@@ -1,6 +1,6 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyectopartepablo.Dao.AlumnosDAO;
+//import com.example.proyectopartepablo.Dao.AlumnosDAO;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ParteIncidencia;
 import javafx.collections.FXCollections;
@@ -60,13 +60,13 @@ public class ListaPartesController implements Initializable {
     @FXML
     private DatePicker txt_fecha;
 
-    AlumnosDAO alumnosDAO = new AlumnosDAO();
+    //AlumnosDAO alumnosDAO = new AlumnosDAO();
 
-    ObservableList<Alumnos> alumnosObservableList;
+    //ObservableList<Alumnos> alumnosObservableList;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        tv_alumnoColumn.setCellValueFactory(new PropertyValueFactory<>("id_alumn"));
+        /*tv_alumnoColumn.setCellValueFactory(new PropertyValueFactory<>("id_alumn"));
         tv_descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         tv_expedienteColumn.setCellValueFactory(new PropertyValueFactory<>("numero_expediente"));
         tv_fechaColumn.setCellValueFactory(new PropertyValueFactory<>("puntos_acumulados"));
@@ -76,6 +76,6 @@ public class ListaPartesController implements Initializable {
 
         ArrayList<Alumnos> listaAlumnos = alumnosDAO.getAlumnosHibernate();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
-        incidentTable.setItems(alumnosObservableList);
+        incidentTable.setItems(alumnosObservableList);*/
     }
 }

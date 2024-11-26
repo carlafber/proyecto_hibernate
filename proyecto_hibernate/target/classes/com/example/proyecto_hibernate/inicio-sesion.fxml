@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.InicioSesionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioSesionController">
    <children>
       <ImageView fx:id="imagen_fondo" fitHeight="835.0" fitWidth="1309.0" layoutX="180.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -43,7 +43,7 @@
                   <Font size="18.0" />
                </font>
             </PasswordField>
-            <Button layoutX="44.0" layoutY="294.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="333.0" style="-fx-background-color: #3396ff;" text="Iniciar sesión" textFill="WHITE">
+            <Button fx:id="bt_iniciar_sesion" layoutX="44.0" layoutY="294.0" mnemonicParsing="false" onAction="#onIniciarSesionClick" prefHeight="31.0" prefWidth="333.0" style="-fx-background-color: #3396ff;" text="Iniciar sesión" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>

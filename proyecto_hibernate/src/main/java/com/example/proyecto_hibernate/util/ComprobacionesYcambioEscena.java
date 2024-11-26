@@ -23,4 +23,22 @@ public class ComprobacionesYcambioEscena {
             e.printStackTrace(); //muestra la traza completa de la excepción
         } //try-catch
     } //cambiarEscena
+
+
+    public static void abrirEscena(String fxmlFile, String titulo) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(GestionPartesApplication.class.getResource(fxmlFile)); //carga el archivo FXML
+            Parent root = fxmlLoader.load(); //carga el archivo FXML
+            Object controller = fxmlLoader.getController(); //obtener el controller
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle(titulo);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("Error al cambiar la escena.");
+            e.printStackTrace(); //muestra la traza completa de la excepción
+        } //try-catch
+    } //cambiarEscena
 }

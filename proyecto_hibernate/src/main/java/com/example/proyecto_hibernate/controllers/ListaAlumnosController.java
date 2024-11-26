@@ -1,8 +1,9 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyectopartepablo.Dao.AlumnosDAO;
+//import com.example.proyectopartepablo.Dao.AlumnosDAO;
 import com.example.proyecto_hibernate.classes.Alumnos;
 
+import com.example.proyecto_hibernate.util.Alerta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -40,55 +41,39 @@ public class ListaAlumnosController implements Initializable {
     @FXML
     private TextField txt_NumeroExpediente;
 
-    AlumnosDAO alumnosDAO = new AlumnosDAO();
+    //AlumnosDAO alumnosDAO = new AlumnosDAO();
 
-    ObservableList <Alumnos> alumnosObservableList;
+    //ObservableList <Alumnos> alumnosObservableList;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        tv_nombreAlumno.setCellValueFactory(new PropertyValueFactory<>("nombre_alum"));
+        /*tv_nombreAlumno.setCellValueFactory(new PropertyValueFactory<>("nombre_alum"));
         tv_nombreGrupo.setCellValueFactory(new PropertyValueFactory<>("nombre_grupo"));
         tv_numeroExpediente.setCellValueFactory(new PropertyValueFactory<>("numero_expediente"));
         tv_puntosAcumulados.setCellValueFactory(new PropertyValueFactory<>("puntos_acumulados"));
 
         ArrayList<Alumnos> listaAlumnos = alumnosDAO.getAlumnosHibernate();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
-        tableView.setItems(alumnosObservableList);
-    }
-    private void mostrarAlerta(String titulo, String encabezado, String contenido, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(encabezado);
-        alerta.setContentText(contenido);
-        alerta.showAndWait();
+        tableView.setItems(alumnosObservableList);*/
     }
 
     public void onClickBuscar(javafx.event.ActionEvent actionEvent) {
-        String textoNumeroExpediente = txt_NumeroExpediente.getText();
+        /*String textoNumeroExpediente = txt_NumeroExpediente.getText();
 
         if(textoNumeroExpediente == null || textoNumeroExpediente.isEmpty()) {
-            mostrarAlerta("Error", "Campo vacío", "Por favor, introduce un numero valido", Alert.AlertType.INFORMATION);
-        }
-        int numeroExpediente = Integer.parseInt(textoNumeroExpediente);
-
-        Alumnos alumnos = alumnosDAO.buscarPorExpediente(numeroExpediente);
-
-        if (alumnos != null) {
-            mostrarAlerta(
-                    "Resultado",
-                    "Alumno encontrado",
-                    "Detalles del alumno:\n" + alumnos,
-                    Alert.AlertType.INFORMATION
-            );
+            Alerta.mensajeError("Campo vacío", "Por favor, introduce un numero valido");
         } else {
-            mostrarAlerta(
-                    "Resultado",
-                    "Alumno no encontrado",
-                    "No se encontró ningún alumno con el expediente: " + numeroExpediente,
-                    Alert.AlertType.WARNING
-            );
-        }
+            int numeroExpediente = Integer.parseInt(textoNumeroExpediente);
 
+
+            Alumnos alumnos = alumnosDAO.buscarPorExpediente(numeroExpediente);
+
+            if (alumnos != null) {
+                Alerta.mensajeInfo("ÉXITO!", "Alumno encontrado","Detalles del alumno:\n" + alumnos);
+            } else {
+                Alerta.mensajeError("Alumno no encontrado", "No se encontró ningúno alumno con el expediente: " + numeroExpediente);
+            }
+        }*/
     }
 }

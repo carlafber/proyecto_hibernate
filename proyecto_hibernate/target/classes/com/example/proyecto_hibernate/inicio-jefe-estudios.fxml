@@ -2,12 +2,13 @@
 
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.InicioProfesorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioJefeEstudiosController">
    <children>
       <ImageView fx:id="imagen_fondo" fitHeight="835.0" fitWidth="1220.0" layoutX="180.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -22,12 +23,22 @@
                </image>
             </ImageView>
             <MenuBar fx:id="menu" prefHeight="40.0" prefWidth="520.0" snapToPixel="false" style="-fx-padding: 15;">
-               <menus>
-                  <Menu mnemonicParsing="false" text="Crear Parte" />
-                  <Menu mnemonicParsing="false" text="Lista de Partes" />
-                  <Menu mnemonicParsing="false" text="Lista de Alumnos" />
-                  <Menu mnemonicParsing="false" text="Crear Profesor" />
-               </menus>
+               <Menu text="Crear Parte">
+                  <items>
+                     <MenuItem fx:id="crear_parte" mnemonicParsing="false" onAction="#onCrearParteClick" text="Crear Parte" />
+                  </items></Menu>
+               <Menu text="Lista de Partes">
+                  <items>
+                     <MenuItem fx:id="lista_partes" mnemonicParsing="false" onAction="#onListaPartesClick" text="Lista de Partes" />
+                  </items></Menu>
+               <Menu text="Lista de Alumnos">
+                  <items>
+                     <MenuItem fx:id="lista_alumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" text="Lista de Alumnos" />
+                  </items></Menu>
+               <Menu text="Crear Profesor">
+                  <items>
+                     <MenuItem fx:id="crear_profesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" text="Crear Profesor" />
+                  </items></Menu>
             </MenuBar>
          </items>
       </ToolBar>

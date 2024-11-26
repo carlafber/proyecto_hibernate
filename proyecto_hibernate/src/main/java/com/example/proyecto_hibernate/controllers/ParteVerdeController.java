@@ -3,19 +3,14 @@ package com.example.proyecto_hibernate.controllers;
 import com.example.proyecto_hibernate.util.ComprobacionesYcambioEscena;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class ParteVerdeController {
 
-public class ParteVerdeController implements Initializable {
-
-    //ATRIBUTOS
     @FXML
     private Button bt_crear;
 
@@ -32,6 +27,9 @@ public class ParteVerdeController implements Initializable {
     private DatePicker dp_fechaParte;
 
     @FXML
+    private Label nombre_profesor;
+
+    @FXML
     private TextArea txt_descripcion;
 
     @FXML
@@ -41,15 +39,9 @@ public class ParteVerdeController implements Initializable {
     private TextField txt_nombreGrupo;
 
     @FXML
-    private TextField txt_profesor;
+    void onCrearClick(ActionEvent event) {
 
-
-    //MÉTODOS
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }//initialize
-
+    }
 
     @FXML
     void onParteNaranjaClick(ActionEvent event) {

@@ -1,0 +1,5 @@
+
+--> el formato de la hora no consigo ponerle, podria hacerse con el LocalTime?
+--> el grupo podría ser que en funcion del expediente que se escriba que ponga el nombre del grupo en tiempo real?
+    porque al final se esta poniendo un parte a una persona, no a un grupo, al final el grupo deberia dar igual, no?
+-->

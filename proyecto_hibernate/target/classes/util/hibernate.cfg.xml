@@ -12,5 +12,6 @@
         <property name="hibernate.show_sql">true</property>
         <mapping class="com.example.proyecto_hibernate.classes.Alumnos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Grupos"/>
+        <mapping class="com.example.proyecto_hibernate.classes.Profesor"/>
     </session-factory>
 </hibernate-configuration>

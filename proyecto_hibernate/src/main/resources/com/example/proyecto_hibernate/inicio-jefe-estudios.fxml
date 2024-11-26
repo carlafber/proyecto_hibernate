@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioJefeEstudiosController">
+   <children>
+      <ImageView fx:id="imagen_fondo" fitHeight="835.0" fitWidth="1220.0" layoutX="180.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../img/logo.png" />
+         </image>
+      </ImageView>
+      <ToolBar prefHeight="55.0" prefWidth="1220.0">
+         <items>
+            <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/logo.png" />
+               </image>
+            </ImageView>
+            <MenuBar fx:id="menu" prefHeight="40.0" prefWidth="520.0" snapToPixel="false" style="-fx-padding: 15;">
+               <menus>
+                  <Menu fx:id="crear_parte" mnemonicParsing="false" text="Crear Parte" />
+                  <Menu fx:id="lista_partes" mnemonicParsing="false" text="Lista de Partes" />
+                  <Menu fx:id="lista_alumnos" mnemonicParsing="false" text="Lista de Alumnos" />
+                  <Menu fx:id="crear_profesor" mnemonicParsing="false" text="Crear Profesor" />
+               </menus>
+            </MenuBar>
+         </items>
+      </ToolBar>
+   </children>
+</AnchorPane>

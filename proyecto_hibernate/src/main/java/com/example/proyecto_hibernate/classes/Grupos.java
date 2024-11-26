@@ -26,11 +26,23 @@ public class Grupos {
         this.id_grupo = id_grupo;
     }
 
-    public String getNombre_grupo() {
+    public void setNombre_grupo(String nombre_grupo) {
+        this.nombre_grupo = nombre_grupo;
+    }
+
+    @Override
+    public String toString() {
+        return "Grupos{" +
+                "id_grupo=" + id_grupo +
+                ", nombre_grupo='" + nombre_grupo + '\'' +
+                '}';
+    }
+
+    public String getNombreGrupo() {
         return nombre_grupo;
     }
 
-    public void setNombre_grupo(String nombre_grupo) {
-        this.nombre_grupo = nombre_grupo;
+    public Grupos getGrupo() {
+        return null;
     }
 }

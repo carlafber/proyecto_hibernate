@@ -5,6 +5,7 @@ import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ParteIncidencia;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,8 +14,10 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 
+
+import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -22,47 +25,63 @@ import java.util.ResourceBundle;
 public class ListaPartesController implements Initializable {
 
     @FXML
-    private Pagination Pg_pagination;
+    private Button bt_buscar;
 
     @FXML
-    private Button bt_Buscar;
+    private Button bt_buscarFecha;
 
     @FXML
-    private Button bt_BuscarFecha;
+    private DatePicker dt_fechaFin;
 
     @FXML
-    private TableView<Alumnos> incidentTable;
+    private DatePicker dt_fechaInicio;
 
     @FXML
-    private TableColumn<?, ?> tv_alumnoColumn;
+    private ImageView imagen_fondo;
 
     @FXML
-    private TableColumn<?, ?> tv_descripcionColumn;
+    private Pagination pagination;
 
     @FXML
-    private TableColumn<?, ?> tv_expedienteColumn;
+    private TableColumn<?, ?> tc_botones;
 
     @FXML
-    private TableColumn<?, ?> tv_fechaColumn;
+    private TableColumn<?, ?> tc_descripcion;
 
     @FXML
-    private TableColumn<?, ?> tv_grupoColumn;
+    private TableColumn<?, ?> tc_expediente;
 
     @FXML
-    private TableColumn<?, ?> tv_profesorColumn;
+    private TableColumn<?, ?> tc_fecha;
 
     @FXML
-    private TableColumn<?, ?> tv_sancionColumn;
+    private TableColumn<?, ?> tc_grupo;
 
     @FXML
-    private TextField txt_NumeroExpediente;
+    private TableColumn<?, ?> tc_nombreAlumno;
 
     @FXML
-    private DatePicker txt_fecha;
+    private TableColumn<?, ?> tc_profesor;
 
-    //AlumnosDAO alumnosDAO = new AlumnosDAO();
+    @FXML
+    private TableColumn<?, ?> tc_sancion;
 
-    //ObservableList<Alumnos> alumnosObservableList;
+    @FXML
+    private TableView<?> tv_partes;
+
+    @FXML
+    private TextField txt_numExpediente;
+
+
+    @FXML
+    void onBuscarClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onBuscarFechaClick(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,8 +93,10 @@ public class ListaPartesController implements Initializable {
         tv_profesorColumn.setCellValueFactory(new PropertyValueFactory<>("id_profesor"));
         tv_sancionColumn.setCellValueFactory(new PropertyValueFactory<>("sancion"));
 
-        ArrayList<Alumnos> listaAlumnos = alumnosDAO.getAlumnosHibernate();
+        ArrayList<Alumnos> listaAlumnos = alumnosDAO.getAlumnos();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
         incidentTable.setItems(alumnosObservableList);*/
     }
+
+
 }

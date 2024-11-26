@@ -21,7 +21,8 @@ public class Profesor {
     private String numeroAsignado;
 
     @Column(name = "tipo")
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoProfesor tipo;
 
     public int getIdProfesor() {
         return idProfesor;
@@ -55,11 +56,11 @@ public class Profesor {
         this.numeroAsignado = numeroAsignado;
     }
 
-    public String getTipo() {
+    public TipoProfesor getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoProfesor tipo) {
         this.tipo = tipo;
     }
 }

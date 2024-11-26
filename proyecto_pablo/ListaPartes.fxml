@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="716.0" prefWidth="907.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectopartepablo.Controller.ListaPartesController">
+   <ImageView fitHeight="716.0" fitWidth="1003.0">
+      <image>
+         <Image url="@../../../img/logo.png" />
+      </image>
+   </ImageView>
+   <AnchorPane layoutX="136.0" layoutY="43.0" prefHeight="109.0" prefWidth="731.0" style="-fx-background-color: black;">
+      <children>
+            <TextField fx:id="txt_NumeroExpediente" layoutX="51.0" layoutY="56.0" prefHeight="25.0" prefWidth="562.0" promptText="Buscar por Número de expediente" />
+            <Button fx:id="bt_Buscar" layoutX="612.0" layoutY="56.0" styleClass="green-button" text="Buscar" />
+            <Button fx:id="bt_BuscarFecha" layoutX="562.0" layoutY="89.0" styleClass="green-button" text="Buscar por Fecha" />
+      
+           <!-- Título -->
+           <Label layoutX="239.0" layoutY="7.0" styleClass="title-label" text="LISTA DE PARTES" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="31.0" />
+            </font>
+         </Label>
+         <DatePicker fx:id="txt_fecha" layoutX="50.0" layoutY="89.0" prefHeight="25.0" prefWidth="279.0" promptText="dd/mm/aaaa" />
+         <DatePicker fx:id="txt_fecha" layoutX="332.0" layoutY="89.0" prefHeight="25.0" prefWidth="230.0" promptText="dd/mm/aaaa" />
+      </children>
+   </AnchorPane>
+   <AnchorPane layoutX="40.0" layoutY="183.0" prefHeight="499.0" prefWidth="923.0" style="-fx-background-color: black;">
+      <children>
+      
+           <!-- Tabla -->
+           <TableView fx:id="incidentTable" layoutY="14.0" prefHeight="438.0" prefWidth="923.0">
+               <columns>
+                   <TableColumn fx:id="tv_expedienteColumn" prefWidth="100" text="Expediente" />
+                   <TableColumn fx:id="tv_alumnoColumn" prefWidth="200" text="Nombre del Alumno" />
+                   <TableColumn fx:id="tv_grupoColumn" prefWidth="100" text="Grupo" />
+                   <TableColumn fx:id="tv_profesorColumn" prefWidth="150" text="Profesor" />
+                   <TableColumn fx:id="tv_fechaColumn" prefWidth="100" text="Fecha" />
+                   <TableColumn fx:id="tv_descripcionColumn" prefWidth="150" text="Descripción" />
+                   <TableColumn fx:id="tv_sancionColumn" prefWidth="120" text="Sanción" />
+               </columns>
+           </TableView>
+      
+                 <!-- Paginación -->
+           <Pagination fx:id="Pg_pagination" layoutX="82.0" layoutY="452.0" maxPageIndicatorCount="3" prefHeight="42.0" prefWidth="760.0" />
+      </children>
+   </AnchorPane>
+</AnchorPane>

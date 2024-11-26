@@ -3,6 +3,7 @@ package com.example.proyectopartepablo.Controller;
 import com.example.proyectopartepablo.Dao.AlumnosDAO;
 import com.example.proyectopartepablo.clases.Alumnos;
 import com.example.proyectopartepablo.clases.Grupos;
+import com.example.proyectopartepablo.utils.Alerta;
 import com.example.proyectopartepablo.utils.HibernateUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -83,12 +84,9 @@ public class ListaAlumnosController implements Initializable {
         String numeroExpediente = txt_NumeroExpediente.getText(); // Recojo el número de expediente
 
         if (numeroExpediente == null || numeroExpediente.isEmpty()) {
-            mostrarAlerta(
-                    "Error",
-                    "Campo vacío",
-                    "Por favor, introduce un número válido",
-                    Alert.AlertType.INFORMATION
-            );
+            Alerta.alertaWarning("Error");
+            Alerta.alertaError("Campo Vacio");
+            Alerta.alertaInfo("Por favor, introduce un número válido");
             return;
         }
 
@@ -98,23 +96,17 @@ public class ListaAlumnosController implements Initializable {
 
             // Comprobar si hay algún resultado
             if (filteredList.isEmpty()) {
-                mostrarAlerta(
-                        "Resultado",
-                        "Alumno no encontrado",
-                        "No se encontró ningún alumno con el expediente: " + numeroExpediente,
-                        Alert.AlertType.WARNING
-                );
+                Alerta.alertaWarning("Resultado");
+                Alerta.alertaError("Alumno no encontrado");
+                Alerta.alertaInfo("No se encontró ningún alumno con el expediente:"  + numeroExpediente);
 
                 // Restablecer el filtro si no hay resultados
                 filteredList.setPredicate(alumno -> true);
             }
         } catch (NumberFormatException e) {
-            mostrarAlerta(
-                    "Error",
-                    "Formato no válido",
-                    "Por favor, introduce un número de expediente válido.",
-                    Alert.AlertType.ERROR
-            );
+            Alerta.alertaWarning("Error");
+            Alerta.alertaError("Formato no válido");
+            Alerta.alertaInfo("Por favor, introduce un número de expediente válido.");
         }
     }
 
@@ -124,11 +116,5 @@ public class ListaAlumnosController implements Initializable {
         txt_NumeroExpediente.clear();
     }
 
-    private void mostrarAlerta(String titulo, String encabezado, String contenido, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(encabezado);
-        alerta.setContentText(contenido);
-        alerta.showAndWait();
-    }
+
 }

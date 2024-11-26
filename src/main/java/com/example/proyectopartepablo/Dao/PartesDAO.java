@@ -1,6 +1,7 @@
 package com.example.proyectopartepablo.Dao;
 
-import com.example.proyectopartepablo.clases.Grupos;
+
+import com.example.proyectopartepablo.clases.ParteIncidencia;
 import com.example.proyectopartepablo.utils.Alerta;
 import com.example.proyectopartepablo.utils.HibernateUtil;
 import org.hibernate.Session;
@@ -10,20 +11,21 @@ import org.hibernate.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GruposDAO {
+public class PartesDAO {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    public ArrayList<Grupos> getGruposHibernate(){
+    public ArrayList<ParteIncidencia> getPartesHibernate(){
         Transaction transaction;
-        ArrayList<Grupos> listaGrupos=new ArrayList<>();
+        ArrayList<ParteIncidencia> listaPartes=new ArrayList<>();
         try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
-            List<Grupos> grupos =session.createQuery("from Grupos", Grupos.class).getResultList();
-            listaGrupos.addAll(grupos);
+            List<ParteIncidencia> parteIncidencias =session.createQuery("from ParteIncidencia", ParteIncidencia.class).getResultList();
+            listaPartes.addAll(parteIncidencias);
             transaction.commit();
         }catch (Exception e){
             Alerta.alertaError(e.getMessage());
+            e.printStackTrace();
         }
-        return listaGrupos;
+        return listaPartes;
     }
 }

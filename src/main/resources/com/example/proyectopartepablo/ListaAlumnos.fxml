@@ -20,9 +20,11 @@
    <AnchorPane layoutX="136.0" layoutY="80.0" prefHeight="109.0" prefWidth="731.0" style="-fx-background-color: black;">
       <children>
             <TextField fx:id="txt_NumeroExpediente" layoutX="51.0" layoutY="56.0" prefHeight="25.0" prefWidth="562.0" promptText="Buscar por Número de expediente" />
-            <Button fx:id="bt_Buscar" layoutX="612.0" layoutY="56.0" styleClass="green-button" text="Buscar" />
-      
-           <!-- Título -->
+            <Button fx:id="bt_Buscar" layoutX="612.0" layoutY="56.0" onAction="#onClickBuscar" styleClass="green-button" text="Buscar" />
+            <Button fx:id="bt_Reset" layoutX="663.0" layoutY="56.0" onAction="#onResetClicked" text="Restablecer" />
+
+
+          <!-- Título -->
            <Label layoutX="218.0" layoutY="10.0" styleClass="title-label" text="LISTA DE ALUMNOS" textAlignment="CENTER" textFill="WHITE">
             <font>
                <Font name="System Bold" size="31.0" />

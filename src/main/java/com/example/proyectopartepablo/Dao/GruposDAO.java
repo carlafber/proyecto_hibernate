@@ -1,6 +1,5 @@
 package com.example.proyectopartepablo.Dao;
 
-import com.example.proyectopartepablo.clases.Alumnos;
 import com.example.proyectopartepablo.clases.Grupos;
 import com.example.proyectopartepablo.utils.Alerta;
 import com.example.proyectopartepablo.utils.HibernateUtil;

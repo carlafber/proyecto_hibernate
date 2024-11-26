@@ -1,7 +1,8 @@
 package com.example.proyectopartepablo.clases;
 
 import javax.persistence.*;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 @Entity
 @Table(name = "partes_incidencia")
 public class ParteIncidencia {
@@ -31,13 +32,28 @@ public class ParteIncidencia {
     private String descripcion;
 
     @Column(name = "fecha")
-    private String fecha;
+    private LocalDate fecha;
 
     @Column(name = "hora")
-    private String hora;
+    private LocalTime hora;
 
     @Column(name = "sancion")
     private String sancion;
+
+
+    public ParteIncidencia() {
+    }
+
+    public ParteIncidencia(Alumnos alumno, Profesor profesor, Grupos grupo, LocalDate fecha, LocalTime hora, String descripcion, String sancion) {
+        this.alumno = alumno;
+        this.profesor = profesor;
+        this.grupo = grupo;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.descripcion = descripcion;
+        this.sancion = sancion;
+    }
+
 
     public int getIdParte() {
         return idParte;
@@ -87,19 +103,19 @@ public class ParteIncidencia {
         this.descripcion = descripcion;
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public String getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(String hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 

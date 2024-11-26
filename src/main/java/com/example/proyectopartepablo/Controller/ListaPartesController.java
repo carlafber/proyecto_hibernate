@@ -1,15 +1,25 @@
 package com.example.proyectopartepablo.Controller;
 
+import com.example.proyectopartepablo.Dao.AlumnosDAO;
+import com.example.proyectopartepablo.clases.Alumnos;
 import com.example.proyectopartepablo.clases.ParteIncidencia;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-public class ListaPartesController {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+public class ListaPartesController implements Initializable {
 
     @FXML
     private Pagination Pg_pagination;
@@ -21,7 +31,7 @@ public class ListaPartesController {
     private Button bt_BuscarFecha;
 
     @FXML
-    private TableView<ParteIncidencia> incidentTable;
+    private TableView<Alumnos> incidentTable;
 
     @FXML
     private TableColumn<?, ?> tv_alumnoColumn;
@@ -50,4 +60,12 @@ public class ListaPartesController {
     @FXML
     private DatePicker txt_fecha;
 
+    AlumnosDAO alumnosDAO = new AlumnosDAO();
+
+    ObservableList<Alumnos> alumnosObservableList;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }

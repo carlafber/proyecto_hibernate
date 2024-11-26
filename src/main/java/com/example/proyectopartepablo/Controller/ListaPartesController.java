@@ -127,8 +127,33 @@ public class ListaPartesController implements Initializable {
 
         filteredList = new FilteredList<>(parteIncidenciasObservable, alumno -> true);
         tableView.setItems(filteredList);
+        configurarPaginacion(filteredList);
     }
 
+    private void configurarPaginacion(ObservableList<ParteIncidencia> listaCompleta) {
+        int filasPorPagina = 5; // Número de filas por página
+
+        // Configurar el Pagination
+        Pg_pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
+        Pg_pagination.setCurrentPageIndex(0);
+
+        // Listener para cambiar de página
+        Pg_pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
+            cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
+        });
+
+        // Mostrar la primera página
+        cambiarPagina(listaCompleta, filasPorPagina, 0);
+    }
+
+    private void cambiarPagina(ObservableList<ParteIncidencia> listaCompleta, int filasPorPagina, int paginaActual) {
+        int desdeIndice = paginaActual * filasPorPagina;
+        int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
+
+        ObservableList<ParteIncidencia> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
+
+        tableView.setItems(paginaActualLista);
+    }
     @FXML
     public void onClickBorrar(javafx.event.ActionEvent actionEvent) {
         filteredList.setPredicate(alumno -> true);

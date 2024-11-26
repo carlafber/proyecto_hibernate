@@ -3,6 +3,7 @@ package com.example.proyectopartepablo.Controller;
 import com.example.proyectopartepablo.Dao.AlumnosDAO;
 import com.example.proyectopartepablo.clases.Alumnos;
 import com.example.proyectopartepablo.clases.Grupos;
+import com.example.proyectopartepablo.clases.ParteIncidencia;
 import com.example.proyectopartepablo.utils.Alerta;
 import com.example.proyectopartepablo.utils.HibernateUtil;
 import javafx.beans.property.SimpleStringProperty;
@@ -77,8 +78,33 @@ public class ListaAlumnosController implements Initializable {
         // Crear el FilteredList basado en la lista original
         filteredList = new FilteredList<>(alumnosObservableList, alumno -> true);
         tableView.setItems(filteredList);
+        configurarPaginacion(filteredList);
     }
 
+    private void configurarPaginacion(ObservableList<Alumnos> listaCompleta) {
+        int filasPorPagina = 5; // Número de filas por página
+
+        // Configurar el Pagination
+        Pg_pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
+        Pg_pagination.setCurrentPageIndex(0);
+
+        // Listener para cambiar de página
+        Pg_pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
+            cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
+        });
+
+        // Mostrar la primera página
+        cambiarPagina(listaCompleta, filasPorPagina, 0);
+    }
+
+    private void cambiarPagina(ObservableList<Alumnos> listaCompleta, int filasPorPagina, int paginaActual) {
+        int desdeIndice = paginaActual * filasPorPagina;
+        int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
+
+        ObservableList<Alumnos> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
+
+        tableView.setItems(paginaActualLista);
+    }
     @FXML
     public void onClickBuscar(javafx.event.ActionEvent actionEvent) {
         String numeroExpediente = txt_NumeroExpediente.getText(); // Recojo el número de expediente
@@ -115,6 +141,4 @@ public class ListaAlumnosController implements Initializable {
         filteredList.setPredicate(alumno -> true);
         txt_NumeroExpediente.clear();
     }
-
-
 }

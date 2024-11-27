@@ -34,7 +34,7 @@ public class InicioSesionController {
         if(txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
-            for(Profesor profe : profesorCRUD.getProfesores()){
+            for(Profesor profe : profesorCRUD.obtenerProfesores()){
                 if(txt_numero.getText().equals(profe.getNumeroAsignado())){
                     if(pwd_contrasena.getText().equals(profe.getContrasena())) {
                         GuardarProfesor.setProfesor(profe);

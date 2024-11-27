@@ -13,7 +13,7 @@ import java.util.List;
 public class ProfesorCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    public ArrayList<Profesor> getProfesores(){
+    public ArrayList<Profesor> obtenerProfesores(){
         Transaction transaction;
         ArrayList<Profesor> listaProfesores=new ArrayList<>();
         try(Session session = factory.openSession()){
@@ -25,5 +25,18 @@ public class ProfesorCRUD {
             Alerta.mensajeError(null, e.getMessage());
         }
         return listaProfesores;
+    }
+
+    public void crearProfesor(Profesor profesor) {
+        Transaction transaction = null;
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+
+            session.save(profesor);
+
+            transaction.commit();
+        } catch (Exception e) {
+            Alerta.mensajeError(null, e.getMessage());
+        }
     }
 }

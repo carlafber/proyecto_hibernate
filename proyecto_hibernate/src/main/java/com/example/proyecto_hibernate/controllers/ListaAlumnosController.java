@@ -71,7 +71,7 @@ public class ListaAlumnosController implements Initializable {
             Grupos grupo = cellData.getValue().getGrupo(); // Obtener el grupo del alumno
             return new SimpleStringProperty(grupo.getNombreGrupo());
         });
-        ArrayList<Alumnos> listaAlumnos = alumnosCRUD.getAlumnos();
+        ArrayList<Alumnos> listaAlumnos = alumnosCRUD.obtenerAlumnos();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
 
         // Crear el FilteredList basado en la lista original

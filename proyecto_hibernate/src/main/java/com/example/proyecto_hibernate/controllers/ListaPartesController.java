@@ -125,7 +125,6 @@ public class ListaPartesController implements Initializable {
                 bt_verMas.setOnAction(event -> {
                     ParteIncidencia parte = getTableView().getItems().get(getIndex());
                     abrirParte(parte);
-                    System.out.println("Botón clicado para: " + parte.getAlumno().getNombre_alum());
                 });
             }
 
@@ -141,7 +140,7 @@ public class ListaPartesController implements Initializable {
         });
 
 
-        ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.getPartes();
+        ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
         ObservableList<ParteIncidencia> parteIncidenciasObservable = FXCollections.observableArrayList(listaPartesIncidencia);
 
         filteredList = new FilteredList<>(parteIncidenciasObservable, alumno -> true);

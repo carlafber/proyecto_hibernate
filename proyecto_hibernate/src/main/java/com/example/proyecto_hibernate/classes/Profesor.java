@@ -24,6 +24,16 @@ public class Profesor {
     @Enumerated(EnumType.STRING)
     private TipoProfesor tipo;
 
+    public Profesor() {
+    }
+
+    public Profesor(String contrasena, String nombre, String numeroAsignado, TipoProfesor tipo) {
+        this.contrasena = contrasena;
+        this.nombre = nombre;
+        this.numeroAsignado = numeroAsignado;
+        this.tipo = tipo;
+    }
+
     public int getIdProfesor() {
         return idProfesor;
     }

@@ -1,16 +1,18 @@
 package com.example.proyecto_hibernate.controllers;
 
+import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
+import com.example.proyecto_hibernate.CRUD.PartesCRUD;
+import com.example.proyecto_hibernate.classes.Alumnos;
+import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.CambioEscena;
 import com.example.proyecto_hibernate.util.GuardarParte;
 import com.example.proyecto_hibernate.util.GuardarProfesor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +32,13 @@ public class ParteRojoController implements Initializable {
     private Button bt_parteVerde;
 
     @FXML
+    private ComboBox<String> cb_horaParte;
+
+    @FXML
     private DatePicker dp_fechaParte;
+
+    @FXML
+    private Label grupo_alumno;
 
     @FXML
     private Label nombre_profesor;
@@ -41,12 +49,45 @@ public class ParteRojoController implements Initializable {
     @FXML
     private TextField txt_expedienteAlumno;
 
-    @FXML
-    private TextField txt_nombreGrupo;
+    private PartesCRUD parteCRUD = new PartesCRUD();
+
+    private AlumnosCRUD alumnoCRUD = new AlumnosCRUD();
+
+    private Alumnos alumno;
 
     @FXML
     void onCrearClick(ActionEvent event) {
+        if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty()){
+            Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
+        } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
+            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), "sancion");
+            //puntuacion falta
+            //sancion hacer
+            parteCRUD.crearParte(parte);
+            Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
+            limpiarCampos();
+        }
+    }
 
+    @FXML
+    void onExpedienteAlumnoChange(KeyEvent event) {
+        String numExpediente = txt_expedienteAlumno.getText();
+
+        if (!numExpediente.isEmpty()) {
+            // Buscar el alumno con el número de expediente
+            alumno = alumnoCRUD.buscarAlumnoPorExpediente(numExpediente);
+
+            if (alumno != null) {
+                // Si el alumno existe, mostrar el grupo en el Label
+                grupo_alumno.setText(alumno.getGrupo().getNombreGrupo());
+            } else {
+                // Si no se encuentra el alumno, mostrar un mensaje de error
+                grupo_alumno.setText("Alumno no encontrado.");
+            }
+        } else {
+            // Si el campo está vacío, limpiar el Label
+            grupo_alumno.setText("");
+        }
     }
 
     @FXML
@@ -63,14 +104,37 @@ public class ParteRojoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        cb_horaParte.getItems().addAll(
+                "8:30-9:20",
+                "9:25-10:15",
+                "10:15-11:10",
+                "11:40-12:30",
+                "12:35-13:25",
+                "13:30-14:20",
+                "16:00-16:50",
+                "16:55-17:45",
+                "17:50-18:40",
+                "18:55-19:45",
+                "19:50-20:40",
+                "20:45-21:35"
+        );
+
         nombre_profesor.setText(" " + GuardarProfesor.getProfesor().getNombre());
 
         if(GuardarParte.getParte() != null){
             txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
-            txt_nombreGrupo.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
+            grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
             dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
-            //hora
+            cb_horaParte.setValue(GuardarParte.getParte().getHora());
             txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
         }
+    }
+
+    private void limpiarCampos() {
+        txt_expedienteAlumno.clear();
+        grupo_alumno.setText("");
+        dp_fechaParte.setValue(null);
+        cb_horaParte.setValue(null);
+        txt_descripcion.clear();
     }
 }//class

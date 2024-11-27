@@ -82,8 +82,17 @@ public class ListaAlumnosController implements Initializable {
 
     @FXML
     void onBorrarClick(ActionEvent event) {
+        // Restablecer el filtro para mostrar todos los alumnos
         filteredList.setPredicate(alumno -> true);
+
+        // Borrar el texto del campo de búsqueda
         txt_numExpediente.clear();
+
+        // Recalcular la paginación para reflejar todos los datos
+        configurarPaginacion(filteredList);
+
+        // Volver a la primera página
+        pagination.setCurrentPageIndex(0);
     }
 
 
@@ -91,13 +100,13 @@ public class ListaAlumnosController implements Initializable {
     void onBuscarClick(ActionEvent event) {
         String numeroExpediente = txt_numExpediente.getText(); // Recojo el número de expediente
 
-        if(numeroExpediente == null || numeroExpediente.isEmpty()){
-            Alerta.mensajeError("Campo vacío", "Por favor, introduce un numero valido");
+        if (numeroExpediente == null || numeroExpediente.isEmpty()) {
+            Alerta.mensajeError("Campo vacío", "Por favor, introduce un número válido.");
             return;
         }
 
         try {
-            // Actualizar el filtro para mostrar solo el alumno con el ID buscado
+            // Actualizar el filtro para mostrar solo el alumno con el número buscado
             filteredList.setPredicate(alumno -> alumno.getNumero_expediente().equals(numeroExpediente));
 
             // Comprobar si hay algún resultado
@@ -108,17 +117,24 @@ public class ListaAlumnosController implements Initializable {
                 // Restablecer el filtro si no hay resultados
                 filteredList.setPredicate(alumno -> true);
             }
+
+            // Recalcular la paginación para reflejar el nuevo contenido
+            configurarPaginacion(filteredList);
+
+            // Ir a la primera página después de aplicar el filtro
+            pagination.setCurrentPageIndex(0);
+
         } catch (NumberFormatException e) {
             Alerta.mensajeError("Formato no válido", "Por favor, introduce un número de expediente válido.");
         }
     }
 
+
     private void configurarPaginacion(ObservableList<Alumnos> listaCompleta) {
-        int filasPorPagina = 5; // Número de filas por página
+        int filasPorPagina = 6; // Número de filas por página
 
         // Configurar el Pagination
         pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
-        pagination.setCurrentPageIndex(0);
 
         // Listener para cambiar de página
         pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
@@ -126,8 +142,9 @@ public class ListaAlumnosController implements Initializable {
         });
 
         // Mostrar la primera página
-        cambiarPagina(listaCompleta, filasPorPagina, 0);
+        cambiarPagina(listaCompleta, filasPorPagina, pagination.getCurrentPageIndex());
     }
+
 
     private void cambiarPagina(ObservableList<Alumnos> listaCompleta, int filasPorPagina, int paginaActual) {
         int desdeIndice = paginaActual * filasPorPagina;

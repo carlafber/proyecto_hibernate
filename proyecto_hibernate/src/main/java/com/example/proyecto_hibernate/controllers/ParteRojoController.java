@@ -1,6 +1,7 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.util.ComprobacionesYcambioEscena;
+import com.example.proyecto_hibernate.util.CambioEscena;
+import com.example.proyecto_hibernate.util.GuardarParte;
 import com.example.proyecto_hibernate.util.GuardarProfesor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,16 +51,26 @@ public class ParteRojoController implements Initializable {
 
     @FXML
     void onParteNaranjaClick(ActionEvent event) {
-        ComprobacionesYcambioEscena.cambiarEscena(bt_parteNaranja, "parte-naranja.fxml");
+        GuardarParte.resetParte();
+        CambioEscena.cambiarEscena(bt_parteNaranja, "parte-naranja.fxml");
     }//onParteNaranjaClick
 
     @FXML
     void onParteVerdeClick(ActionEvent event) {
-        ComprobacionesYcambioEscena.cambiarEscena(bt_parteRojo, "parte-verde.fxml");
+        GuardarParte.resetParte();
+        CambioEscena.cambiarEscena(bt_parteRojo, "parte-verde.fxml");
     }//onParteVerdeClick
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nombre_profesor.setText(" " + GuardarProfesor.getProfesor().getNombre());
+
+        if(GuardarParte.getParte() != null){
+            txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
+            txt_nombreGrupo.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
+            dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
+            //hora
+            txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
+        }
     }
 }//class

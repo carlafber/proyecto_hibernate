@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `gestionpartes`.`alumnos` (
   `id_grupo` INT NOT NULL,
   `puntos_acumulados` INT NOT NULL,
   `nombre_alum` VARCHAR(255) NULL DEFAULT NULL,
-  `numero_expediente` VARCHAR(255) NULL DEFAULT NULL,
+  `numero_expediente` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_alum`),
   INDEX `FKoif6noujgnb1q4hfucdj3by8q` (`id_grupo` ASC))
 ENGINE = InnoDB
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `gestionpartes`.`profesores` (
   `id_profesor` INT NOT NULL AUTO_INCREMENT,
   `contrasena` VARCHAR(255) NULL DEFAULT NULL,
   `nombre` VARCHAR(255) NULL DEFAULT NULL,
-  `numero_asignado` VARCHAR(255) NULL DEFAULT NULL,
+  `numero_asignado` INT NULL DEFAULT NULL,
   `tipo` ENUM('jefe_de_estudios', 'profesor') NULL DEFAULT NULL,
   PRIMARY KEY (`id_profesor`),
   UNIQUE INDEX `UK_p6ltb4s5eu3ymeanq6rdw944v` (`numero_asignado` ASC))
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `gestionpartes`.`partes_incidencia` (
   `id_profesor` INT NULL DEFAULT NULL,
   `id_punt_partes` INT NULL DEFAULT NULL,
   `descripcion` VARCHAR(255) NULL DEFAULT NULL,
-  `fecha` VARCHAR(255) NULL DEFAULT NULL,
+  `fecha` DATE NULL DEFAULT NULL,
   `hora` VARCHAR(255) NULL DEFAULT NULL,
   `sancion` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id_parte`),

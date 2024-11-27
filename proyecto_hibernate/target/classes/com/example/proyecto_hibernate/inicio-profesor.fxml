@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,22 +13,18 @@
             <Image url="@../../../img/logo.png" />
          </image>
       </ImageView>
-      <ToolBar prefHeight="47.0" prefWidth="1220.0">
-        <items>
+      <ToolBar prefHeight="55.0" prefWidth="1220.0">
+         <items>
             <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../img/logo.png" />
                </image>
             </ImageView>
-            <MenuBar fx:id="menu" prefHeight="55.0" prefWidth="132.0" snapToPixel="false" style="-fx-padding: 15;">
-              <menus>
-                <Menu mnemonicParsing="false" text="Crear Parte">
-                     <items>
-                        <MenuItem fx:id="cear_parte" mnemonicParsing="false" onAction="#onCrearParteClick" text="Crear Parte" />
-                     </items></Menu>
-              </menus>
-            </MenuBar>
-        </items>
+            <Button fx:id="bt_crearParte" mnemonicParsing="false" onAction="#onCrearParteClick" style="-fx-background-color: white;" text="Crear Parte" />
+            <Button fx:id="bt_listaPartes" mnemonicParsing="false" onAction="#onListaPartesClick" style="-fx-background-color: white;" text="Lista de Partes" />
+            <Button fx:id="bt_listaAlumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" style="-fx-background-color: white;" text="Lista de Alumnos" />
+            <Button fx:id="bt_crearProfesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" style="-fx-background-color: white;" text="Crear Profesor" />
+         </items>
       </ToolBar>
    </children>
 </AnchorPane>

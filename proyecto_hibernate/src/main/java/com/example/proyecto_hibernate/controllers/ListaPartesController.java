@@ -6,6 +6,8 @@ import com.example.proyecto_hibernate.classes.Grupos;
 import com.example.proyecto_hibernate.classes.ParteIncidencia;
 import com.example.proyecto_hibernate.classes.Profesor;
 import com.example.proyecto_hibernate.util.Alerta;
+import com.example.proyecto_hibernate.util.CambioEscena;
+import com.example.proyecto_hibernate.util.GuardarParte;
 import com.example.proyecto_hibernate.util.HibernateUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -87,6 +89,7 @@ public class ListaPartesController implements Initializable {
 
     private Session session;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -117,24 +120,26 @@ public class ListaPartesController implements Initializable {
 
         tc_botones.setCellFactory(column -> new TableCell<>() {
             private final Button bt_verMas = new Button("Ver Más");
+
             {
                 bt_verMas.setOnAction(event -> {
                     ParteIncidencia parte = getTableView().getItems().get(getIndex());
-
-                    System.out.println("Botón clicado para: " + parte);
+                    abrirParte(parte);
+                    System.out.println("Botón clicado para: " + parte.getAlumno().getNombre_alum());
                 });
             }
 
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null); // Limpia la celda si está vacía
                 } else {
-                    setGraphic(bt_verMas);
+                    setGraphic(bt_verMas); // Añade el botón si la celda contiene datos
                 }
             }
         });
+
 
         ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.getPartes();
         ObservableList<ParteIncidencia> parteIncidenciasObservable = FXCollections.observableArrayList(listaPartesIncidencia);
@@ -151,18 +156,25 @@ public class ListaPartesController implements Initializable {
         txt_numExpediente.clear();
         dt_fechaInicio.setValue(null);
         dt_fechaFin.setValue(null);
+
+        configurarPaginacion(filteredList);
+        pagination.setCurrentPageIndex(0);
+
+        tv_partes.refresh();
     }
 
     @FXML
     void onBuscarClick(ActionEvent event) {
         String numeroExpediente = txt_numExpediente.getText();
 
+        // Validar si el campo está vacío
         if (numeroExpediente == null || numeroExpediente.isEmpty()) {
             Alerta.mensajeError("Campo vacío", "Por favor, introduce un número de expediente válido.");
             return;
         }
 
         try {
+            // Aplicar el filtro a la lista
             filteredList.setPredicate(parte -> {
                 Alumnos alumno = parte.getAlumno();
                 if (alumno != null) {
@@ -171,32 +183,50 @@ public class ListaPartesController implements Initializable {
                 return false;
             });
 
+            // Si no se encontraron resultados
             if (filteredList.isEmpty()) {
                 Alerta.mensajeError("Parte no encontrado", "No se encontró ninguna parte con el expediente: " + numeroExpediente);
 
+                // Restablecer el filtro para mostrar todo
                 filteredList.setPredicate(parte -> true);
+
+                // Recalibrar la paginación para mostrar todos los resultados
+                configurarPaginacion(filteredList);
+
+                return;
             }
+
+            // Recalibrar la paginación para reflejar los resultados de la búsqueda
+            configurarPaginacion(filteredList);
+
+            // Mostrar la primera página de los resultados
+            pagination.setCurrentPageIndex(0);
         } catch (Exception e) {
-            Alerta.mensajeError("Error inesperado", "Ocurrio un error al buscar: " + e.getMessage());
+            Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     void onBuscarFechaClick(ActionEvent event) {
         LocalDate fechaInicio = dt_fechaInicio.getValue();
         LocalDate fechaFin = dt_fechaFin.getValue();
 
+        // Validar que ambas fechas estén seleccionadas
         if (fechaInicio == null || fechaFin == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, selecciona ambas fechas para buscar.");
             return;
         }
 
+        // Validar que el rango de fechas sea válido
         if (fechaInicio.isAfter(fechaFin)) {
             Alerta.mensajeError("Rango de fechas inválido", "La fecha inicial no puede ser posterior a la fecha final.");
             return;
         }
 
         try {
+            // Aplicar filtro para el rango de fechas
             filteredList.setPredicate(parte -> {
                 if (parte.getFecha() != null) {
                     return !parte.getFecha().isBefore(fechaInicio) && !parte.getFecha().isAfter(fechaFin);
@@ -204,19 +234,33 @@ public class ListaPartesController implements Initializable {
                 return false;
             });
 
+            // Si no se encuentran resultados
             if (filteredList.isEmpty()) {
                 Alerta.mensajeError("No se encontraron partes", "No se encontraron partes entre las fechas: " + fechaInicio + " y " + fechaFin);
 
+                // Restablecer el filtro para mostrar todos los elementos
                 filteredList.setPredicate(parte -> true);
+
+                // Recalibrar la paginación para mostrar todos los resultados
+                configurarPaginacion(filteredList);
+
+                return;
             }
+
+            // Recalibrar la paginación para reflejar los resultados filtrados
+            configurarPaginacion(filteredList);
+
+            // Mostrar la primera página de los resultados
+            pagination.setCurrentPageIndex(0);
         } catch (Exception e) {
-            Alerta.mensajeError("Error inesperado", "Ocurrio un error al buscar por rango de fechas: " + e.getMessage());
+            Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar por rango de fechas: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+
     private void configurarPaginacion(ObservableList<ParteIncidencia> listaCompleta) {
-        int filasPorPagina = 5; // Número de filas por página
+        int filasPorPagina = 10; // Número de filas por página
 
         // Configurar el Pagination
         pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
@@ -240,6 +284,13 @@ public class ListaPartesController implements Initializable {
         tv_partes.setItems(paginaActualLista);
     }
 
+    private void abrirParte(ParteIncidencia parte){
+        GuardarParte.setParte(parte);
+        CambioEscena.abrirEscena("parte-verde.fxml", "Ver parte");
+        /*if(color){
+            CambioEscena.abrirEscena("parte-verde.fxml", "Crear parte");
+        }*/
 
+    }
 
 }

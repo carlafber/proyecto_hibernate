@@ -10,7 +10,7 @@ public class HibernateUtil {
     static SessionFactory factory = null;
     static {
         Configuration cfg = new Configuration();
-        cfg.configure("util/hibernate.cfg.xml");
+        cfg.configure("configuration/hibernate.cfg.xml");
 
         cfg.addAnnotatedClass(Alumnos.class);
         cfg.addAnnotatedClass(Grupos.class);

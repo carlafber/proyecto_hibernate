@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="716.0" prefWidth="907.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectopartepablo.Controller.ListaPartesController">
+<AnchorPane prefHeight="716.0" prefWidth="907.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectopartepablo.Controller.ListaPartesController">
    <ImageView fitHeight="716.0" fitWidth="1003.0">
       <image>
          <Image url="@../../../img/logo.png" />
@@ -39,15 +39,16 @@
       <children>
       
            <!-- Tabla -->
-           <TableView fx:id="tableView" layoutY="14.0" prefHeight="438.0" prefWidth="923.0">
+           <TableView fx:id="tableView" layoutX="-15.0" layoutY="14.0" prefHeight="438.0" prefWidth="955.0">
                <columns>
                    <TableColumn fx:id="tv_expedienteColumn" prefWidth="100" text="Expediente" />
-                   <TableColumn fx:id="tv_alumnoColumn" prefWidth="200" text="Nombre del Alumno" />
-                   <TableColumn fx:id="tv_grupoColumn" prefWidth="100" text="Grupo" />
-                   <TableColumn fx:id="tv_profesorColumn" prefWidth="150" text="Profesor" />
-                   <TableColumn fx:id="tv_fechaColumn" prefWidth="100" text="Fecha" />
-                   <TableColumn fx:id="tv_descripcionColumn" prefWidth="150" text="Descripción" />
-                   <TableColumn fx:id="tv_sancionColumn" prefWidth="120" text="Sanción" />
+                   <TableColumn fx:id="tv_alumnoColumn" prefWidth="145.0" text="Nombre del Alumno" />
+                   <TableColumn fx:id="tv_grupoColumn" prefWidth="114.0" text="Grupo" />
+                   <TableColumn fx:id="tv_profesorColumn" prefWidth="128.0" text="Profesor" />
+                   <TableColumn fx:id="tv_fechaColumn" prefWidth="114.0" text="Fecha" />
+                   <TableColumn fx:id="tv_descripcionColumn" prefWidth="133.0" text="Descripción" />
+                   <TableColumn fx:id="tv_sancionColumn" prefWidth="119.0" text="Sanción" />
+               <TableColumn fx:id="tv_botonVerMas" prefWidth="100" />
                </columns>
            </TableView>
       

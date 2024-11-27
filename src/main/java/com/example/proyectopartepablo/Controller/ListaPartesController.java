@@ -15,12 +15,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.hibernate.Session;
 
@@ -45,6 +40,9 @@ public class ListaPartesController implements Initializable {
 
     @FXML
     private TableColumn<ParteIncidencia, String> tv_alumnoColumn;
+
+    @FXML
+    private TableColumn<ParteIncidencia, Button> tv_botonVerMas;
 
     @FXML
     private TableColumn<ParteIncidencia, String> tv_descripcionColumn;
@@ -115,6 +113,32 @@ public class ListaPartesController implements Initializable {
                 return new SimpleStringProperty("Sin Nombre");
             }
         });
+
+
+
+        tv_botonVerMas.setCellFactory(column -> new TableCell<>() {
+            private final Button btnVerMas = new Button("Ver Más");
+
+            {
+
+                btnVerMas.setOnAction(event -> {
+                    ParteIncidencia parte = getTableView().getItems().get(getIndex());
+
+                    System.out.println("Botón clicado para: " + parte);
+                });
+            }
+
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnVerMas);
+                }
+            }
+        });
+
 
         tv_sancionColumn.setCellValueFactory(new PropertyValueFactory<>("sancion"));
         tv_fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));

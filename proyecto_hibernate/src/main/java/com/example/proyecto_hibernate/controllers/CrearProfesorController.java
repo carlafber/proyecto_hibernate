@@ -41,7 +41,7 @@ public class CrearProfesorController implements Initializable {
     @FXML
     void onCrearClick(ActionEvent event) {
         TipoProfesor tipo = null;
-        if (txt_nombre.getText().isEmpty() || txt_numero.getText().isEmpty() || cb_tipo.getSelectionModel().isEmpty()) {
+        if (txt_nombre.getText().isEmpty() || txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty() || cb_tipo.getSelectionModel().getSelectedItem() == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
             if(cb_tipo.getSelectionModel().getSelectedItem().equals("Profesor")){

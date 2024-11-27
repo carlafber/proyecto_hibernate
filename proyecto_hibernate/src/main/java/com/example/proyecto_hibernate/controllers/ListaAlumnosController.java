@@ -69,11 +69,7 @@ public class ListaAlumnosController implements Initializable {
 
         tc_nombreGrupo.setCellValueFactory(cellData -> {
             Grupos grupo = cellData.getValue().getGrupo(); // Obtener el grupo del alumno
-            if (grupo != null) {
-                return new SimpleStringProperty(grupo.getNombreGrupo());
-            } else {
-                return new SimpleStringProperty("Sin Grupo"); // Valor por defecto si no tiene grupo
-            }
+            return new SimpleStringProperty(grupo.getNombreGrupo());
         });
         ArrayList<Alumnos> listaAlumnos = alumnosCRUD.getAlumnos();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
@@ -81,6 +77,7 @@ public class ListaAlumnosController implements Initializable {
         // Crear el FilteredList basado en la lista original
         filteredList = new FilteredList<>(alumnosObservableList, alumno -> true);
         tv_alumnos.setItems(filteredList);
+        configurarPaginacion(filteredList);
     }
 
     @FXML
@@ -114,5 +111,30 @@ public class ListaAlumnosController implements Initializable {
         } catch (NumberFormatException e) {
             Alerta.mensajeError("Formato no válido", "Por favor, introduce un número de expediente válido.");
         }
+    }
+
+    private void configurarPaginacion(ObservableList<Alumnos> listaCompleta) {
+        int filasPorPagina = 5; // Número de filas por página
+
+        // Configurar el Pagination
+        pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
+        pagination.setCurrentPageIndex(0);
+
+        // Listener para cambiar de página
+        pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
+            cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
+        });
+
+        // Mostrar la primera página
+        cambiarPagina(listaCompleta, filasPorPagina, 0);
+    }
+
+    private void cambiarPagina(ObservableList<Alumnos> listaCompleta, int filasPorPagina, int paginaActual) {
+        int desdeIndice = paginaActual * filasPorPagina;
+        int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
+
+        ObservableList<Alumnos> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
+
+        tv_alumnos.setItems(paginaActualLista);
     }
 }

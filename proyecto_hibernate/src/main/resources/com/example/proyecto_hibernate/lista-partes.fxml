@@ -29,11 +29,12 @@
                 </font>
             </Label>
             <Line endX="463.0" endY="-0.5" layoutX="258.0" layoutY="53.0" startX="-237.0" startY="-0.5" stroke="#4a4a4a" strokeMiterLimit="1.0" strokeWidth="0.5" />
-            <TextField fx:id="txt_numExpediente" layoutX="51.0" layoutY="65.0" prefHeight="25.0" prefWidth="562.0" promptText="Buscar por Número de expediente" />
-            <Button fx:id="bt_buscar" layoutX="612.0" layoutY="65.0" onAction="#onBuscarClick" style="-fx-background-color: #289318;" text="Buscar" textFill="WHITE" />
+            <TextField fx:id="txt_numExpediente" layoutX="51.0" layoutY="65.0" prefHeight="31.0" prefWidth="494.0" promptText="Buscar por Número de expediente" />
+            <Button fx:id="bt_buscar" layoutX="543.0" layoutY="66.0" onAction="#onBuscarClick" style="-fx-background-color: #289318;" text="Buscar" textFill="WHITE" />
             <DatePicker fx:id="dt_fechaInicio" layoutX="51.0" layoutY="108.0" prefHeight="31.0" prefWidth="246.0" promptText="dd/mm/aaaa" />
             <DatePicker fx:id="dt_fechaFin" layoutX="297.0" layoutY="108.0" prefHeight="31.0" prefWidth="246.0" promptText="dd/mm/aaaa" />
             <Button fx:id="bt_buscarFecha" layoutX="543.0" layoutY="108.0" onAction="#onBuscarFechaClick" style="-fx-background-color: #289318;" text="Buscar por Fecha" textFill="WHITE" />
+         <Button fx:id="bt_borrar" layoutX="612.0" layoutY="66.0" onAction="#onBorrarClick" style="-fx-background-color: #289318;" text="Borrar" textFill="WHITE" />
         </children>
     </AnchorPane>
     <AnchorPane layoutX="109.0" layoutY="274.0" prefHeight="526.0" prefWidth="1002.0" style="-fx-background-color: #54c6ff; -fx-background-radius: 15;">

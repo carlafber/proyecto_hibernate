@@ -13,5 +13,7 @@
         <mapping class="com.example.proyecto_hibernate.classes.Alumnos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Grupos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Profesor"/>
+        <mapping class="com.example.proyecto_hibernate.classes.ParteIncidencia"/>
+        <mapping class="com.example.proyecto_hibernate.classes.PuntuacionPartes"/>
     </session-factory>
 </hibernate-configuration>

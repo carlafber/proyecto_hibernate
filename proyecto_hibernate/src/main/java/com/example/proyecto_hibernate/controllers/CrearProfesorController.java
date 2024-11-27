@@ -1,7 +1,6 @@
 package com.example.proyecto_hibernate.controllers;
 
 import com.example.proyecto_hibernate.classes.TipoProfesor;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class CrearProfesorController implements Initializable {

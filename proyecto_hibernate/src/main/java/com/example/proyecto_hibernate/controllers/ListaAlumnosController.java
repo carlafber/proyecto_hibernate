@@ -71,6 +71,26 @@ public class ListaAlumnosController implements Initializable {
             Grupos grupo = cellData.getValue().getGrupo(); // Obtener el grupo del alumno
             return new SimpleStringProperty(grupo.getNombreGrupo());
         });
+
+        tv_alumnos.setRowFactory(tv -> new TableRow<>() {
+            protected void updateItem(Alumnos alumnos, boolean empty) {
+                super.updateItem(alumnos, empty);
+                if (alumnos == null || empty) {
+                    setStyle(""); // Restablecer estilo si la fila está vacía
+                } else {
+                    int puntos = alumnos.getPuntos_acumulados();
+                    if (puntos > 25) {
+                        setStyle("-fx-background-color: #ff9a9a;");
+                    } else if (puntos < 25 && puntos >= 12 ) {
+                        setStyle("-fx-background-color: #fff6a0;");
+                    } else if (puntos < 12) {
+                        setStyle("-fx-background-color: #a0ffa0;");
+                    } else {
+                        setStyle(""); // Sin estilo si no hay sanción
+                    }
+                }
+            }
+        });
         ArrayList<Alumnos> listaAlumnos = alumnosCRUD.obtenerAlumnos();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
 

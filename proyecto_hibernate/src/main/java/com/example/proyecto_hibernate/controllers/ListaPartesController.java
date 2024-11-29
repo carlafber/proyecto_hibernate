@@ -138,7 +138,27 @@ public class ListaPartesController implements Initializable {
                 }
             }
         });
-
+        tv_partes.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(ParteIncidencia parte, boolean empty) {
+                super.updateItem(parte, empty);
+                if (parte == null || empty) {
+                    setStyle(""); // Restablecer estilo si la fila está vacía
+                } else {
+                    // Aplicar colores según la sanción
+                    String sancion = parte.getSancion();
+                    if ("Advertencia".equalsIgnoreCase(sancion)) {
+                        setStyle("-fx-background-color: #a0ffa0;");
+                    } else if ("Suspensión".equalsIgnoreCase(sancion)) {
+                        setStyle("-fx-background-color: #fff6a0;");
+                    } else if ("Expulsión".equalsIgnoreCase(sancion)) {
+                        setStyle("-fx-background-color: #ff9a9a;");
+                    } else {
+                        setStyle(""); // Sin estilo si no hay sanción
+                    }
+                }
+            }
+        });
 
         ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
         ObservableList<ParteIncidencia> parteIncidenciasObservable = FXCollections.observableArrayList(listaPartesIncidencia);

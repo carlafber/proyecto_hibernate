@@ -85,6 +85,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version> <!-- Para el hashing de contraseñas -->
+        </dependency>
     </dependencies>
 
     <build>

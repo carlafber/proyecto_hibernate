@@ -6,9 +6,11 @@ import com.example.proyecto_hibernate.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ProfesorCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
@@ -31,6 +33,9 @@ public class ProfesorCRUD {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
+
+            String contrasena_encriptada = BCrypt.hashpw(profesor.getContrasena(), BCrypt.gensalt());
+            profesor.setContrasena(contrasena_encriptada);
 
             session.save(profesor);
 

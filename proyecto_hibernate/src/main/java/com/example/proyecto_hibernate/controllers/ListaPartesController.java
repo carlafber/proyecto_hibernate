@@ -1,10 +1,7 @@
 package com.example.proyecto_hibernate.controllers;
 
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
-import com.example.proyecto_hibernate.classes.Alumnos;
-import com.example.proyecto_hibernate.classes.Grupos;
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
-import com.example.proyecto_hibernate.classes.Profesor;
+import com.example.proyecto_hibernate.classes.*;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.CambioEscena;
 import com.example.proyecto_hibernate.util.GuardarParte;
@@ -83,7 +80,7 @@ public class ListaPartesController implements Initializable {
 
     private PartesCRUD partesCRUD = new PartesCRUD();
 
-    private  ParteIncidencia parteIncidencia = new ParteIncidencia();
+    private  ParteIncidencia parte = new ParteIncidencia();
 
     private FilteredList<ParteIncidencia> filteredList;
 
@@ -119,13 +116,15 @@ public class ListaPartesController implements Initializable {
         tc_sancion.setCellValueFactory(new PropertyValueFactory<>("sancion"));
 
         tc_botones.setCellFactory(column -> new TableCell<>() {
-            private final Button bt_verMas = new Button("Ver Más");
-
+            private final Button bt_verMas = new Button("Ver más");
             {
+                bt_verMas.setStyle("-fx-background-color: #3396ff; -fx-text-fill: white;");
+
                 bt_verMas.setOnAction(event -> {
-                    ParteIncidencia parte = getTableView().getItems().get(getIndex());
+                    parte = getTableView().getItems().get(getIndex());
                     abrirParte(parte);
                 });
+
             }
 
             @Override
@@ -135,30 +134,33 @@ public class ListaPartesController implements Initializable {
                     setGraphic(null); // Limpia la celda si está vacía
                 } else {
                     setGraphic(bt_verMas); // Añade el botón si la celda contiene datos
+                    setStyle("-fx-alignment: CENTER;"); // Centra el botón en la celda
                 }
             }
         });
+
         tv_partes.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(ParteIncidencia parte, boolean empty) {
                 super.updateItem(parte, empty);
+                String estilo = "-fx-background-color: ";
                 if (parte == null || empty) {
+                    estilo = "";
                     setStyle(""); // Restablecer estilo si la fila está vacía
                 } else {
-                    // Aplicar colores según la sanción
-                    String sancion = parte.getSancion();
-                    if ("Advertencia".equalsIgnoreCase(sancion)) {
-                        setStyle("-fx-background-color: #a0ffa0;");
-                    } else if ("Suspensión".equalsIgnoreCase(sancion)) {
-                        setStyle("-fx-background-color: #fff6a0;");
-                    } else if ("Expulsión".equalsIgnoreCase(sancion)) {
-                        setStyle("-fx-background-color: #ff9a9a;");
-                    } else {
-                        setStyle(""); // Sin estilo si no hay sanción
+                    // Aplicar colores según el color del parte
+                    if(parte.getColor().equals(ColorParte.VERDE)){
+                        estilo += ColorParte.VERDE.getCodigo_color() + ";";
+                    } else if(parte.getColor().equals(ColorParte.NARANJA)){
+                        estilo += ColorParte.NARANJA.getCodigo_color() + ";";
+                    } else if(parte.getColor().equals(ColorParte.ROJO)){
+                        estilo += ColorParte.ROJO.getCodigo_color() + ";";
                     }
                 }
+                setStyle(estilo);
             }
         });
+
 
         ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
         ObservableList<ParteIncidencia> parteIncidenciasObservable = FXCollections.observableArrayList(listaPartesIncidencia);
@@ -305,11 +307,13 @@ public class ListaPartesController implements Initializable {
 
     private void abrirParte(ParteIncidencia parte){
         GuardarParte.setParte(parte);
-        CambioEscena.abrirEscena("parte-verde.fxml", "Ver parte");
-        /*if(color){
-            CambioEscena.abrirEscena("parte-verde.fxml", "Crear parte");
-        }*/
-
+        if(parte.getColor().equals(ColorParte.VERDE)){
+            CambioEscena.abrirEscena("parte-verde.fxml", "Ver parte");
+        } else if (parte.getColor().equals(ColorParte.NARANJA)) {
+            CambioEscena.abrirEscena("parte-naranja.fxml", "Ver parte");
+        } else if (parte.getColor().equals(ColorParte.ROJO)) {
+            CambioEscena.abrirEscena("parte-rojo.fxml", "Ver parte");
+        }
     }
 
 }

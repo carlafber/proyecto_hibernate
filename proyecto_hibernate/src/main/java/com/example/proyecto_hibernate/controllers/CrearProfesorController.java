@@ -54,6 +54,7 @@ public class CrearProfesorController implements Initializable {
             Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
             limpiarCampos();
             //FALTA ENCRIPTAR CONTRASEÑAS
+            //FALTA COMPROBAR QUE EXISTE EL PROFESOR
         }
     }
 

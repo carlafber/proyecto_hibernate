@@ -37,7 +37,7 @@
       <children>
       
            <!-- Tabla -->
-           <TableView fx:id="tv_alumnos" layoutX="59.0" layoutY="21.0" prefHeight="244.0" prefWidth="806.0">
+           <TableView fx:id="tv_alumnos" layoutX="59.0" layoutY="25.0" prefHeight="235.0" prefWidth="806.0">
                <columns>
                    <TableColumn fx:id="tc_numExpediente" prefWidth="225.0" text="Número de Expediente" />
                    <TableColumn fx:id="tc_nombreAlumno" prefWidth="232.0" text="Nombre Alumno" />

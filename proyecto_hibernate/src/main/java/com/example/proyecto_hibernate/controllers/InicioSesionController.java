@@ -7,18 +7,29 @@ import com.example.proyecto_hibernate.util.CambioEscena;
 import com.example.proyecto_hibernate.util.GuardarProfesor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
-public class InicioSesionController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class InicioSesionController implements Initializable {
 
     @FXML
     private Button bt_iniciar_sesion;
 
     @FXML
+    private StackPane fondo;
+
+    @FXML
     private ImageView imagen_fondo;
+
+    //@FXML
+    //private VBox inicio;
 
     @FXML
     private PasswordField pwd_contrasena;
@@ -52,5 +63,15 @@ public class InicioSesionController {
         }
         txt_numero.clear();
         pwd_contrasena.clear();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        imagen_fondo.fitWidthProperty().bind(fondo.widthProperty());
+        imagen_fondo.fitHeightProperty().bind(fondo.heightProperty());
+
+        //inicio.prefWidthProperty().bind(fondo.widthProperty());
+        //inicio.prefHeightProperty().bind(fondo.heightProperty());
+
     }
 }

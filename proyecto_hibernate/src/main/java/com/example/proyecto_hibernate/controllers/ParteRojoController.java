@@ -3,6 +3,7 @@ package com.example.proyecto_hibernate.controllers;
 import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.Alumnos;
+import com.example.proyecto_hibernate.classes.ColorParte;
 import com.example.proyecto_hibernate.classes.ParteIncidencia;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.CambioEscena;
@@ -60,7 +61,7 @@ public class ParteRojoController implements Initializable {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
-            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), "sancion");
+            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), "sancion", ColorParte.ROJO);
             //puntuacion falta
             //sancion hacer
             parteCRUD.crearParte(parte);

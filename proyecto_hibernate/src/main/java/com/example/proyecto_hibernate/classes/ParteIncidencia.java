@@ -41,10 +41,15 @@ public class ParteIncidencia {
     private String sancion;
 
 
+    @Column(name = "color")
+    @Enumerated(EnumType.STRING)
+    private ColorParte color;
+
     public ParteIncidencia() {
     }
 
-    public ParteIncidencia(Alumnos alumno, Profesor profesor, Grupos grupo, LocalDate fecha, String hora, String descripcion, String sancion) {
+
+    public ParteIncidencia(Alumnos alumno, Profesor profesor, Grupos grupo, LocalDate fecha, String hora, String descripcion, String sancion, ColorParte color) {
         this.alumno = alumno;
         this.profesor = profesor;
         this.grupo = grupo;
@@ -52,6 +57,7 @@ public class ParteIncidencia {
         this.hora = hora;
         this.descripcion = descripcion;
         this.sancion = sancion;
+        this.color = color;
     }
 
 
@@ -125,5 +131,13 @@ public class ParteIncidencia {
 
     public void setSancion(String sancion) {
         this.sancion = sancion;
+    }
+
+    public ColorParte getColor() {
+        return color;
+    }
+
+    public void setColor(ColorParte color) {
+        this.color = color;
     }
 }

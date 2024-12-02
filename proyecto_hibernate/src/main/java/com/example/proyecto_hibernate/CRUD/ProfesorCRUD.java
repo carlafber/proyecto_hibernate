@@ -29,7 +29,7 @@ public class ProfesorCRUD {
         return listaProfesores;
     }
 
-    public void crearProfesor(Profesor profesor) {
+    public boolean crearProfesor(Profesor profesor) {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
@@ -40,8 +40,10 @@ public class ProfesorCRUD {
             session.save(profesor);
 
             transaction.commit();
+            return true;
         } catch (Exception e) {
-            Alerta.mensajeError(null, e.getMessage());
+            //Alerta.mensajeError("null", e.getMessage());
+            return false;
         }
     }
 }

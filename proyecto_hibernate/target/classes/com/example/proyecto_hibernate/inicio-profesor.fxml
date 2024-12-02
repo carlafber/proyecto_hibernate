@@ -4,11 +4,11 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: Grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioProfesorController">
+<StackPane fx:id="fondo" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioProfesorController">
    <children>
-      <ImageView fx:id="imagen_fondo" fitHeight="835.0" fitWidth="1220.0" layoutX="180.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imagen_fondo" fitHeight="834.0" fitWidth="908.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../img/logo.png" />
          </image>
@@ -27,4 +27,4 @@
          </items>
       </ToolBar>
    </children>
-</AnchorPane>
+</StackPane>

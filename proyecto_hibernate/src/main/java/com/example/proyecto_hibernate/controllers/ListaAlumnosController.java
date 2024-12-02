@@ -1,7 +1,11 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.classes.*;
-import com.example.proyecto_hibernate.CRUD.*;
+import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.Alumnos;
+import com.example.proyecto_hibernate.classes.ColorParte;
+import com.example.proyecto_hibernate.classes.Grupos;
+import com.example.proyecto_hibernate.CRUD.PartesCRUD;
+import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
 
 import com.example.proyecto_hibernate.util.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +22,7 @@ import org.hibernate.Session;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaAlumnosController implements Initializable {
@@ -51,6 +56,8 @@ public class ListaAlumnosController implements Initializable {
 
     private AlumnosCRUD alumnosCRUD = new AlumnosCRUD();
 
+    private PartesCRUD partesCRUD = new PartesCRUD();
+
     private ObservableList<Alumnos> alumnosObservableList;
 
     private FilteredList<Alumnos> filteredList;
@@ -69,6 +76,37 @@ public class ListaAlumnosController implements Initializable {
             Grupos grupo = cellData.getValue().getGrupo(); // Obtener el grupo del alumno
             return new SimpleStringProperty(grupo.getNombreGrupo());
         });
+
+        tv_alumnos.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Alumnos alumno, boolean empty) {
+                super.updateItem(alumno, empty);
+
+                if (alumno == null || empty) {
+                    setStyle(""); // Restablecer estilo si la fila está vacía o el alumno es null
+                    return; // Salir para evitar el procesamiento adicional
+                }
+
+                List<ParteIncidencia> partes = partesCRUD.obtenerPartesAlumno(alumno.getId_alum());
+                String estilo = "-fx-background-color: ";
+                ColorParte color = colorMasGrave(partes);
+                if (partes.isEmpty()) {
+                    estilo = "";
+                    setStyle(""); // Restablecer estilo si la fila está vacía
+                } else {
+                    // Aplicar colores según el color del parte
+                    if(color.equals(ColorParte.VERDE)){
+                        estilo += ColorParte.VERDE.getCodigo_color() + ";";
+                    } else if(color.equals(ColorParte.NARANJA)){
+                        estilo += ColorParte.NARANJA.getCodigo_color() + ";";
+                    } else if(color.equals(ColorParte.ROJO)){
+                        estilo += ColorParte.ROJO.getCodigo_color() + ";";
+                    }
+                }
+                setStyle(estilo);
+            }
+        });
+
         ArrayList<Alumnos> listaAlumnos = alumnosCRUD.obtenerAlumnos();
         alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
 
@@ -151,5 +189,25 @@ public class ListaAlumnosController implements Initializable {
         ObservableList<Alumnos> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
 
         tv_alumnos.setItems(paginaActualLista);
+    }
+
+    private ColorParte colorMasGrave(List<ParteIncidencia> partes) {
+        ColorParte color = ColorParte.VERDE;
+
+        for (ParteIncidencia parte : partes) {
+            if (parte.getColor() != null) {
+                if (parte.getColor() == ColorParte.ROJO) {
+                    return ColorParte.ROJO; // Si hay algún ROJO, retornamos ROJO
+                }
+                if (parte.getColor() == ColorParte.NARANJA && color != ColorParte.ROJO) {
+                    color = ColorParte.NARANJA; // Si hay NARANJA y no hay ROJO, ponemos NARANJA
+                }
+                if (parte.getColor() == ColorParte.VERDE && color == ColorParte.VERDE) {
+                    color = ColorParte.VERDE; // Si hay VERDE y es el color más leve, mantenemos VERDE
+                }
+            }
+        }
+
+        return color;
     }
 }

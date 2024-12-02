@@ -70,7 +70,6 @@ public class ParteVerdeController implements Initializable {
         }
     }
 
-
     @FXML
     void onExpedienteAlumnoChange(KeyEvent event) {
         String numExpediente = txt_expedienteAlumno.getText();

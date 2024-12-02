@@ -41,6 +41,7 @@ public class CrearProfesorController implements Initializable {
     @FXML
     void onCrearClick(ActionEvent event) {
         TipoProfesor tipo = null;
+        boolean creado = false;
         if (txt_nombre.getText().isEmpty() || txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty() || cb_tipo.getSelectionModel().getSelectedItem() == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
@@ -50,11 +51,12 @@ public class CrearProfesorController implements Initializable {
                 tipo = TipoProfesor.jefe_de_estudios;
             }
             Profesor profesor = new Profesor(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
-            profesorCRUD.crearProfesor(profesor);
-            Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
+            if(profesorCRUD.crearProfesor(profesor)){
+                Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
+            } else {
+                Alerta.mensajeError("Profesor duplicado", "No puede haber dos profesores con el mismo número asignado.");
+            }
             limpiarCampos();
-            //FALTA ENCRIPTAR CONTRASEÑAS
-            //FALTA COMPROBAR QUE EXISTE EL PROFESOR
         }
     }
 

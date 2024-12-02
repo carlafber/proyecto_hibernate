@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +27,9 @@ public class InicioProfesorController implements Initializable {
 
     @FXML
     private Button bt_listaPartes;
+
+    @FXML
+    private StackPane fondo;
 
     @FXML
     private ImageView imagen_fondo;
@@ -55,6 +59,9 @@ public class InicioProfesorController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        imagen_fondo.fitWidthProperty().bind(fondo.widthProperty());
+        imagen_fondo.fitHeightProperty().bind(fondo.heightProperty());
+
         tipoProfesor = GuardarProfesor.getProfesor().getTipo();
         if(tipoProfesor.equals(TipoProfesor.profesor)){
             deshabilitarBotones();

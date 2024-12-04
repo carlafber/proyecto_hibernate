@@ -24,6 +24,9 @@ public class ParteRojoController implements Initializable {
     private Button bt_crear;
 
     @FXML
+    private Button bt_actualizar;
+
+    @FXML
     private Button bt_parteNaranja;
 
     @FXML
@@ -33,7 +36,13 @@ public class ParteRojoController implements Initializable {
     private Button bt_parteVerde;
 
     @FXML
+    private TextArea txt_sancionRecibida;
+
+    @FXML
     private ComboBox<String> cb_horaParte;
+
+    @FXML
+    private ComboBox<String> cb_tipoSancion;
 
     @FXML
     private DatePicker dp_fechaParte;
@@ -120,7 +129,16 @@ public class ParteRojoController implements Initializable {
                 "20:45-21:35"
         );
 
+        cb_tipoSancion.getItems().addAll(
+                "Incoación de expediente o en su caso expediente abreviado",
+                "Reunión con la Comisión de Convivencia",
+                "Es obligatorio pedir disculpas a la persona/as contra las que\nejerció daño físico o moral, y/o reparar los daños materiales causados",
+                "Otro"
+        );
+
         nombre_profesor.setText(" " + GuardarProfesor.getProfesor().getNombre());
+
+        txt_sancionRecibida.setVisible(false);
 
         if(GuardarParte.getParte() != null){
             txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
@@ -128,6 +146,25 @@ public class ParteRojoController implements Initializable {
             dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
             cb_horaParte.setValue(GuardarParte.getParte().getHora());
             txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
+        }
+    }
+
+    @FXML
+    void onActualizarClick(ActionEvent event) {
+
+    }
+
+    //validación de lo que se selecciona en el comboBox del tipo de sanción recibida
+    @FXML
+    void onSancionChangeOtro(ActionEvent event) {
+        String tipoSancion = cb_tipoSancion.getValue();
+
+        if (tipoSancion != null && tipoSancion.equals("Otro")) {
+            //si el valor es "Otro", mostramos el TextField
+            txt_sancionRecibida.setVisible(true);
+        } else {
+            //si no es "otro" la opción seleccioanda, el TextField se mantiene oculto
+            txt_sancionRecibida.setVisible(false);
         }
     }
 

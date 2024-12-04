@@ -24,6 +24,9 @@ public class ParteNaranjaController implements Initializable {
     private Button bt_crear;
 
     @FXML
+    private Button bt_actualizar;
+
+    @FXML
     private Button bt_parteNaranja;
 
     @FXML
@@ -37,6 +40,9 @@ public class ParteNaranjaController implements Initializable {
 
     @FXML
     private DatePicker dp_fechaParte;
+
+    @FXML
+    private TextArea txt_sancionRecibida;
 
     @FXML
     private Label grupo_alumno;
@@ -129,6 +135,11 @@ public class ParteNaranjaController implements Initializable {
             cb_horaParte.setValue(GuardarParte.getParte().getHora());
             txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
         }
+    }
+
+    @FXML
+    void onActualizarClick(ActionEvent event) {
+
     }
 
     private void limpiarCampos() {

@@ -24,6 +24,9 @@ public class ParteVerdeController implements Initializable {
     private Button bt_crear;
 
     @FXML
+    private Button bt_actualizar;
+
+    @FXML
     private Button bt_parteNaranja;
 
     @FXML
@@ -31,6 +34,9 @@ public class ParteVerdeController implements Initializable {
 
     @FXML
     private Button bt_parteVerde;
+
+    @FXML
+    private TextArea txt_sancionRecibida;
 
     @FXML
     private ComboBox<String> cb_horaParte;
@@ -129,6 +135,11 @@ public class ParteVerdeController implements Initializable {
            cb_horaParte.setValue(GuardarParte.getParte().getHora());
            txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
        }
+    }
+
+    @FXML
+    void onActualizarClick(ActionEvent event) {
+
     }
 
     private void limpiarCampos() {

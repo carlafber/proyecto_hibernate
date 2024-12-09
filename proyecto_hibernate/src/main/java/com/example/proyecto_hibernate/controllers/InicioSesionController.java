@@ -46,7 +46,7 @@ public class InicioSesionController implements Initializable {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
             for(Profesor profe : profesorCRUD.obtenerProfesores()){
-                if(txt_numero.getText().equals(profe.getNumeroAsignado())){
+                if(txt_numero.getText().equals(profe.getNumero_asignado())){
                     if(pwd_contrasena.getText().equals(profe.getContrasena())) {
                         GuardarProfesor.setProfesor(profe);
                         CambioEscena.abrirEscena("inicio-profesor.fxml", null);

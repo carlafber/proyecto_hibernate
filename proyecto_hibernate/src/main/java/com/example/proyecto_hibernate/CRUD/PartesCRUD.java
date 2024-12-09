@@ -35,14 +35,13 @@ public class PartesCRUD {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
             session.save(parteIncidencia);
-
             transaction.commit();
         } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
         }
     }//insertarParte
+
 
     public List<ParteIncidencia> obtenerPartesAlumno(int id_alumno){
         Transaction transaction = null;
@@ -58,5 +57,21 @@ public class PartesCRUD {
             e.printStackTrace();
         }
         return listaPartes;
+    }
+
+    public boolean actualizarParte(ParteIncidencia parte) {
+        Transaction transaction = null;
+        boolean cambios = false;
+        try(Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+            session.update(parte);
+            cambios = true;
+            transaction.commit();
+        } catch (Exception e) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return cambios;
     }
 }

@@ -2,7 +2,7 @@ package com.example.proyecto_hibernate.classes;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
+
 @Entity
 @Table(name = "partes_incidencia")
 public class ParteIncidencia {
@@ -10,7 +10,7 @@ public class ParteIncidencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_parte")
-    private int idParte;
+    private int id_parte;
 
     @ManyToOne
     @JoinColumn(name = "id_alum")
@@ -24,10 +24,6 @@ public class ParteIncidencia {
     @JoinColumn(name = "id_profesor")
     private Profesor profesor;
 
-    @ManyToOne
-    @JoinColumn(name = "id_punt_partes")
-    private PuntuacionPartes puntuacionParte;
-
     @Column(name = "descripcion")
     private String descripcion;
 
@@ -40,14 +36,16 @@ public class ParteIncidencia {
     @Column(name = "sancion")
     private String sancion;
 
-
     @Column(name = "color")
     @Enumerated(EnumType.STRING)
     private ColorParte color;
 
+    @Column(name = "puntos_parte")
+    private int puntos_parte;
+
+
     public ParteIncidencia() {
     }
-
 
     public ParteIncidencia(Alumnos alumno, Profesor profesor, Grupos grupo, LocalDate fecha, String hora, String descripcion, String sancion, ColorParte color) {
         this.alumno = alumno;
@@ -58,15 +56,16 @@ public class ParteIncidencia {
         this.descripcion = descripcion;
         this.sancion = sancion;
         this.color = color;
+        this.puntos_parte = color.getPuntos(); // Inicializar los puntos basados en el color
     }
 
 
-    public int getIdParte() {
-        return idParte;
+    public int getId_parte() {
+        return id_parte;
     }
 
-    public void setIdParte(int idParte) {
-        this.idParte = idParte;
+    public void setId_parte(int id_parte) {
+        this.id_parte = id_parte;
     }
 
     public Alumnos getAlumno() {
@@ -91,14 +90,6 @@ public class ParteIncidencia {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
-    }
-
-    public PuntuacionPartes getPuntuacionParte() {
-        return puntuacionParte;
-    }
-
-    public void setPuntuacionParte(PuntuacionPartes puntuacionParte) {
-        this.puntuacionParte = puntuacionParte;
     }
 
     public String getDescripcion() {
@@ -139,5 +130,14 @@ public class ParteIncidencia {
 
     public void setColor(ColorParte color) {
         this.color = color;
+        this.puntos_parte = color.getPuntos(); // Al cambiar el color, actualizar los puntos
+    }
+
+    public int getPuntos_parte() {
+        return puntos_parte;
+    }
+
+    public void setPuntos_parte(int puntos_parte) {
+        this.puntos_parte = puntos_parte;
     }
 }

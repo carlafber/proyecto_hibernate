@@ -7,15 +7,30 @@ import javax.persistence.*;
 public class Alumnos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_alum")
     private int id_alum;
+
+    @Column(name = "nombre_alum")
     private String nombre_alum;
+
+    @Column(name = "numero_expediente")
     private String numero_expediente;
-    private int puntos_acumulados;
+
+    @Column(name = "puntos_acumulados")
+    private int puntos_acumulados; //calcular buscando los puntos que vale cada parte que tiene el alumno
 
     @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupos grupo;
 
+    public Alumnos() {
+    }
+
+    public Alumnos(String nombre_alum, String numero_expediente, Grupos grupo) {
+        this.nombre_alum = nombre_alum;
+        this.numero_expediente = numero_expediente;
+        this.grupo = grupo;
+    }
 
     public int getId_alum() {
         return id_alum;

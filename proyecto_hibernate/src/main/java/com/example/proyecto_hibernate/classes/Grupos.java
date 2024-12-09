@@ -7,16 +7,21 @@ import javax.persistence.*;
 public class Grupos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_grupo")
     private int id_grupo;
+
+    @Column(name = "nombre_grupo")
     private String nombre_grupo;
+
+
+    public Grupos() {
+    }
 
     public Grupos(int id_grupo, String nombre_grupo) {
         this.id_grupo = id_grupo;
         this.nombre_grupo = nombre_grupo;
     }
 
-    public Grupos() {
-    }
 
     public int getId_grupo() {
         return id_grupo;

@@ -16,7 +16,6 @@ public class HibernateUtil {
         cfg.addAnnotatedClass(Grupos.class);
         cfg.addAnnotatedClass(Profesor.class);
         cfg.addAnnotatedClass(ParteIncidencia.class);
-        cfg.addAnnotatedClass(PuntuacionPartes.class);
 
         System.out.println("conectado hibernate");
 

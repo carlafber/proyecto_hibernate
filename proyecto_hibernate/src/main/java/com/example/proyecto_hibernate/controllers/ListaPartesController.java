@@ -2,10 +2,8 @@ package com.example.proyecto_hibernate.controllers;
 
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.*;
-import com.example.proyecto_hibernate.util.Alerta;
-import com.example.proyecto_hibernate.util.CambioEscena;
-import com.example.proyecto_hibernate.util.GuardarParte;
-import com.example.proyecto_hibernate.util.HibernateUtil;
+import com.example.proyecto_hibernate.util.*;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -82,15 +80,37 @@ public class ListaPartesController implements Initializable {
 
     private  ParteIncidencia parte = new ParteIncidencia();
 
-    private FilteredList<ParteIncidencia> filteredList;
+    private FilteredList<ParteIncidencia> listaFiltrada;
 
     private Session session;
+
+    private ObservableList<ParteIncidencia> listaPartesObservable; // Lista observable para la tabla
+
+    Configurable ParteVerdeController = new ParteVerdeController();
+
+    Configurable ParteNaranjaController = new ParteNaranjaController();
+
+    Configurable ParteRojoController = new ParteRojoController();
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         session = HibernateUtil.getSessionFactory().openSession();
 
+        // Configurar columnas de la tabla
+        configurarColumnasTabla();
+
+
+        ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
+        listaPartesObservable = FXCollections.observableArrayList(listaPartesIncidencia);
+
+        listaFiltrada = new FilteredList<>(listaPartesObservable, parte -> true);
+        tv_partes.setItems(listaFiltrada);
+
+        configurarPaginacion(listaFiltrada);
+    }
+
+    private void configurarColumnasTabla() {
         tc_expediente.setCellValueFactory(cellData -> {
             Alumnos alumnos = cellData.getValue().getAlumno();
             return new SimpleStringProperty(alumnos.getNumero_expediente());
@@ -160,25 +180,17 @@ public class ListaPartesController implements Initializable {
                 setStyle(estilo);
             }
         });
-
-
-        ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
-        ObservableList<ParteIncidencia> parteIncidenciasObservable = FXCollections.observableArrayList(listaPartesIncidencia);
-
-        filteredList = new FilteredList<>(parteIncidenciasObservable, alumno -> true);
-        tv_partes.setItems(filteredList);
-        configurarPaginacion(filteredList);
     }
 
 
     @FXML
     void onBorrarClick(ActionEvent event) {
-        filteredList.setPredicate(alumno -> true);
+        listaFiltrada.setPredicate(alumno -> true);
         txt_numExpediente.clear();
         dt_fechaInicio.setValue(null);
         dt_fechaFin.setValue(null);
 
-        configurarPaginacion(filteredList);
+        configurarPaginacion(listaFiltrada);
         pagination.setCurrentPageIndex(0);
 
         tv_partes.refresh();
@@ -196,7 +208,7 @@ public class ListaPartesController implements Initializable {
 
         try {
             // Aplicar el filtro a la lista
-            filteredList.setPredicate(parte -> {
+            listaFiltrada.setPredicate(parte -> {
                 Alumnos alumno = parte.getAlumno();
                 if (alumno != null) {
                     return alumno.getNumero_expediente().equals(numeroExpediente);
@@ -205,20 +217,20 @@ public class ListaPartesController implements Initializable {
             });
 
             // Si no se encontraron resultados
-            if (filteredList.isEmpty()) {
+            if (listaFiltrada.isEmpty()) {
                 Alerta.mensajeError("Parte no encontrado", "No se encontró ninguna parte con el expediente: " + numeroExpediente);
 
                 // Restablecer el filtro para mostrar todo
-                filteredList.setPredicate(parte -> true);
+                listaFiltrada.setPredicate(parte -> true);
 
                 // Recalibrar la paginación para mostrar todos los resultados
-                configurarPaginacion(filteredList);
+                configurarPaginacion(listaFiltrada);
 
                 return;
             }
 
             // Recalibrar la paginación para reflejar los resultados de la búsqueda
-            configurarPaginacion(filteredList);
+            configurarPaginacion(listaFiltrada);
 
             // Mostrar la primera página de los resultados
             pagination.setCurrentPageIndex(0);
@@ -248,7 +260,7 @@ public class ListaPartesController implements Initializable {
 
         try {
             // Aplicar filtro para el rango de fechas
-            filteredList.setPredicate(parte -> {
+            listaFiltrada.setPredicate(parte -> {
                 if (parte.getFecha() != null) {
                     return !parte.getFecha().isBefore(fechaInicio) && !parte.getFecha().isAfter(fechaFin);
                 }
@@ -256,20 +268,20 @@ public class ListaPartesController implements Initializable {
             });
 
             // Si no se encuentran resultados
-            if (filteredList.isEmpty()) {
+            if (listaFiltrada.isEmpty()) {
                 Alerta.mensajeError("No se encontraron partes", "No se encontraron partes entre las fechas: " + fechaInicio + " y " + fechaFin);
 
                 // Restablecer el filtro para mostrar todos los elementos
-                filteredList.setPredicate(parte -> true);
+                listaFiltrada.setPredicate(parte -> true);
 
                 // Recalibrar la paginación para mostrar todos los resultados
-                configurarPaginacion(filteredList);
+                configurarPaginacion(listaFiltrada);
 
                 return;
             }
 
             // Recalibrar la paginación para reflejar los resultados filtrados
-            configurarPaginacion(filteredList);
+            configurarPaginacion(listaFiltrada);
 
             // Mostrar la primera página de los resultados
             pagination.setCurrentPageIndex(0);
@@ -307,13 +319,30 @@ public class ListaPartesController implements Initializable {
 
     private void abrirParte(ParteIncidencia parte){
         GuardarParte.setParte(parte);
+        boolean estado = GuardarProfesor.getProfesor().getTipo().equals(TipoProfesor.profesor);
+        GuardarController.setController(this);
         if(parte.getColor().equals(ColorParte.VERDE)){
-            CambioEscena.abrirEscena("parte-verde.fxml", "Ver parte");
+            CambioEscena.abrirEscena("parte-verde.fxml", "Ver parte", ParteVerdeController, estado);
         } else if (parte.getColor().equals(ColorParte.NARANJA)) {
-            CambioEscena.abrirEscena("parte-naranja.fxml", "Ver parte");
+            CambioEscena.abrirEscena("parte-naranja.fxml", "Ver parte", ParteNaranjaController, estado);
         } else if (parte.getColor().equals(ColorParte.ROJO)) {
-            CambioEscena.abrirEscena("parte-rojo.fxml", "Ver parte");
+            CambioEscena.abrirEscena("parte-rojo.fxml", "Ver parte", ParteRojoController, estado);
         }
     }
+
+    public void recargarListaPartes() {
+        Platform.runLater(() -> {
+            // Recuperar datos actualizados
+            ArrayList<ParteIncidencia> listaActualizada = partesCRUD.obtenerPartes();
+            // Actualizar lista observable
+            listaPartesObservable.setAll(listaActualizada);
+
+            configurarPaginacion(listaFiltrada);
+        });
+    }
+
+
+
+
 
 }

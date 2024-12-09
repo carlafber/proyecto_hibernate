@@ -9,7 +9,7 @@ public class Profesor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_profesor")
-    private int idProfesor;
+    private int id_profesor;
 
     @Column(name = "contrasena")
     private String contrasena;
@@ -18,28 +18,30 @@ public class Profesor {
     private String nombre;
 
     @Column(name = "numero_asignado")
-    private String numeroAsignado;
+    private String numero_asignado;
 
     @Column(name = "tipo")
     @Enumerated(EnumType.STRING)
     private TipoProfesor tipo;
 
+
     public Profesor() {
     }
 
-    public Profesor(String contrasena, String nombre, String numeroAsignado, TipoProfesor tipo) {
+    public Profesor(String contrasena, String nombre, String numero_asignado, TipoProfesor tipo) {
         this.contrasena = contrasena;
         this.nombre = nombre;
-        this.numeroAsignado = numeroAsignado;
+        this.numero_asignado = numero_asignado;
         this.tipo = tipo;
     }
 
-    public int getIdProfesor() {
-        return idProfesor;
+
+    public int getId_profesor() {
+        return id_profesor;
     }
 
-    public void setIdProfesor(int idProfesor) {
-        this.idProfesor = idProfesor;
+    public void setId_profesor(int id_profesor) {
+        this.id_profesor = id_profesor;
     }
 
     public String getContrasena() {
@@ -58,12 +60,12 @@ public class Profesor {
         this.nombre = nombre;
     }
 
-    public String getNumeroAsignado() {
-        return numeroAsignado;
+    public String getNumero_asignado() {
+        return numero_asignado;
     }
 
-    public void setNumeroAsignado(String numeroAsignado) {
-        this.numeroAsignado = numeroAsignado;
+    public void setNumero_asignado(String numero_asignado) {
+        this.numero_asignado = numero_asignado;
     }
 
     public TipoProfesor getTipo() {

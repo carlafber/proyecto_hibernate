@@ -7,13 +7,13 @@
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost/gestionpartes</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">toor</property>
+        <!--<property name="connection.password">toor</property>-->
+        <property name="connection.password">1234</property>
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="hibernate.show_sql">true</property>
         <mapping class="com.example.proyecto_hibernate.classes.Alumnos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Grupos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Profesor"/>
         <mapping class="com.example.proyecto_hibernate.classes.ParteIncidencia"/>
-        <mapping class="com.example.proyecto_hibernate.classes.PuntuacionPartes"/>
     </session-factory>
 </hibernate-configuration>

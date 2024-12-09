@@ -5,26 +5,25 @@ import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ColorParte;
 import com.example.proyecto_hibernate.classes.ParteIncidencia;
-import com.example.proyecto_hibernate.util.Alerta;
-import com.example.proyecto_hibernate.util.CambioEscena;
-import com.example.proyecto_hibernate.util.GuardarParte;
-import com.example.proyecto_hibernate.util.GuardarProfesor;
+import com.example.proyecto_hibernate.classes.TipoProfesor;
+import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ParteVerdeController implements Initializable {
-
-    @FXML
-    private Button bt_crear;
+public class ParteVerdeController implements Initializable, Configurable {
 
     @FXML
     private Button bt_actualizar;
+
+    @FXML
+    private Button bt_crear;
 
     @FXML
     private Button bt_parteNaranja;
@@ -36,13 +35,13 @@ public class ParteVerdeController implements Initializable {
     private Button bt_parteVerde;
 
     @FXML
-    private TextArea txt_sancionRecibida;
-
-    @FXML
     private ComboBox<String> cb_horaParte;
 
     @FXML
     private DatePicker dp_fechaParte;
+
+    @FXML
+    private TextArea txt_sancion;
 
     @FXML
     private Label grupo_alumno;
@@ -62,14 +61,42 @@ public class ParteVerdeController implements Initializable {
 
     private Alumnos alumno;
 
+    private Boolean reset = false;
+
+    private ListaPartesController listaPartesController;
+
+    @FXML
+    void onActualizarClick(ActionEvent event) {
+        ParteIncidencia parte = GuardarParte.getParte();
+        parte.setFecha(dp_fechaParte.getValue());
+        parte.setHora(cb_horaParte.getValue());
+        parte.setDescripcion(txt_descripcion.getText());
+        parte.setSancion(txt_sancion.getText());
+        parte.setColor(ColorParte.VERDE);
+        parte.setPuntos_parte(parte.getColor().getPuntos());
+
+        if(parteCRUD.actualizarParte(parte)){
+            Alerta.mensajeInfo("ÉXITO", null, "Parte actualizado correctamente.");
+            // Cerrar la ventana actual
+            Stage stage = (Stage) bt_actualizar.getScene().getWindow();
+            stage.close();
+
+            setListaPartesController(listaPartesController);
+            // Notificar a la lista de partes para que se recargue
+            listaPartesController.recargarListaPartes();
+        } else {
+            Alerta.mensajeError(null, "No se pudo actualizar el parte.");
+        }
+    }
+
     @FXML
     void onCrearClick(ActionEvent event) {
-        if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty()){
+        if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty() || txt_sancion.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
-            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), "sancion", ColorParte.VERDE);
+            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.VERDE);
+            alumnoCRUD.actualizarPuntosAlumno(alumno, parte);
             //puntuacion falta
-            //sancion hacer
             parteCRUD.crearParte(parte);
             Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
             limpiarCampos();
@@ -99,22 +126,23 @@ public class ParteVerdeController implements Initializable {
 
     @FXML
     void onParteNaranjaClick(ActionEvent event) {
-        GuardarParte.resetParte();
+        resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteNaranja, "parte-naranja.fxml");
     }//onParteNaranjaClick
 
     @FXML
     void onParteRojoClick(ActionEvent event) {
-        GuardarParte.resetParte();
+        resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteRojo, "parte-rojo.fxml");
     }//onParteRojoClick
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cb_horaParte.getItems().addAll(
-                "8:30-9:20",
-                "9:25-10:15",
-                "10:15-11:10",
+                "08:30-09:20",
+                "09:25-10:15",
+                "10:20-11:10",
                 "11:40-12:30",
                 "12:35-13:25",
                 "13:30-14:20",
@@ -126,20 +154,19 @@ public class ParteVerdeController implements Initializable {
                 "20:45-21:35"
         );
 
-       nombre_profesor.setText(" " + GuardarProfesor.getProfesor().getNombre());
+        nombre_profesor.setText(GuardarProfesor.getProfesor().getNombre());
 
-       if(GuardarParte.getParte() != null){
-           txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
-           grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
-           dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
-           cb_horaParte.setValue(GuardarParte.getParte().getHora());
-           txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
-       }
-    }
+        if(GuardarParte.getParte() != null){
+            txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
+            grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
+            dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
+            cb_horaParte.setValue(GuardarParte.getParte().getHora());
+            txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
+            txt_sancion.setText(GuardarParte.getParte().getSancion());
+        }
 
-    @FXML
-    void onActualizarClick(ActionEvent event) {
-
+        bt_actualizar.setDisable(reset);
+        bt_crear.setDisable(!reset);
     }
 
     private void limpiarCampos() {
@@ -148,6 +175,27 @@ public class ParteVerdeController implements Initializable {
         dp_fechaParte.setValue(null);
         cb_horaParte.setValue(null);
         txt_descripcion.clear();
+        txt_sancion.setText("");
+    }
+
+    @Override
+    public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
+        bt_parteNaranja.setDisable(estado); //true -> deshabilitado
+        bt_parteRojo.setDisable(estado);
+        bt_crear.setDisable(!estado);
+        bt_actualizar.setDisable(estado);
+        reset = estado;
+    }
+
+    @Override
+    public void setListaPartesController(ListaPartesController listaPartesController) {
+        this.listaPartesController = GuardarController.getController();
+    }
+
+    private void resetParte(Boolean reset) {
+        if(reset){
+            GuardarParte.resetParte();
+        }
     }
 
 }//class

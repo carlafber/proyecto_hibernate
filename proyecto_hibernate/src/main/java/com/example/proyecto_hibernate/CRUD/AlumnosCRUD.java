@@ -6,6 +6,8 @@ import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.util.HibernateUtil;
 
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -47,5 +49,24 @@ public class AlumnosCRUD {
             Alerta.mensajeError(null, e.getMessage());
         }
         return alumno;
+    }
+
+    public void actualizarPuntosAlumno(Alumnos alumno, ParteIncidencia parte) {
+        Transaction transaction = null;
+        try(Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+            // Sumar los puntos del parte al alumno
+            if (alumno != null) {
+                int nuevosPuntos = alumno.getPuntos_acumulados() + parte.getPuntos_parte();
+                alumno.setPuntos_acumulados(nuevosPuntos);
+
+                session.update(alumno);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 -- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -45,20 +44,6 @@ ALTER TABLE `gestionpartes`.`alumnos`
     FOREIGN KEY (`id_grupo`)
       REFERENCES `gestionpartes`.`grupos` (`id_grupo`);
 
--- -----------------------------------------------------
--- Table `gestionpartes`.`puntuacion_partes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `gestionpartes`.`puntuacion_partes`;
-CREATE TABLE IF NOT EXISTS `gestionpartes`.`puntuacion_partes` (
-`id_punt_partes` INT NOT NULL AUTO_INCREMENT,
-`puntos` INT NOT NULL,
-`tipo_parte` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_punt_partes`),
-  UNIQUE INDEX `UK_6m0adpsgoo0hnptrfpdvcx8vm` (`tipo_parte` ASC))
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- Table `gestionpartes`.`profesores`
@@ -86,26 +71,20 @@ CREATE TABLE IF NOT EXISTS `gestionpartes`.`partes_incidencia` (
 `id_grupo` INT NULL DEFAULT NULL,
 `id_parte` INT NOT NULL AUTO_INCREMENT,
 `id_profesor` INT NULL DEFAULT NULL,
-`id_punt_partes` INT NULL DEFAULT NULL,
 `descripcion` VARCHAR(255) NULL DEFAULT NULL,
   `fecha` DATE NULL DEFAULT NULL,
   `hora` VARCHAR(255) NULL DEFAULT NULL,
   `sancion` VARCHAR(255) NULL DEFAULT NULL,
   `color` ENUM('VERDE', 'NARANJA', 'ROJO') NULL DEFAULT NULL,
+  `puntos_parte` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_parte`),
   INDEX `FKqrx661g5lij25bl2plx6cb2pl` (`id_alum` ASC),
   INDEX `FKckq2ajm1w9wbi3kunm8q3ldp3` (`id_grupo` ASC),
-  INDEX `FKniytl2x2lvm632ic1904a1bhb` (`id_profesor` ASC),
-  INDEX `FK75ruupml2w0bpugnsojl56g05` (`id_punt_partes` ASC))
+  INDEX `FKniytl2x2lvm632ic1904a1bhb` (`id_profesor` ASC))
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci;
-
-ALTER TABLE `gestionpartes`.`partes_incidencia`
-  ADD CONSTRAINT `FK75ruupml2w0bpugnsojl56g05`
-    FOREIGN KEY (`id_punt_partes`)
-      REFERENCES `gestionpartes`.`puntuacion_partes` (`id_punt_partes`);
 
 ALTER TABLE `gestionpartes`.`partes_incidencia`
   ADD CONSTRAINT `FKckq2ajm1w9wbi3kunm8q3ldp3`
@@ -125,11 +104,6 @@ ALTER TABLE `gestionpartes`.`partes_incidencia`
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- Inserción de puntuaciones predeterminadas
-INSERT INTO puntuacion_partes (id_punt_partes, tipo_parte, puntos) VALUES(1, 'verde', 1);
-INSERT INTO puntuacion_partes (id_punt_partes, tipo_parte, puntos) VALUES(6, 'naranja', 6);
-INSERT INTO puntuacion_partes (id_punt_partes, tipo_parte, puntos) VALUES(12, 'rojo', 12);
 
 -- Inserción de profesores en la tabla 'profesores'
 INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Juan Perez', 'jefe_de_estudios', 1001, 'ce5ca673d13b36118d54a7cf13aeb0ca012383bf771e713421b4d1fd841f539a');
@@ -171,24 +145,24 @@ INSERT INTO alumnos (id_grupo, puntos_acumulados, nombre_alum, numero_expediente
 INSERT INTO alumnos (id_grupo, puntos_acumulados, nombre_alum, numero_expediente) VALUES(3, 1, 'Miguel Romero', '1019');
 INSERT INTO alumnos (id_grupo, puntos_acumulados, nombre_alum, numero_expediente) VALUES(4, 6, 'Isabel Hernández', '1020');
 
--- Inserción de partes de incidencia en la tabla 'partes_incidencia' con el campo 'color' actualizado
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (1, 1, 1, 1, 'Incidente menor', '2024-01-01', '09:25-10:15', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (2, 1, 2, 6, 'Incidente moderado', '2024-01-02', '10:20-11:10', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (3, 2, 3, 12, 'Incidente grave', '2024-01-03', '11:40-12:30', 'Reunión con la Comisión de Convivencia', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (4, 2, 4, 1, 'Incidente menor', '2024-01-04', '12:35-13:25', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (5, 3, 5, 6, 'Incidente moderado', '2024-01-05', '13:30-14:20', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (6, 3, 6, 12, 'Incidente grave', '2024-01-06', '13:30-14:20', 'Otra: Expulsión', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (7, 4, 1, 1, 'Incidente menor', '2024-01-07', '16:00-16:50', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (8, 4, 2, 6, 'Incidente moderado', '2024-01-08', '16:55-17:45', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (9, 5, 3, 12, 'Incidente grave', '2024-01-09', '17:50-18:40', 'Expulsión', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (10, 5, 4, 1, 'Incidente menor', '2024-01-10', '18:55-19:45', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (11, 6, 5, 6, 'Incidente moderado', '2024-01-11', '19:50-20:40', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (12, 6, 6, 12, 'Incidente grave', '2024-01-12', '20:45-21:35', 'Expulsión', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (13, 7, 1, 1, 'Incidente menor', '2024-01-13', '10:20-11:10', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (14, 7, 2, 6, 'Incidente moderado', '2024-01-14', '11:40-12:30', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (15, 8, 3, 12, 'Incidente grave', '2024-01-15', '13:30-14:20', 'Expulsión', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (16, 8, 4, 1, 'Incidente menor', '2024-01-16', '16:00-16:50', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (17, 1, 5, 6, 'Incidente moderado', '2024-01-17', '16:55-17:45', 'Suspensión', 'NARANJA');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (18, 2, 6, 12, 'Incidente grave', '2024-01-18', '17:50-18:40', 'Expulsión', 'ROJO');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (19, 3, 1, 1, 'Incidente menor', '2024-01-19', '18:55-19:45', 'Advertencia', 'VERDE');
-INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, id_punt_partes, descripcion, fecha, hora, sancion, color) VALUES (20, 4, 2, 6, 'Incidente moderado', '2024-01-20', '20:45-21:35', 'Suspensión', 'NARANJA');
+-- Inserción de partes de incidencia en la tabla 'partes_incidencia' con el campo 'color' y 'puntos' actualizados
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (1, 1, 1, 'Incidente menor', '2024-01-01', '09:25-10:15', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (2, 1, 2, 'Incidente moderado', '2024-01-02', '10:20-11:10', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (3, 2, 3, 'Incidente grave', '2024-01-03', '11:40-12:30', 'Reunión con la Comisión de Convivencia', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (4, 2, 4, 'Incidente menor', '2024-01-04', '12:35-13:25', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (5, 3, 5, 'Incidente moderado', '2024-01-05', '13:30-14:20', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (6, 3, 6, 'Incidente grave', '2024-01-06', '13:30-14:20', 'Expulsión', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (7, 4, 1, 'Incidente menor', '2024-01-07', '16:00-16:50', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (8, 4, 2, 'Incidente moderado', '2024-01-08', '16:55-17:45', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (9, 5, 3, 'Incidente grave', '2024-01-09', '17:50-18:40', 'Incoación de expediente o en su caso expediente abreviado', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (10, 5, 4, 'Incidente menor', '2024-01-10', '18:55-19:45', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (11, 6, 5, 'Incidente moderado', '2024-01-11', '19:50-20:40', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (12, 6, 6, 'Incidente grave', '2024-01-12', '20:45-21:35', 'Expulsión', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (13, 7, 1, 'Incidente menor', '2024-01-13', '10:20-11:10', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (14, 7, 2, 'Incidente moderado', '2024-01-14', '11:40-12:30', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (15, 8, 3, 'Incidente grave', '2024-01-15', '13:30-14:20', 'Es obligatorio pedir disculpas a la persona/as contra las que ejerció daño físico o moral, y/o reparar los daños materiales causados', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (16, 8, 4, 'Incidente menor', '2024-01-16', '16:00-16:50', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (17, 1, 5, 'Incidente moderado', '2024-01-17', '16:55-17:45', 'Suspensión', 'NARANJA', 6);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (18, 2, 6, 'Incidente grave', '2024-01-18', '17:50-18:40', 'Expulsión', 'ROJO', 12);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (19, 3, 1, 'Incidente menor', '2024-01-19', '18:55-19:45', 'Advertencia', 'VERDE', 1);
+INSERT INTO partes_incidencia (id_alum, id_grupo, id_profesor, descripcion, fecha, hora, sancion, color, puntos_parte) VALUES (20, 4, 2, 'Incidente moderado', '2024-01-20', '20:45-21:35', 'Suspensión', 'NARANJA', 6);

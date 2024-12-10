@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "grupos")
 public class Grupos {
+
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_grupo")
@@ -14,6 +16,7 @@ public class Grupos {
     private String nombre_grupo;
 
 
+    //CONSTRUCTOR
     public Grupos() {
     }
 
@@ -23,6 +26,7 @@ public class Grupos {
     }
 
 
+    //GETTER Y SETTER
     public int getId_grupo() {
         return id_grupo;
     }
@@ -35,19 +39,21 @@ public class Grupos {
         this.nombre_grupo = nombre_grupo;
     }
 
-    @Override
-    public String toString() {
-        return "Grupos{" +
-                "id_grupo=" + id_grupo +
-                ", nombre_grupo='" + nombre_grupo + '\'' +
-                '}';
-    }
-
     public String getNombreGrupo() {
         return nombre_grupo;
     }
 
     public Grupos getGrupo() {
         return null;
+    }
+
+
+    //TOSTRING
+    @Override
+    public String toString() {
+        return "Grupos{" +
+                "id_grupo=" + id_grupo +
+                ", nombre_grupo='" + nombre_grupo + '\'' +
+                '}';
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "profesores")
 public class Profesor {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_profesor")
@@ -25,6 +26,7 @@ public class Profesor {
     private TipoProfesor tipo;
 
 
+    //CONSTRUCTOR
     public Profesor() {
     }
 
@@ -36,6 +38,7 @@ public class Profesor {
     }
 
 
+    //GETTER Y SETTER
     public int getId_profesor() {
         return id_profesor;
     }

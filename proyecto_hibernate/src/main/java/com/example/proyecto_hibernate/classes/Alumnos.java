@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "alumnos")
 public class Alumnos {
+
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_alum")
@@ -19,11 +21,13 @@ public class Alumnos {
     @Column(name = "puntos_acumulados")
     private int puntos_acumulados;
 
+    //relación ManyToOne con la clase grupos, asociando un alumno a un grupo específico
     @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupos grupo;
 
 
+    //CONSTRUCTOR
     public Alumnos() {
     }
 
@@ -34,6 +38,7 @@ public class Alumnos {
     }
 
 
+    //GETTER Y SETTER
     public int getId_alum() {
         return id_alum;
     }

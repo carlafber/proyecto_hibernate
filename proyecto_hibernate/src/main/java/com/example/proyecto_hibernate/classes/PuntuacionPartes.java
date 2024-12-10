@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "puntuacion_partes")
 public class PuntuacionPartes {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_punt_partes")
@@ -17,6 +18,8 @@ public class PuntuacionPartes {
     @Column(name = "tipo_parte")
     private String tipoParte;
 
+
+    //GETTER Y SETTER
     public int getIdPuntPartes() {
         return idPuntPartes;
     }

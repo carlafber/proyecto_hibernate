@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Table(name = "partes_incidencia")
 public class ParteIncidencia {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_parte")
@@ -44,6 +45,7 @@ public class ParteIncidencia {
     private int puntos_parte;
 
 
+    //CONSTRUCTOR
     public ParteIncidencia() {
     }
 
@@ -56,10 +58,11 @@ public class ParteIncidencia {
         this.descripcion = descripcion;
         this.sancion = sancion;
         this.color = color;
-        this.puntos_parte = color.getPuntos(); // Inicializar los puntos basados en el color
+        this.puntos_parte = color.getPuntos(); //inicialización de los puntos basados en el color
     }
 
 
+    //GETTER Y SETTER
     public int getId_parte() {
         return id_parte;
     }
@@ -130,7 +133,7 @@ public class ParteIncidencia {
 
     public void setColor(ColorParte color) {
         this.color = color;
-        this.puntos_parte = color.getPuntos(); // Al cambiar el color, actualizar los puntos
+        this.puntos_parte = color.getPuntos(); //al cambiar el color, se actualizan los puntos
     }
 
     public int getPuntos_parte() {

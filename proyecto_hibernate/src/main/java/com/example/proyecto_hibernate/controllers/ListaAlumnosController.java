@@ -1,6 +1,6 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ColorParte;
 import com.example.proyecto_hibernate.classes.Grupos;
@@ -87,7 +87,7 @@ public class ListaAlumnosController implements Initializable {
                     return; // Salir para evitar el procesamiento adicional
                 }
 
-                List<ParteIncidencia> partes = partesCRUD.obtenerPartesAlumno(alumno.getId_alum());
+                List<PartesIncidencia> partes = partesCRUD.obtenerPartesAlumno(alumno.getId_alum());
                 String estilo = "-fx-background-color: ";
                 ColorParte color = colorMasGrave(partes);
                 if (partes.isEmpty()) {
@@ -115,6 +115,7 @@ public class ListaAlumnosController implements Initializable {
         tv_alumnos.setItems(filteredList);
         configurarPaginacion(filteredList);
     }
+
 
     @FXML
     void onBorrarClick(ActionEvent event) {
@@ -191,10 +192,11 @@ public class ListaAlumnosController implements Initializable {
         tv_alumnos.setItems(paginaActualLista);
     }
 
-    private ColorParte colorMasGrave(List<ParteIncidencia> partes) {
+
+    private ColorParte colorMasGrave(List<PartesIncidencia> partes) {
         ColorParte color = ColorParte.VERDE;
 
-        for (ParteIncidencia parte : partes) {
+        for (PartesIncidencia parte : partes) {
             if (parte.getColor() != null) {
                 if (parte.getColor() == ColorParte.ROJO) {
                     return ColorParte.ROJO; // Si hay algún ROJO, retornamos ROJO
@@ -207,7 +209,6 @@ public class ListaAlumnosController implements Initializable {
                 }
             }
         }
-
         return color;
     }
 }

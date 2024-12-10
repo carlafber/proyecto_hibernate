@@ -4,7 +4,7 @@ import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ColorParte;
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,7 +66,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
 
     @FXML
     void onActualizarClick(ActionEvent event) {
-        ParteIncidencia parte = GuardarParte.getParte();
+        PartesIncidencia parte = GuardarParte.getParte();
         parte.setFecha(dp_fechaParte.getValue());
         parte.setHora(cb_horaParte.getValue());
         parte.setDescripcion(txt_descripcion.getText());
@@ -89,12 +89,13 @@ public class ParteNaranjaController implements Initializable, Configurable {
         }
     }
 
+
     @FXML
     void onCrearClick(ActionEvent event) {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty() || txt_sancion.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
-            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.NARANJA);
+            PartesIncidencia parte = new PartesIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.NARANJA);
             alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
             //puntuacion falta
             parteCRUD.crearParte(parte);
@@ -102,6 +103,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
             limpiarCampos();
         }
     }
+
 
     @FXML
     void onExpedienteAlumnoChange(KeyEvent event) {
@@ -124,11 +126,13 @@ public class ParteNaranjaController implements Initializable, Configurable {
         }
     }
 
+
     @FXML
     void onParteRojoClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteRojo, "parte-rojo.fxml");
     }//onParteRojoClick
+
 
     @FXML
     void onParteVerdeClick(ActionEvent event) {
@@ -169,6 +173,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
         bt_crear.setDisable(!reset);
     }
 
+
     private void limpiarCampos() {
         txt_expedienteAlumno.clear();
         grupo_alumno.setText("");
@@ -178,6 +183,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
         txt_sancion.setText("");
     }
 
+
     @Override
     public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
         bt_parteVerde.setDisable(estado);
@@ -186,6 +192,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
         bt_actualizar.setDisable(estado);
         reset = estado;
     }
+
 
     private void resetParte(Boolean reset) {
         if(reset){

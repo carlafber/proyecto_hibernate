@@ -4,7 +4,7 @@ import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ColorParte;
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,7 +75,7 @@ public class ParteRojoController implements Initializable, Configurable {
 
     @FXML
     void onActualizarClick(ActionEvent event) {
-        ParteIncidencia parte = GuardarParte.getParte();
+        PartesIncidencia parte = GuardarParte.getParte();
         parte.setFecha(dp_fechaParte.getValue());
         parte.setHora(cb_horaParte.getValue());
         parte.setDescripcion(txt_descripcion.getText());
@@ -102,6 +102,7 @@ public class ParteRojoController implements Initializable, Configurable {
         }
     }
 
+
     @FXML
     void onCrearClick(ActionEvent event) {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue() == null || cb_sancion.getValue().isEmpty()){
@@ -119,13 +120,14 @@ public class ParteRojoController implements Initializable, Configurable {
                 sancion = cb_sancion.getValue();
             }
 
-            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), sancion, ColorParte.ROJO);
+            PartesIncidencia parte = new PartesIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), sancion, ColorParte.ROJO);
             alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
             parteCRUD.crearParte(parte);
             Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
             limpiarCampos();
         }
     }
+
 
     @FXML
     void onExpedienteAlumnoChange(KeyEvent event) {
@@ -148,11 +150,13 @@ public class ParteRojoController implements Initializable, Configurable {
         }
     }
 
+
     @FXML
     void onParteNaranjaClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteNaranja, "parte-naranja.fxml");
     }//onParteNaranjaClick
+
 
     @FXML
     void onParteVerdeClick(ActionEvent event) {
@@ -161,9 +165,8 @@ public class ParteRojoController implements Initializable, Configurable {
     }//onParteVerdeClick
 
 
-    //validación de lo que se selecciona en el comboBox del tipo de sanción recibida
     @FXML
-    void onSancionChangeOtro(ActionEvent event) {
+    void onSancionChangeOtro(ActionEvent event) { //validación de lo que se selecciona en el comboBox del tipo de sanción recibida
         String tipoSancion = cb_sancion.getValue();
 
         if (tipoSancion != null && tipoSancion.equals("Otra:")) {
@@ -174,6 +177,7 @@ public class ParteRojoController implements Initializable, Configurable {
             txt_sancion.setVisible(false);
         }
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -246,6 +250,7 @@ public class ParteRojoController implements Initializable, Configurable {
         bt_crear.setDisable(!reset);
     }
 
+
     private void limpiarCampos() {
         txt_expedienteAlumno.clear();
         grupo_alumno.setText("");
@@ -256,6 +261,7 @@ public class ParteRojoController implements Initializable, Configurable {
         txt_sancion.setText("");
     }
 
+
     public boolean comprobarSancion(String sancion){
         for (String s : sanciones) {
             if (sancion.contains(s)) {
@@ -265,6 +271,7 @@ public class ParteRojoController implements Initializable, Configurable {
         return true; // No contiene ninguna de las cadenas
     }
 
+
     @Override
     public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
         bt_parteVerde.setDisable(estado);
@@ -273,6 +280,7 @@ public class ParteRojoController implements Initializable, Configurable {
         bt_actualizar.setDisable(estado);
         reset = estado;
     }
+
 
     private void resetParte(Boolean reset) {
         if(reset){

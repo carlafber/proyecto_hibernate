@@ -47,44 +47,44 @@ public class ListaPartesController implements Initializable {
     private Pagination pagination;
 
     @FXML
-    private TableColumn<ParteIncidencia, Button> tc_botones;
+    private TableColumn<PartesIncidencia, Button> tc_botones;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_descripcion;
+    private TableColumn<PartesIncidencia, String> tc_descripcion;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_expediente;
+    private TableColumn<PartesIncidencia, String> tc_expediente;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_fecha;
+    private TableColumn<PartesIncidencia, String> tc_fecha;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_grupo;
+    private TableColumn<PartesIncidencia, String> tc_grupo;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_nombreAlumno;
+    private TableColumn<PartesIncidencia, String> tc_nombreAlumno;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_profesor;
+    private TableColumn<PartesIncidencia, String> tc_profesor;
 
     @FXML
-    private TableColumn<ParteIncidencia, String> tc_sancion;
+    private TableColumn<PartesIncidencia, String> tc_sancion;
 
     @FXML
-    private TableView<ParteIncidencia> tv_partes;
+    private TableView<PartesIncidencia> tv_partes;
 
     @FXML
     private TextField txt_numExpediente;
 
     private PartesCRUD partesCRUD = new PartesCRUD();
 
-    private  ParteIncidencia parte = new ParteIncidencia();
+    private PartesIncidencia parte = new PartesIncidencia();
 
-    private FilteredList<ParteIncidencia> listaFiltrada;
+    private FilteredList<PartesIncidencia> listaFiltrada;
 
     private Session session;
 
-    private ObservableList<ParteIncidencia> listaPartesObservable; // Lista observable para la tabla
+    private ObservableList<PartesIncidencia> listaPartesObservable; // Lista observable para la tabla
 
     Configurable ParteVerdeController = new ParteVerdeController();
 
@@ -98,19 +98,6 @@ public class ListaPartesController implements Initializable {
         session = HibernateUtil.getSessionFactory().openSession();
 
         // Configurar columnas de la tabla
-        configurarColumnasTabla();
-
-
-        ArrayList<ParteIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
-        listaPartesObservable = FXCollections.observableArrayList(listaPartesIncidencia);
-
-        listaFiltrada = new FilteredList<>(listaPartesObservable, parte -> true);
-        tv_partes.setItems(listaFiltrada);
-
-        configurarPaginacion(listaFiltrada);
-    }
-
-    private void configurarColumnasTabla() {
         tc_expediente.setCellValueFactory(cellData -> {
             Alumnos alumnos = cellData.getValue().getAlumno();
             return new SimpleStringProperty(alumnos.getNumero_expediente());
@@ -127,8 +114,8 @@ public class ListaPartesController implements Initializable {
         });
 
         tc_profesor.setCellValueFactory(cellData -> {
-            Profesor profesor = cellData.getValue().getProfesor();
-            return new SimpleStringProperty(profesor.getNombre());
+            Profesores profesores = cellData.getValue().getProfesor();
+            return new SimpleStringProperty(profesores.getNombre());
         });
 
         tc_fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
@@ -161,7 +148,7 @@ public class ListaPartesController implements Initializable {
 
         tv_partes.setRowFactory(tv -> new TableRow<>() {
             @Override
-            protected void updateItem(ParteIncidencia parte, boolean empty) {
+            protected void updateItem(PartesIncidencia parte, boolean empty) {
                 super.updateItem(parte, empty);
                 String estilo = "-fx-background-color: ";
                 if (parte == null || empty) {
@@ -180,6 +167,15 @@ public class ListaPartesController implements Initializable {
                 setStyle(estilo);
             }
         });
+
+
+        ArrayList<PartesIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
+        listaPartesObservable = FXCollections.observableArrayList(listaPartesIncidencia);
+
+        listaFiltrada = new FilteredList<>(listaPartesObservable, parte -> true);
+        tv_partes.setItems(listaFiltrada);
+
+        configurarPaginacion(listaFiltrada);
     }
 
 
@@ -195,6 +191,7 @@ public class ListaPartesController implements Initializable {
 
         tv_partes.refresh();
     }
+
 
     @FXML
     void onBuscarClick(ActionEvent event) {
@@ -292,7 +289,7 @@ public class ListaPartesController implements Initializable {
     }
 
 
-    private void configurarPaginacion(ObservableList<ParteIncidencia> listaCompleta) {
+    private void configurarPaginacion(ObservableList<PartesIncidencia> listaCompleta) {
         int filasPorPagina = 10; // Número de filas por página
 
         // Configurar el Pagination
@@ -308,16 +305,18 @@ public class ListaPartesController implements Initializable {
         cambiarPagina(listaCompleta, filasPorPagina, 0);
     }
 
-    private void cambiarPagina(ObservableList<ParteIncidencia> listaCompleta, int filasPorPagina, int paginaActual) {
+
+    private void cambiarPagina(ObservableList<PartesIncidencia> listaCompleta, int filasPorPagina, int paginaActual) {
         int desdeIndice = paginaActual * filasPorPagina;
         int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
 
-        ObservableList<ParteIncidencia> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
+        ObservableList<PartesIncidencia> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
 
         tv_partes.setItems(paginaActualLista);
     }
 
-    private void abrirParte(ParteIncidencia parte){
+
+    private void abrirParte(PartesIncidencia parte){
         GuardarParte.setParte(parte);
         boolean estado = GuardarProfesor.getProfesor().getTipo().equals(TipoProfesor.profesor);
         GuardarController.setController(this);
@@ -330,10 +329,11 @@ public class ListaPartesController implements Initializable {
         }
     }
 
+
     public void recargarListaPartes() {
         Platform.runLater(() -> {
             // Recuperar datos actualizados
-            ArrayList<ParteIncidencia> listaActualizada = partesCRUD.obtenerPartes();
+            ArrayList<PartesIncidencia> listaActualizada = partesCRUD.obtenerPartes();
             // Actualizar lista observable
             listaPartesObservable.setAll(listaActualizada);
 

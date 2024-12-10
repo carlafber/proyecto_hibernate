@@ -1,13 +1,11 @@
 package com.example.proyecto_hibernate.CRUD;
 
 
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.util.HibernateUtil;
 
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,6 +31,7 @@ public class AlumnosCRUD {
         return listaAlumnos;
     }
 
+
     public Alumnos buscarAlumnoPorExpediente(String expediente) {
         Session session = factory.openSession();  // Asegúrate de abrir la sesión
         Alumnos alumno = null;
@@ -51,26 +50,21 @@ public class AlumnosCRUD {
         return alumno;
     }
 
-    public void actualizarPuntosAlumno(Alumnos alumno, ParteIncidencia parte, boolean sumar) {
+
+    public void actualizarPuntosAlumno(Alumnos alumno, PartesIncidencia parte, boolean sumar) {
         Transaction transaction = null;
+        int nuevosPuntos = 0;
         try(Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            if(sumar){
-                // Sumar los puntos del parte al alumno
-                if (alumno != null) {
-                    int nuevosPuntos = alumno.getPuntos_acumulados() + parte.getPuntos_parte();
-                    alumno.setPuntos_acumulados(nuevosPuntos);
-
-                    session.update(alumno);
+            if (alumno != null) {
+                if(sumar){ // Sumar los puntos del parte al alumno
+                    nuevosPuntos = alumno.getPuntos_acumulados() + parte.getPuntos_parte();
+                } else { //cambiar los puntos
+                    nuevosPuntos = parte.getPuntos_parte();
                 }
-            } else {
-                //cambiar los puntos
-                if (alumno != null) {
-                    int nuevosPuntos = parte.getPuntos_parte();
-                    alumno.setPuntos_acumulados(nuevosPuntos);
+                alumno.setPuntos_acumulados(nuevosPuntos);
 
-                    session.update(alumno);
-                }
+                session.update(alumno);
             }
 
             transaction.commit();

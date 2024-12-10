@@ -1,7 +1,7 @@
 package com.example.proyecto_hibernate.controllers;
 
 import com.example.proyecto_hibernate.CRUD.ProfesorCRUD;
-import com.example.proyecto_hibernate.classes.Profesor;
+import com.example.proyecto_hibernate.classes.Profesores;
 import com.example.proyecto_hibernate.classes.TipoProfesor;
 import com.example.proyecto_hibernate.util.Alerta;
 import javafx.event.ActionEvent;
@@ -41,7 +41,7 @@ public class CrearProfesorController implements Initializable {
     @FXML
     void onCrearClick(ActionEvent event) {
         TipoProfesor tipo = null;
-        boolean creado = false;
+        boolean creado = false; //¿?
         if (txt_nombre.getText().isEmpty() || txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty() || cb_tipo.getSelectionModel().getSelectedItem() == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
@@ -50,8 +50,8 @@ public class CrearProfesorController implements Initializable {
             } else if (cb_tipo.getSelectionModel().getSelectedItem().equals("Jefe de estudios")) {
                 tipo = TipoProfesor.jefe_de_estudios;
             }
-            Profesor profesor = new Profesor(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
-            if(profesorCRUD.crearProfesor(profesor)){
+            Profesores profesores = new Profesores(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
+            if(profesorCRUD.crearProfesor(profesores)){
                 Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
             } else {
                 Alerta.mensajeError("Profesor duplicado", "No puede haber dos profesores con el mismo número asignado.");
@@ -71,6 +71,7 @@ public class CrearProfesorController implements Initializable {
             }
         }
     }
+
 
     private void limpiarCampos() {
         txt_nombre.clear();

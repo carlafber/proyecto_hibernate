@@ -17,11 +17,12 @@ public class Alumnos {
     private String numero_expediente;
 
     @Column(name = "puntos_acumulados")
-    private int puntos_acumulados; //calcular buscando los puntos que vale cada parte que tiene el alumno
+    private int puntos_acumulados;
 
     @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupos grupo;
+
 
     public Alumnos() {
     }
@@ -31,6 +32,7 @@ public class Alumnos {
         this.numero_expediente = numero_expediente;
         this.grupo = grupo;
     }
+
 
     public int getId_alum() {
         return id_alum;

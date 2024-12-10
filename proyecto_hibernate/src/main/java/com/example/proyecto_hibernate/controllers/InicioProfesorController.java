@@ -42,20 +42,24 @@ public class InicioProfesorController implements Initializable {
         CambioEscena.abrirEscena("parte-verde.fxml", "Crear parte");
     }
 
+
     @FXML
     void onCrearProfesorClick(ActionEvent event) {
         CambioEscena.abrirEscena("crear-profesor.fxml", "Crear profesor");
     }
+
 
     @FXML
     void onListaAlumnosClick(ActionEvent event) {
         CambioEscena.abrirEscena("lista-alumnos.fxml", "Lista alumnos");
     }
 
+
     @FXML
     void onListaPartesClick(ActionEvent event) {
         CambioEscena.abrirEscena("lista-partes.fxml", "Lista partes");
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,6 +71,7 @@ public class InicioProfesorController implements Initializable {
             deshabilitarBotones();
         }
     }
+
 
     private void deshabilitarBotones(){
         bt_listaPartes.setVisible(false);

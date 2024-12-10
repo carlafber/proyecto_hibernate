@@ -4,8 +4,7 @@ import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
 import com.example.proyecto_hibernate.CRUD.PartesCRUD;
 import com.example.proyecto_hibernate.classes.Alumnos;
 import com.example.proyecto_hibernate.classes.ColorParte;
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
-import com.example.proyecto_hibernate.classes.TipoProfesor;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,7 +66,7 @@ public class ParteVerdeController implements Initializable, Configurable {
 
     @FXML
     void onActualizarClick(ActionEvent event) {
-        ParteIncidencia parte = GuardarParte.getParte();
+        PartesIncidencia parte = GuardarParte.getParte();
         parte.setFecha(dp_fechaParte.getValue());
         parte.setHora(cb_horaParte.getValue());
         parte.setDescripcion(txt_descripcion.getText());
@@ -90,12 +89,13 @@ public class ParteVerdeController implements Initializable, Configurable {
         }
     }
 
+
     @FXML
     void onCrearClick(ActionEvent event) {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty() || txt_sancion.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
-            ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.VERDE);
+            PartesIncidencia parte = new PartesIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.VERDE);
             alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
             //puntuacion falta
             parteCRUD.crearParte(parte);
@@ -103,6 +103,7 @@ public class ParteVerdeController implements Initializable, Configurable {
             limpiarCampos();
         }
     }
+
 
     @FXML
     void onExpedienteAlumnoChange(KeyEvent event) {
@@ -124,6 +125,7 @@ public class ParteVerdeController implements Initializable, Configurable {
             grupo_alumno.setText("");
         }
     }
+
 
     @FXML
     void onParteNaranjaClick(ActionEvent event) {
@@ -170,6 +172,7 @@ public class ParteVerdeController implements Initializable, Configurable {
         bt_crear.setDisable(!reset);
     }
 
+
     private void limpiarCampos() {
         txt_expedienteAlumno.clear();
         grupo_alumno.setText("");
@@ -178,6 +181,7 @@ public class ParteVerdeController implements Initializable, Configurable {
         txt_descripcion.clear();
         txt_sancion.setText("");
     }
+
 
     @Override
     public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
@@ -188,10 +192,10 @@ public class ParteVerdeController implements Initializable, Configurable {
         reset = estado;
     }
 
+
     private void resetParte(Boolean reset) {
         if(reset){
             GuardarParte.resetParte();
         }
     }
-
 }//class

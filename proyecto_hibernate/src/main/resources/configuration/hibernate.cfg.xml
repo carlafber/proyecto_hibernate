@@ -12,7 +12,7 @@
         <property name="hibernate.show_sql">true</property>
         <mapping class="com.example.proyecto_hibernate.classes.Alumnos"/>
         <mapping class="com.example.proyecto_hibernate.classes.Grupos"/>
-        <mapping class="com.example.proyecto_hibernate.classes.Profesor"/>
-        <mapping class="com.example.proyecto_hibernate.classes.ParteIncidencia"/>
+        <mapping class="com.example.proyecto_hibernate.classes.Profesores"/>
+        <mapping class="com.example.proyecto_hibernate.classes.PartesIncidencia"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,7 +1,7 @@
 package com.example.proyecto_hibernate.controllers;
 
 import com.example.proyecto_hibernate.CRUD.ProfesorCRUD;
-import com.example.proyecto_hibernate.classes.Profesor;
+import com.example.proyecto_hibernate.classes.Profesores;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.CambioEscena;
 import com.example.proyecto_hibernate.util.GuardarProfesor;
@@ -45,7 +45,7 @@ public class InicioSesionController implements Initializable {
         if(txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
-            for(Profesor profe : profesorCRUD.obtenerProfesores()){
+            for(Profesores profe : profesorCRUD.obtenerProfesores()){
                 if(txt_numero.getText().equals(profe.getNumero_asignado())){
                     if(pwd_contrasena.getText().equals(profe.getContrasena())) {
                         GuardarProfesor.setProfesor(profe);
@@ -65,13 +65,10 @@ public class InicioSesionController implements Initializable {
         pwd_contrasena.clear();
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         imagen_fondo.fitWidthProperty().bind(fondo.widthProperty());
         imagen_fondo.fitHeightProperty().bind(fondo.heightProperty());
-
-        //inicio.prefWidthProperty().bind(fondo.widthProperty());
-        //inicio.prefHeightProperty().bind(fondo.heightProperty());
-
     }
 }

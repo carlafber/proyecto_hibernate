@@ -8,7 +8,6 @@ public enum ColorParte {
     private final String codigo_color;
     private final int puntos;
 
-
     ColorParte(String codigo_color, int puntos) {
         this.codigo_color = codigo_color;
         this.puntos = puntos;

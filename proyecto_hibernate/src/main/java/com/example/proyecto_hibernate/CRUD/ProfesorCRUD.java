@@ -1,6 +1,6 @@
 package com.example.proyecto_hibernate.CRUD;
 
-import com.example.proyecto_hibernate.classes.Profesor;
+import com.example.proyecto_hibernate.classes.Profesores;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.HibernateUtil;
 import org.hibernate.Session;
@@ -15,13 +15,13 @@ import java.util.List;
 public class ProfesorCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    public ArrayList<Profesor> obtenerProfesores(){
+    public ArrayList<Profesores> obtenerProfesores(){
         Transaction transaction;
-        ArrayList<Profesor> listaProfesores=new ArrayList<>();
+        ArrayList<Profesores> listaProfesores = new ArrayList<>();
         try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
-            List<Profesor> profesor = session.createQuery("from Profesor", Profesor.class).getResultList();
-            listaProfesores.addAll(profesor);
+            List<Profesores> profesores = session.createQuery("from Profesores", Profesores.class).getResultList();
+            listaProfesores.addAll(profesores);
             transaction.commit();
         }catch (Exception e){
             Alerta.mensajeError(null, e.getMessage());
@@ -29,15 +29,16 @@ public class ProfesorCRUD {
         return listaProfesores;
     }
 
-    public boolean crearProfesor(Profesor profesor) {
+
+    public boolean crearProfesor(Profesores profesores) {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
 
-            String contrasena_encriptada = BCrypt.hashpw(profesor.getContrasena(), BCrypt.gensalt());
-            profesor.setContrasena(contrasena_encriptada);
+            String contrasena_encriptada = BCrypt.hashpw(profesores.getContrasena(), BCrypt.gensalt());
+            profesores.setContrasena(contrasena_encriptada);
 
-            session.save(profesor);
+            session.save(profesores);
 
             transaction.commit();
             return true;

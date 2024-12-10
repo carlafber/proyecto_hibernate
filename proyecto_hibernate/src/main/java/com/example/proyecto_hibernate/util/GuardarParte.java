@@ -1,17 +1,19 @@
 package com.example.proyecto_hibernate.util;
 
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 
 public class GuardarParte {
-    private static ParteIncidencia parte_guardado;
+    private static PartesIncidencia parte_guardado;
 
-    public static ParteIncidencia getParte() {
+    public static PartesIncidencia getParte() {
         return parte_guardado;
     }
 
-    public static void setParte(ParteIncidencia parte) {
+
+    public static void setParte(PartesIncidencia parte) {
         parte_guardado = parte;
     }
+
 
     public static void resetParte() {
         parte_guardado = null;

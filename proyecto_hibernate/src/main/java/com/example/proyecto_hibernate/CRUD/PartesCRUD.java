@@ -1,7 +1,6 @@
 package com.example.proyecto_hibernate.CRUD;
 
-import com.example.proyecto_hibernate.classes.Alumnos;
-import com.example.proyecto_hibernate.classes.ParteIncidencia;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.HibernateUtil;
 import org.hibernate.Session;
@@ -15,13 +14,13 @@ import java.util.List;
 public class PartesCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    public ArrayList<ParteIncidencia> obtenerPartes(){
+    public ArrayList<PartesIncidencia> obtenerPartes(){
         Transaction transaction = null;
-        ArrayList<ParteIncidencia> listaPartes = new ArrayList<>();
+        ArrayList<PartesIncidencia> listaPartes = new ArrayList<>();
         try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
-            List<ParteIncidencia> parteIncidencias = session.createQuery("from ParteIncidencia", ParteIncidencia.class).getResultList();
-            listaPartes.addAll(parteIncidencias);
+            List<PartesIncidencia> partesIncidencias = session.createQuery("from PartesIncidencia", PartesIncidencia.class).getResultList();
+            listaPartes.addAll(partesIncidencias);
             transaction.commit();
         }catch (Exception e){
             Alerta.mensajeError(null, e.getMessage());
@@ -31,11 +30,11 @@ public class PartesCRUD {
     }
 
 
-    public void crearParte(ParteIncidencia parteIncidencia) {
+    public void crearParte(PartesIncidencia partesIncidencia) {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(parteIncidencia);
+            session.save(partesIncidencia);
             transaction.commit();
         } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
@@ -43,12 +42,12 @@ public class PartesCRUD {
     }//insertarParte
 
 
-    public List<ParteIncidencia> obtenerPartesAlumno(int id_alumno){
+    public List<PartesIncidencia> obtenerPartesAlumno(int id_alumno){
         Transaction transaction = null;
         List listaPartes = new ArrayList<>();
         try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM ParteIncidencia WHERE alumno.id_alum = :id_alum", ParteIncidencia.class);
+            Query query = session.createQuery("FROM PartesIncidencia WHERE alumno.id_alum = :id_alum", PartesIncidencia.class);
             query.setParameter("id_alum", id_alumno);
             listaPartes = query.getResultList();
             transaction.commit();
@@ -59,7 +58,8 @@ public class PartesCRUD {
         return listaPartes;
     }
 
-    public boolean actualizarParte(ParteIncidencia parte) {
+
+    public boolean actualizarParte(PartesIncidencia parte) {
         Transaction transaction = null;
         boolean cambios = false;
         try(Session session = factory.openSession()) {

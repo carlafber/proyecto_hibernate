@@ -63,7 +63,7 @@ public class ParteVerdeController implements Initializable, Configurable {
 
     private Boolean reset = false;
 
-    private ListaPartesController listaPartesController;
+    private ListaPartesController listaPartesController = GuardarController.getController();
 
     @FXML
     void onActualizarClick(ActionEvent event) {
@@ -75,13 +75,14 @@ public class ParteVerdeController implements Initializable, Configurable {
         parte.setColor(ColorParte.VERDE);
         parte.setPuntos_parte(parte.getColor().getPuntos());
 
+        alumno = parte.getAlumno();
+        alumnoCRUD.actualizarPuntosAlumno(alumno, parte, false); //actualizar los puntos, al modificar el parte
         if(parteCRUD.actualizarParte(parte)){
             Alerta.mensajeInfo("ÉXITO", null, "Parte actualizado correctamente.");
             // Cerrar la ventana actual
             Stage stage = (Stage) bt_actualizar.getScene().getWindow();
             stage.close();
 
-            setListaPartesController(listaPartesController);
             // Notificar a la lista de partes para que se recargue
             listaPartesController.recargarListaPartes();
         } else {
@@ -95,7 +96,7 @@ public class ParteVerdeController implements Initializable, Configurable {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
             ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.VERDE);
-            alumnoCRUD.actualizarPuntosAlumno(alumno, parte);
+            alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
             //puntuacion falta
             parteCRUD.crearParte(parte);
             Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
@@ -185,11 +186,6 @@ public class ParteVerdeController implements Initializable, Configurable {
         bt_crear.setDisable(!estado);
         bt_actualizar.setDisable(estado);
         reset = estado;
-    }
-
-    @Override
-    public void setListaPartesController(ListaPartesController listaPartesController) {
-        this.listaPartesController = GuardarController.getController();
     }
 
     private void resetParte(Boolean reset) {

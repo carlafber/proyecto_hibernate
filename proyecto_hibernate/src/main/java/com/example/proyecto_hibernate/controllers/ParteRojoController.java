@@ -71,7 +71,7 @@ public class ParteRojoController implements Initializable, Configurable {
 
     private List<String> sanciones = new ArrayList<>();
 
-    private ListaPartesController listaPartesController;
+    private ListaPartesController listaPartesController = GuardarController.getController();
 
     @FXML
     void onActualizarClick(ActionEvent event) {
@@ -87,13 +87,14 @@ public class ParteRojoController implements Initializable, Configurable {
         parte.setColor(ColorParte.ROJO);
         parte.setPuntos_parte(parte.getColor().getPuntos());
 
+        alumno = parte.getAlumno();
+        alumnoCRUD.actualizarPuntosAlumno(alumno, parte, false); //actualizar los puntos, al modificar el parte
         if(parteCRUD.actualizarParte(parte)){
             Alerta.mensajeInfo("ÉXITO", null,"Parte actualizado correctamente.");
             // Cerrar la ventana actual
             Stage stage = (Stage) bt_actualizar.getScene().getWindow();
             stage.close();
 
-            setListaPartesController(listaPartesController);
             // Notificar a la lista de partes para que se recargue
             listaPartesController.recargarListaPartes();
         } else {
@@ -119,7 +120,7 @@ public class ParteRojoController implements Initializable, Configurable {
             }
 
             ParteIncidencia parte = new ParteIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), sancion, ColorParte.ROJO);
-            alumnoCRUD.actualizarPuntosAlumno(alumno, parte);
+            alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
             parteCRUD.crearParte(parte);
             Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
             limpiarCampos();
@@ -271,11 +272,6 @@ public class ParteRojoController implements Initializable, Configurable {
         bt_crear.setDisable(!estado);
         bt_actualizar.setDisable(estado);
         reset = estado;
-    }
-
-    @Override
-    public void setListaPartesController(ListaPartesController listaPartesController) {
-        this.listaPartesController = GuardarController.getController();
     }
 
     private void resetParte(Boolean reset) {

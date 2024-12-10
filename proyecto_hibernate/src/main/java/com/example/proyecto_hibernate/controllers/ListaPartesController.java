@@ -114,8 +114,8 @@ public class ListaPartesController implements Initializable {
         });
 
         tc_profesor.setCellValueFactory(cellData -> {
-            Profesores profesores = cellData.getValue().getProfesor();
-            return new SimpleStringProperty(profesores.getNombre());
+            Profesores profesor = cellData.getValue().getProfesor();
+            return new SimpleStringProperty(profesor.getNombre());
         });
 
         tc_fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));

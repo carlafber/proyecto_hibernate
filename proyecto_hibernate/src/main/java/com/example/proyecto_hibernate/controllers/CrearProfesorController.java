@@ -50,8 +50,8 @@ public class CrearProfesorController implements Initializable {
             } else if (cb_tipo.getSelectionModel().getSelectedItem().equals("Jefe de estudios")) {
                 tipo = TipoProfesor.jefe_de_estudios;
             }
-            Profesores profesores = new Profesores(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
-            if(profesorCRUD.crearProfesor(profesores)){
+            Profesores profesor = new Profesores(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
+            if(profesorCRUD.crearProfesor(profesor)){
                 Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
             } else {
                 Alerta.mensajeError("Profesor duplicado", "No puede haber dos profesores con el mismo número asignado.");

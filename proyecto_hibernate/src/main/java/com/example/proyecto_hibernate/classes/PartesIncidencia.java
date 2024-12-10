@@ -22,7 +22,7 @@ public class PartesIncidencia {
 
     @ManyToOne
     @JoinColumn(name = "id_profesor")
-    private Profesores profesores;
+    private Profesores profesor;
 
     @Column(name = "descripcion")
     private String descripcion;
@@ -47,9 +47,9 @@ public class PartesIncidencia {
     public PartesIncidencia() {
     }
 
-    public PartesIncidencia(Alumnos alumno, Profesores profesores, Grupos grupo, LocalDate fecha, String hora, String descripcion, String sancion, ColorParte color) {
+    public PartesIncidencia(Alumnos alumno, Profesores profesor, Grupos grupo, LocalDate fecha, String hora, String descripcion, String sancion, ColorParte color) {
         this.alumno = alumno;
-        this.profesores = profesores;
+        this.profesor = profesor;
         this.grupo = grupo;
         this.fecha = fecha;
         this.hora = hora;
@@ -85,11 +85,11 @@ public class PartesIncidencia {
     }
 
     public Profesores getProfesor() {
-        return profesores;
+        return profesor;
     }
 
-    public void setProfesor(Profesores profesores) {
-        this.profesores = profesores;
+    public void setProfesor(Profesores profesor) {
+        this.profesor = profesor;
     }
 
     public String getDescripcion() {

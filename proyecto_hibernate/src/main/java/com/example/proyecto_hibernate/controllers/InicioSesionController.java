@@ -28,9 +28,6 @@ public class InicioSesionController implements Initializable {
     @FXML
     private ImageView imagen_fondo;
 
-    //@FXML
-    //private VBox inicio;
-
     @FXML
     private PasswordField pwd_contrasena;
 
@@ -39,6 +36,8 @@ public class InicioSesionController implements Initializable {
 
     private ProfesorCRUD profesorCRUD = new ProfesorCRUD();
 
+
+    // Método que inicia sesión con el id del profesor y su respectiva contraseña
     @FXML
     void onIniciarSesionClick(ActionEvent event) {
         boolean encontrado = false;

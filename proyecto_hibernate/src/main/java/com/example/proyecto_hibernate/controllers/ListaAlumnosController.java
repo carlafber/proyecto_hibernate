@@ -64,6 +64,7 @@ public class ListaAlumnosController implements Initializable {
 
     private Session session;
 
+    // Inicializamos la tabla con los datos de los Alumnos
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -117,6 +118,7 @@ public class ListaAlumnosController implements Initializable {
     }
 
 
+    // Método borrar/establecer si hemos filtrado por un número en la tabla
     @FXML
     void onBorrarClick(ActionEvent event) {
         // Restablecer el filtro para mostrar todos los alumnos
@@ -133,6 +135,7 @@ public class ListaAlumnosController implements Initializable {
     }
 
 
+    // Método que busca por el número de expediente de un alúmno
     @FXML
     void onBuscarClick(ActionEvent event) {
         String numeroExpediente = txt_numExpediente.getText(); // Recojo el número de expediente
@@ -143,19 +146,19 @@ public class ListaAlumnosController implements Initializable {
         }
 
         try {
-            // Actualizar el filtro para mostrar solo el alumno con el número buscado
+            // Actualizamos el filtro para mostrar solo el alumno con el número buscado
             filteredList.setPredicate(alumno -> alumno.getNumero_expediente().equals(numeroExpediente));
 
-            // Comprobar si hay algún resultado
+            // Comprobamos si hay algún resultado
             if (filteredList.isEmpty()) {
                 Alerta.mensajeError("Alumno no encontrado", "No se encontró ningún alumno con el expediente: " + numeroExpediente);
                 txt_numExpediente.clear();
 
-                // Restablecer el filtro si no hay resultados
+                // Restablecemos el filtro si no hay resultados
                 filteredList.setPredicate(alumno -> true);
             }
 
-            // Recalcular la paginación para reflejar el nuevo contenido
+            // Recalculamos la paginación para reflejar el nuevo contenido
             configurarPaginacion(filteredList);
 
             // Ir a la primera página después de aplicar el filtro
@@ -167,6 +170,7 @@ public class ListaAlumnosController implements Initializable {
     }
 
 
+    // Método de paginación
     private void configurarPaginacion(ObservableList<Alumnos> listaCompleta) {
         int filasPorPagina = 7; // Número de filas por página
 
@@ -183,6 +187,7 @@ public class ListaAlumnosController implements Initializable {
     }
 
 
+    // Método para poder cambiar de página en el pagination
     private void cambiarPagina(ObservableList<Alumnos> listaCompleta, int filasPorPagina, int paginaActual) {
         int desdeIndice = paginaActual * filasPorPagina;
         int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
@@ -193,6 +198,7 @@ public class ListaAlumnosController implements Initializable {
     }
 
 
+    // Método que colorea al alumno depediendo del parte que ha recibido
     private ColorParte colorMasGrave(List<PartesIncidencia> partes) {
         ColorParte color = ColorParte.VERDE;
 

@@ -316,9 +316,16 @@ public class ParteRojoController implements Initializable, Configurable {
             // Iniciar flujo de contenido
             contentStream = new PDPageContentStream(document, page);
 
-            // Añadir la imagen (logo) antes de comenzar el texto
+            // Dibujar el fondo rojo
+            contentStream.setNonStrokingColor(255, 0, 0); // RGB para rojo
+            contentStream.addRect(0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
+            contentStream.fill();
+
+            contentStream.setNonStrokingColor(255, 255, 255); // RGB para blanco
+
+            // Añadir la imagen (logo) ajustada más arriba y a la derecha
             PDImageXObject logo = PDImageXObject.createFromFile(getClass().getResource("/img/logo.png").getFile(), document);
-            contentStream.drawImage(logo, 420, 700, 100, 100);  // Posición ajustada
+            contentStream.drawImage(logo, 500, 650, 100, 100); // Posición ajustada
 
             // Escribir el título h1
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);

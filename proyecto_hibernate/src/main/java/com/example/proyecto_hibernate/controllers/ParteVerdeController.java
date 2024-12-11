@@ -11,8 +11,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,6 +27,9 @@ public class ParteVerdeController implements Initializable, Configurable {
 
     @FXML
     private Button bt_actualizar;
+
+    @FXML
+    private Button bt_exportar;
 
     @FXML
     private Button bt_crear;
@@ -202,4 +212,156 @@ public class ParteVerdeController implements Initializable, Configurable {
             GuardarParte.resetParte();
         }
     }
+
+    @FXML
+    void onExportarClick(ActionEvent event) {
+        if (GuardarParte.getParte() == null) {
+            Alerta.mensajeError("Error", "No hay ningún parte cargado para exportar.");
+            return;
+        }
+
+        PDPageContentStream contentStream = null;
+        PDDocument document = null;
+        try {
+            // Crear documento PDF
+            document = new PDDocument();
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            // Iniciar flujo de contenido
+            contentStream = new PDPageContentStream(document, page);
+
+            // Añadir la imagen (logo) antes de comenzar el texto
+            PDImageXObject logo = PDImageXObject.createFromFile(getClass().getResource("/img/logo.png").getFile(), document);
+            contentStream.drawImage(logo, 420, 700, 100, 100);  // Posición ajustada
+
+            // Escribir el título h1
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, 650);
+            contentStream.showText("Parte de Incidencia");
+            contentStream.endText();
+
+            // Escribir el subtítulo h2
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, 620);
+            contentStream.showText("Detalles del Parte");
+            contentStream.endText();
+
+            // Escribir los detalles del parte
+            contentStream.setFont(PDType1Font.HELVETICA, 12);
+            PartesIncidencia parte = GuardarParte.getParte();
+            String content = String.format(
+                    "Profesor: %s\n" +
+                            "Alumno: %s\n" +
+                            "Grupo: %s\n" +
+                            "Fecha: %s\n" +
+                            "Hora: %s\n\n" +
+                            "Descripción:\n%s\n\n" +
+                            "Sanción:\n%s\n\n" +
+                            "Color del Parte: %s",
+                    parte.getProfesor().getNombre(),
+                    parte.getAlumno().getNombre_alum(),
+                    parte.getGrupo().getNombreGrupo(),
+                    parte.getFecha(),
+                    parte.getHora(),
+                    parte.getDescripcion(),
+                    parte.getSancion(),
+                    parte.getColor()
+            );
+
+            // Gestión de saltos de línea manualmente
+            String[] lines = content.split("\n");
+            float yPosition = 580;  // Posición inicial en el eje Y
+            for (String line : lines) {
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, yPosition);
+                contentStream.showText(line);
+                contentStream.endText();
+                yPosition -= 14;  // Ajusta la posición para la siguiente línea
+            }
+
+            // Agregar información adicional como tabla
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, yPosition - 20);
+            contentStream.showText("Información Adicional:");
+            contentStream.endText();
+
+            // Tabla de información adicional
+            float tableYPosition = yPosition - 40;
+            float rowHeight = 20;
+            String[][] tableData = {
+                    {"Campo", "Valor"},
+                    {"Profesor", parte.getProfesor().getNombre()},
+                    {"Alumno", parte.getAlumno().getNombre_alum()},
+                    {"Grupo", parte.getGrupo().getNombreGrupo()},
+                    {"Fecha", String.valueOf(parte.getFecha())},
+                    {"Hora", parte.getHora()},
+                    {"Descripción", parte.getDescripcion()},
+                    {"Sanción", parte.getSancion()},
+                    {"Color del Parte", String.valueOf(parte.getColor())}
+            };
+
+            // Escribir la tabla
+            contentStream.setLineWidth(0.5f); // Línea más delgada para las tablas
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+
+            // Encabezados de la tabla
+            for (int i = 0; i < tableData.length; i++) {
+                float yPos = tableYPosition - (i * rowHeight);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, yPos);
+                contentStream.showText(tableData[i][0]); // Campo
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.newLineAtOffset(200, yPos);
+                contentStream.showText(tableData[i][1]); // Valor
+                contentStream.endText();
+
+                // Dibujar una línea horizontal simple entre las filas
+                if (i < tableData.length - 1) {
+                    contentStream.moveTo(50, yPos - 2);
+                    contentStream.lineTo(550, yPos - 2);
+                    contentStream.stroke();
+                }
+            }
+
+            // Dibujar la línea horizontal final para la tabla
+            contentStream.moveTo(50, tableYPosition - (tableData.length * rowHeight) - 2);
+            contentStream.lineTo(550, tableYPosition - (tableData.length * rowHeight) - 2);
+            contentStream.stroke();
+
+            // Cerrar el flujo de contenido
+            contentStream.close();
+
+            // Usar FileChooser para seleccionar la ubicación de guardado
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+            // Establecer el directorio predeterminado en las "Descargas" del usuario
+            String userHome = System.getProperty("user.home");
+            String downloadsFolder = userHome + "/Downloads";
+            File defaultDirectory = new File(downloadsFolder);
+            fileChooser.setInitialDirectory(defaultDirectory);
+
+            // Abrir el diálogo de selección de archivo
+            File selectedFile = fileChooser.showSaveDialog(null);
+            if (selectedFile != null) {
+                String filePath = selectedFile.getAbsolutePath();
+                document.save(filePath);
+                document.close();
+
+                // Notificar éxito
+                Alerta.mensajeInfo("Éxito", "Exportación completada", "El parte se ha exportado como PDF:\n" + filePath);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerta.mensajeError("Error", "Ocurrió un error al exportar el PDF.");
+        }
+    }
+
 }

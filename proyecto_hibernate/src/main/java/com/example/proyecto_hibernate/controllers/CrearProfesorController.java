@@ -38,6 +38,7 @@ public class CrearProfesorController implements Initializable {
 
     private ProfesorCRUD profesorCRUD = new ProfesorCRUD();
 
+    // Método paras crear profesor
     @FXML
     void onCrearClick(ActionEvent event) {
         TipoProfesor tipo = null;
@@ -60,7 +61,6 @@ public class CrearProfesorController implements Initializable {
         }
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         for(TipoProfesor tipo : TipoProfesor.values()) {
@@ -72,7 +72,7 @@ public class CrearProfesorController implements Initializable {
         }
     }
 
-
+    // Método que llamamos cuando queremos limpiar datos
     private void limpiarCampos() {
         txt_nombre.clear();
         txt_numero.clear();

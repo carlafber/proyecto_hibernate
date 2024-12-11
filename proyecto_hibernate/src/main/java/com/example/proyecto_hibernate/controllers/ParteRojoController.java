@@ -73,6 +73,7 @@ public class ParteRojoController implements Initializable, Configurable {
 
     private ListaPartesController listaPartesController = GuardarController.getController();
 
+    // Método para actualizar cualquier dato del parte
     @FXML
     void onActualizarClick(ActionEvent event) {
         PartesIncidencia parte = GuardarParte.getParte();
@@ -102,7 +103,7 @@ public class ParteRojoController implements Initializable, Configurable {
         }
     }
 
-
+    // Creamos un parte
     @FXML
     void onCrearClick(ActionEvent event) {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue() == null || cb_sancion.getValue().isEmpty()){
@@ -150,19 +151,19 @@ public class ParteRojoController implements Initializable, Configurable {
         }
     }
 
-
+    // Nos lleva al parte naranja
     @FXML
     void onParteNaranjaClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteNaranja, "parte-naranja.fxml");
-    }//onParteNaranjaClick
+    }
 
-
+    // Nos lleva al parte verde
     @FXML
     void onParteVerdeClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteRojo, "parte-verde.fxml");
-    }//onParteVerdeClick
+    }
 
 
     @FXML
@@ -179,6 +180,7 @@ public class ParteRojoController implements Initializable, Configurable {
     }
 
 
+    // Inicializa las horas que hay para poner partes
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cb_horaParte.getItems().addAll(
@@ -245,6 +247,9 @@ public class ParteRojoController implements Initializable, Configurable {
                 cb_sancion.setValue(GuardarParte.getParte().getSancion());
             }
         }
+
+        bt_actualizar.setDisable(reset);
+        bt_crear.setDisable(!reset);
     }
 
 
@@ -276,7 +281,6 @@ public class ParteRojoController implements Initializable, Configurable {
         bt_crear.setDisable(!estado);
         bt_actualizar.setDisable(estado);
         txt_expedienteAlumno.setEditable(estado); //para que no se pueda editar el alumno
-        //hacer que cuando cambie de pantalla no se pueda editar ell txt y los botones estén igual
         reset = estado;
     }
 
@@ -286,4 +290,4 @@ public class ParteRojoController implements Initializable, Configurable {
             GuardarParte.resetParte();
         }
     }
-}//class
+}

@@ -93,11 +93,12 @@ public class ListaPartesController implements Initializable {
     Configurable ParteRojoController = new ParteRojoController();
 
 
+    // Método para inicializar la tabla de Lista de Partes
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         session = HibernateUtil.getSessionFactory().openSession();
 
-        // Configurar columnas de la tabla
+        // Configuramos las columnas de la tabla
         tc_expediente.setCellValueFactory(cellData -> {
             Alumnos alumnos = cellData.getValue().getAlumno();
             return new SimpleStringProperty(alumnos.getNumero_expediente());
@@ -134,6 +135,7 @@ public class ListaPartesController implements Initializable {
 
             }
 
+            // Hay que actualizar para que no desaparezcan los botones cuando buscamos o cambiamos de página
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
@@ -153,9 +155,9 @@ public class ListaPartesController implements Initializable {
                 String estilo = "-fx-background-color: ";
                 if (parte == null || empty) {
                     estilo = "";
-                    setStyle(""); // Restablecer estilo si la fila está vacía
+                    setStyle(""); // Restablecemos el estilo si la fila está vacía
                 } else {
-                    // Aplicar colores según el color del parte
+                    // Aplicamos colores según el color del parte
                     if(parte.getColor().equals(ColorParte.VERDE)){
                         estilo += ColorParte.VERDE.getCodigo_color() + ";";
                     } else if(parte.getColor().equals(ColorParte.NARANJA)){
@@ -197,14 +199,14 @@ public class ListaPartesController implements Initializable {
     void onBuscarClick(ActionEvent event) {
         String numeroExpediente = txt_numExpediente.getText();
 
-        // Validar si el campo está vacío
+        // Validamos si el campo está vacío
         if (numeroExpediente == null || numeroExpediente.isEmpty()) {
             Alerta.mensajeError("Campo vacío", "Por favor, introduce un número de expediente válido.");
             return;
         }
 
         try {
-            // Aplicar el filtro a la lista
+            // Aplicamos el filtro a la lista
             listaFiltrada.setPredicate(parte -> {
                 Alumnos alumno = parte.getAlumno();
                 if (alumno != null) {
@@ -213,7 +215,7 @@ public class ListaPartesController implements Initializable {
                 return false;
             });
 
-            // Si no se encontraron resultados
+            // Si no encontramos resultados
             if (listaFiltrada.isEmpty()) {
                 Alerta.mensajeError("Parte no encontrado", "No se encontró ninguna parte con el expediente: " + numeroExpediente);
 
@@ -226,10 +228,10 @@ public class ListaPartesController implements Initializable {
                 return;
             }
 
-            // Recalibrar la paginación para reflejar los resultados de la búsqueda
+            // Recalibramos la paginación para reflejar los resultados de la búsqueda
             configurarPaginacion(listaFiltrada);
 
-            // Mostrar la primera página de los resultados
+            // Mostramos la primera página de los resultados
             pagination.setCurrentPageIndex(0);
         } catch (Exception e) {
             Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar: " + e.getMessage());
@@ -243,20 +245,20 @@ public class ListaPartesController implements Initializable {
         LocalDate fechaInicio = dt_fechaInicio.getValue();
         LocalDate fechaFin = dt_fechaFin.getValue();
 
-        // Validar que ambas fechas estén seleccionadas
+        // Validamos que ambas fechas estén seleccionadas
         if (fechaInicio == null || fechaFin == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, selecciona ambas fechas para buscar.");
             return;
         }
 
-        // Validar que el rango de fechas sea válido
+        // Validamos que el rango de fechas sea válido
         if (fechaInicio.isAfter(fechaFin)) {
             Alerta.mensajeError("Rango de fechas inválido", "La fecha inicial no puede ser posterior a la fecha final.");
             return;
         }
 
         try {
-            // Aplicar filtro para el rango de fechas
+            // Aplicamos filtro para el rango de fechas
             listaFiltrada.setPredicate(parte -> {
                 if (parte.getFecha() != null) {
                     return !parte.getFecha().isBefore(fechaInicio) && !parte.getFecha().isAfter(fechaFin);
@@ -264,7 +266,7 @@ public class ListaPartesController implements Initializable {
                 return false;
             });
 
-            // Si no se encuentran resultados
+            // Si no se encuentran los resultados
             if (listaFiltrada.isEmpty()) {
                 Alerta.mensajeError("No se encontraron partes", "No se encontraron partes entre las fechas: " + fechaInicio + " y " + fechaFin);
 
@@ -277,10 +279,8 @@ public class ListaPartesController implements Initializable {
                 return;
             }
 
-            // Recalibrar la paginación para reflejar los resultados filtrados
             configurarPaginacion(listaFiltrada);
 
-            // Mostrar la primera página de los resultados
             pagination.setCurrentPageIndex(0);
         } catch (Exception e) {
             Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar por rango de fechas: " + e.getMessage());
@@ -292,7 +292,7 @@ public class ListaPartesController implements Initializable {
     private void configurarPaginacion(ObservableList<PartesIncidencia> listaCompleta) {
         int filasPorPagina = 10; // Número de filas por página
 
-        // Configurar el Pagination
+        // Configuramos el Pagination
         pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
         pagination.setCurrentPageIndex(0);
 
@@ -301,7 +301,7 @@ public class ListaPartesController implements Initializable {
             cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
         });
 
-        // Mostrar la primera página
+        // Mostramos la primera página
         cambiarPagina(listaCompleta, filasPorPagina, 0);
     }
 
@@ -316,6 +316,7 @@ public class ListaPartesController implements Initializable {
     }
 
 
+    // Método para saber más información sobre un parte de un alumno
     private void abrirParte(PartesIncidencia parte){
         GuardarParte.setParte(parte);
         boolean estado = GuardarProfesor.getProfesor().getTipo().equals(TipoProfesor.profesor);
@@ -329,7 +330,6 @@ public class ListaPartesController implements Initializable {
         }
     }
 
-
     public void recargarListaPartes() {
         Platform.runLater(() -> {
             // Recuperar datos actualizados
@@ -340,9 +340,4 @@ public class ListaPartesController implements Initializable {
             configurarPaginacion(listaFiltrada);
         });
     }
-
-
-
-
-
 }

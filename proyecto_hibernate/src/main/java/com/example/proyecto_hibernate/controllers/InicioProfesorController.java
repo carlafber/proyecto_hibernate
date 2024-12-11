@@ -36,12 +36,12 @@ public class InicioProfesorController implements Initializable {
 
     private TipoProfesor tipoProfesor;
 
+    // Creamos y mostramos los botones para el inicio de sesión del profesor
     @FXML
     void onCrearParteClick(ActionEvent event) {
         GuardarParte.resetParte();
         CambioEscena.abrirEscena("parte-verde.fxml", "Crear parte");
     }
-
 
     @FXML
     void onCrearProfesorClick(ActionEvent event) {
@@ -73,6 +73,7 @@ public class InicioProfesorController implements Initializable {
     }
 
 
+    // Como es profesor, no tiene acceso a la mayoria de métodos, por eso se lo deshabilitamos2
     private void deshabilitarBotones(){
         bt_listaPartes.setVisible(false);
         bt_listaAlumnos.setVisible(false);

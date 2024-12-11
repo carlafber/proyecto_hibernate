@@ -212,7 +212,6 @@ public class ParteVerdeController implements Initializable, Configurable {
             GuardarParte.resetParte();
         }
     }
-
     @FXML
     void onExportarClick(ActionEvent event) {
         if (GuardarParte.getParte() == null) {
@@ -231,9 +230,17 @@ public class ParteVerdeController implements Initializable, Configurable {
             // Iniciar flujo de contenido
             contentStream = new PDPageContentStream(document, page);
 
-            // Añadir la imagen (logo) antes de comenzar el texto
+            // Dibujar el fondo verde
+            contentStream.setNonStrokingColor(0, 255, 0); // RGB para verde
+            contentStream.addRect(0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
+            contentStream.fill();
+
+            contentStream.setNonStrokingColor(255, 255, 255); // RGB para blanco
+
+            // Añadir la imagen (logo) ajustada más arriba y a la derecha
             PDImageXObject logo = PDImageXObject.createFromFile(getClass().getResource("/img/logo.png").getFile(), document);
-            contentStream.drawImage(logo, 420, 700, 100, 100);  // Posición ajustada
+            contentStream.drawImage(logo, 500, 650, 100, 100); // Posición ajustada
+
 
             // Escribir el título h1
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
@@ -273,66 +280,14 @@ public class ParteVerdeController implements Initializable, Configurable {
 
             // Gestión de saltos de línea manualmente
             String[] lines = content.split("\n");
-            float yPosition = 580;  // Posición inicial en el eje Y
+            float yPosition = 580; // Posición inicial en el eje Y
             for (String line : lines) {
                 contentStream.beginText();
                 contentStream.newLineAtOffset(50, yPosition);
                 contentStream.showText(line);
                 contentStream.endText();
-                yPosition -= 14;  // Ajusta la posición para la siguiente línea
+                yPosition -= 14; // Ajusta la posición para la siguiente línea
             }
-
-            // Agregar información adicional como tabla
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(50, yPosition - 20);
-            contentStream.showText("Información Adicional:");
-            contentStream.endText();
-
-            // Tabla de información adicional
-            float tableYPosition = yPosition - 40;
-            float rowHeight = 20;
-            String[][] tableData = {
-                    {"Campo", "Valor"},
-                    {"Profesor", parte.getProfesor().getNombre()},
-                    {"Alumno", parte.getAlumno().getNombre_alum()},
-                    {"Grupo", parte.getGrupo().getNombreGrupo()},
-                    {"Fecha", String.valueOf(parte.getFecha())},
-                    {"Hora", parte.getHora()},
-                    {"Descripción", parte.getDescripcion()},
-                    {"Sanción", parte.getSancion()},
-                    {"Color del Parte", String.valueOf(parte.getColor())}
-            };
-
-            // Escribir la tabla
-            contentStream.setLineWidth(0.5f); // Línea más delgada para las tablas
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
-
-            // Encabezados de la tabla
-            for (int i = 0; i < tableData.length; i++) {
-                float yPos = tableYPosition - (i * rowHeight);
-                contentStream.beginText();
-                contentStream.newLineAtOffset(50, yPos);
-                contentStream.showText(tableData[i][0]); // Campo
-                contentStream.endText();
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(200, yPos);
-                contentStream.showText(tableData[i][1]); // Valor
-                contentStream.endText();
-
-                // Dibujar una línea horizontal simple entre las filas
-                if (i < tableData.length - 1) {
-                    contentStream.moveTo(50, yPos - 2);
-                    contentStream.lineTo(550, yPos - 2);
-                    contentStream.stroke();
-                }
-            }
-
-            // Dibujar la línea horizontal final para la tabla
-            contentStream.moveTo(50, tableYPosition - (tableData.length * rowHeight) - 2);
-            contentStream.lineTo(550, tableYPosition - (tableData.length * rowHeight) - 2);
-            contentStream.stroke();
 
             // Cerrar el flujo de contenido
             contentStream.close();
@@ -361,6 +316,13 @@ public class ParteVerdeController implements Initializable, Configurable {
         } catch (Exception e) {
             e.printStackTrace();
             Alerta.mensajeError("Error", "Ocurrió un error al exportar el PDF.");
+        } finally {
+            try {
+                if (contentStream != null) contentStream.close();
+                if (document != null) document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

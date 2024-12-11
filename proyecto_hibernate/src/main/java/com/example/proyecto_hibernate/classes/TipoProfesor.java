@@ -1,7 +1,6 @@
 package com.example.proyecto_hibernate.classes;
 
-//esta clase representa los tipos de usuario que tiene el sistema
-
+//Clase que representa los tipos de profesores que existen
 public enum TipoProfesor {
     jefe_de_estudios,
     profesor

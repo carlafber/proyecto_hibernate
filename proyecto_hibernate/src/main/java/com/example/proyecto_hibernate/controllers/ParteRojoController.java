@@ -245,9 +245,6 @@ public class ParteRojoController implements Initializable, Configurable {
                 cb_sancion.setValue(GuardarParte.getParte().getSancion());
             }
         }
-
-        bt_actualizar.setDisable(reset);
-        bt_crear.setDisable(!reset);
     }
 
 
@@ -279,6 +276,7 @@ public class ParteRojoController implements Initializable, Configurable {
         bt_crear.setDisable(!estado);
         bt_actualizar.setDisable(estado);
         txt_expedienteAlumno.setEditable(estado); //para que no se pueda editar el alumno
+        //hacer que cuando cambie de pantalla no se pueda editar ell txt y los botones estén igual
         reset = estado;
     }
 

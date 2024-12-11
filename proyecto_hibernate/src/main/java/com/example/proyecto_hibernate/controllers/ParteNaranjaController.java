@@ -97,7 +97,6 @@ public class ParteNaranjaController implements Initializable, Configurable {
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
             PartesIncidencia parte = new PartesIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.NARANJA);
             alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
-            //puntuacion falta
             parteCRUD.crearParte(parte);
             Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
             limpiarCampos();
@@ -109,19 +108,15 @@ public class ParteNaranjaController implements Initializable, Configurable {
     void onExpedienteAlumnoChange(KeyEvent event) {
         String numExpediente = txt_expedienteAlumno.getText();
 
-        if (!numExpediente.isEmpty()) {
-            // Buscar el alumno con el número de expediente
+        if (!numExpediente.isEmpty()) { // Buscar el alumno con el número de expediente
             alumno = alumnoCRUD.buscarAlumnoPorExpediente(numExpediente);
 
-            if (alumno != null) {
-                // Si el alumno existe, mostrar el grupo en el Label
+            if (alumno != null) { // Si el alumno existe, mostrar el grupo en el Label
                 grupo_alumno.setText(alumno.getGrupo().getNombreGrupo());
-            } else {
-                // Si no se encuentra el alumno, mostrar un mensaje de error
+            } else { // Si no se encuentra el alumno, mostrar un mensaje de error
                 grupo_alumno.setText("Alumno no encontrado.");
             }
-        } else {
-            // Si el campo está vacío, limpiar el Label
+        } else { // Si el campo está vacío, limpiar el Label
             grupo_alumno.setText("");
         }
     }
@@ -168,9 +163,6 @@ public class ParteNaranjaController implements Initializable, Configurable {
             txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
             txt_sancion.setText(GuardarParte.getParte().getSancion());
         }
-
-        bt_actualizar.setDisable(reset);
-        bt_crear.setDisable(!reset);
     }
 
 
@@ -191,6 +183,7 @@ public class ParteNaranjaController implements Initializable, Configurable {
         bt_crear.setDisable(!estado);
         bt_actualizar.setDisable(estado);
         txt_expedienteAlumno.setEditable(estado); //para que no se pueda editar el alumno
+        //hacer que cuando cambie de pantalla no se pueda editar ell txt y los botones estén igual
         reset = estado;
     }
 

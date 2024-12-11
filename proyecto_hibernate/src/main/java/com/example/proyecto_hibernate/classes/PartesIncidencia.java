@@ -62,6 +62,7 @@ public class PartesIncidencia {
     }
 
 
+    //GETTER Y SETTER
     public int getId_parte() {
         return id_parte;
     }

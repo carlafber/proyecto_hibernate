@@ -21,7 +21,7 @@ public class Alumnos {
     @Column(name = "puntos_acumulados")
     private int puntos_acumulados;
 
-    //relación ManyToOne con la clase grupos, asociando un alumno a un grupo específico
+    //Relación ManyToOne con la clase Grupos, asociando un alumno a un grupo específico
     @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupos grupo;

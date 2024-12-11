@@ -1,7 +1,6 @@
 package com.example.proyecto_hibernate.classes;
 
-//esta clase asocia a cada elemento (verde, naranja, rojo) un color y los puntos asociados.
-
+//Clase que representa el color de los partes, asociando a cada uno su código de color y los puntos.
 public enum ColorParte {
     VERDE("#a0ffa0", 1),
     NARANJA("#ffce86", 6),

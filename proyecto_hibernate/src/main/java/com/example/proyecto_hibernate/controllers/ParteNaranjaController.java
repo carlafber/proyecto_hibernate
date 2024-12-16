@@ -1,25 +1,26 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.CRUD.AlumnosCRUD;
-import com.example.proyecto_hibernate.CRUD.PartesCRUD;
-import com.example.proyecto_hibernate.classes.Alumnos;
-import com.example.proyecto_hibernate.classes.ColorParte;
-import com.example.proyecto_hibernate.classes.PartesIncidencia;
+import com.example.proyecto_hibernate.CRUD.*;
+import com.example.proyecto_hibernate.classes.*;
 import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import javafx.stage.*;
+import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -74,7 +75,6 @@ public class ParteNaranjaController implements Initializable, Configurable {
 
     private ListaPartesController listaPartesController = GuardarController.getController();
 
-    // Método para actualizar cualquier dato del parte
     @FXML
     void onActualizarClick(ActionEvent event) {
         PartesIncidencia parte = GuardarParte.getParte();
@@ -87,8 +87,8 @@ public class ParteNaranjaController implements Initializable, Configurable {
 
         alumno = parte.getAlumno();
         alumnoCRUD.actualizarPuntosAlumno(alumno, parte, false); //actualizamos los puntos, al modificar el parte
-        if(parteCRUD.actualizarParte(parte)){
-            Alerta.mensajeInfo("ÉXITO", null,"Parte actualizado correctamente.");
+        if (parteCRUD.actualizarParte(parte)) {
+            Alerta.mensajeInfo("ÉXITO", null, "Parte actualizado correctamente.");
             // Cerrar la ventana actual
             Stage stage = (Stage) bt_actualizar.getScene().getWindow();
             stage.close();
@@ -101,7 +101,6 @@ public class ParteNaranjaController implements Initializable, Configurable {
     }
 
 
-    // Creamos un parte
     @FXML
     void onCrearClick(ActionEvent event) {
         if (txt_expedienteAlumno.getText().isEmpty() || dp_fechaParte.getValue() == null || txt_descripcion.getText().isEmpty() || cb_horaParte.getValue().isEmpty() || txt_sancion.getText().isEmpty()){
@@ -109,9 +108,11 @@ public class ParteNaranjaController implements Initializable, Configurable {
         } else { //si todos los campos están correctos -> creo el parte y lo introduzco en la BD
             PartesIncidencia parte = new PartesIncidencia(alumno, GuardarProfesor.getProfesor(), alumno.getGrupo(), dp_fechaParte.getValue(), cb_horaParte.getValue(), txt_descripcion.getText(), txt_sancion.getText(), ColorParte.NARANJA);
             alumnoCRUD.actualizarPuntosAlumno(alumno, parte, true);
-            //puntuacion falta
-            parteCRUD.crearParte(parte);
-            Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
+            if(parteCRUD.crearParte(parte)){
+                Alerta.mensajeInfo("ÉXITO", "Parte creado", "El parte ha sido creado correctamente.");
+            } else {
+                Alerta.mensajeError("Error al crear el parte", "El parte duplicado.");
+            }
             limpiarCampos();
         }
     }
@@ -121,99 +122,33 @@ public class ParteNaranjaController implements Initializable, Configurable {
     void onExpedienteAlumnoChange(KeyEvent event) {
         String numExpediente = txt_expedienteAlumno.getText();
 
-        if (!numExpediente.isEmpty()) {
-            // Buscar el alumno con el número de expediente
+        if (!numExpediente.isEmpty()) { // Buscar el alumno con el número de expediente
             alumno = alumnoCRUD.buscarAlumnoPorExpediente(numExpediente);
 
-            if (alumno != null) {
-                // Si el alumno existe, mostrar el grupo en el Label
+            if (alumno != null) { // Si el alumno existe, mostrar el grupo en el Label
                 grupo_alumno.setText(alumno.getGrupo().getNombreGrupo());
-            } else {
-                // Si no se encuentra el alumno, mostrar un mensaje de error
+            } else { // Si no se encuentra el alumno, mostrar un mensaje de error
                 grupo_alumno.setText("Alumno no encontrado.");
             }
-        } else {
-            // Si el campo está vacío, limpiar el Label
+        } else { // Si el campo está vacío, limpiar el Label
             grupo_alumno.setText("");
         }
     }
 
 
-    // Nos lleva al parte rojo
     @FXML
     void onParteRojoClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteRojo, "parte-rojo.fxml");
-    }
+    }//onParteRojoClick
 
-    // Nos lleva al parte verde
+
     @FXML
     void onParteVerdeClick(ActionEvent event) {
         resetParte(reset);
         CambioEscena.cambiarEscena(bt_parteRojo, "parte-verde.fxml");
     }//onParteVerdeClick
 
-
-    // Inicializa las horas que hay para poner partes
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        cb_horaParte.getItems().addAll(
-                "8:30-9:20",
-                "9:25-10:15",
-                "10:20-11:10",
-                "11:40-12:30",
-                "12:35-13:25",
-                "13:30-14:20",
-                "16:00-16:50",
-                "16:55-17:45",
-                "17:50-18:40",
-                "18:55-19:45",
-                "19:50-20:40",
-                "20:45-21:35"
-        );
-
-        nombre_profesor.setText(GuardarProfesor.getProfesor().getNombre());
-
-        if(GuardarParte.getParte() != null){
-            txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
-            grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
-            dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
-            cb_horaParte.setValue(GuardarParte.getParte().getHora());
-            txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
-            txt_sancion.setText(GuardarParte.getParte().getSancion());
-        }
-
-        bt_actualizar.setDisable(reset);
-        bt_crear.setDisable(!reset);
-    }
-
-
-    private void limpiarCampos() {
-        txt_expedienteAlumno.clear();
-        grupo_alumno.setText("");
-        dp_fechaParte.setValue(null);
-        cb_horaParte.setValue(null);
-        txt_descripcion.clear();
-        txt_sancion.setText("");
-    }
-
-
-    @Override
-    public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
-        bt_parteVerde.setDisable(estado);
-        bt_parteRojo.setDisable(estado);
-        bt_crear.setDisable(!estado);
-        bt_actualizar.setDisable(estado);
-        txt_expedienteAlumno.setEditable(estado); //para que no se pueda editar el alumno
-        reset = estado;
-    }
-
-
-    private void resetParte(Boolean reset) {
-        if(reset){
-            GuardarParte.resetParte();
-        }
-    }
 
     @FXML
     void onExportarClick(ActionEvent event) {
@@ -234,15 +169,29 @@ public class ParteNaranjaController implements Initializable, Configurable {
             contentStream = new PDPageContentStream(document, page);
 
             // Dibujar el fondo naranja
-            contentStream.setNonStrokingColor(255, 165, 0); // RGB para naranja
+            contentStream.setNonStrokingColor(Color.decode(ColorParte.NARANJA.getCodigo_color())); // RGB para naranja
             contentStream.addRect(0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
             contentStream.fill();
 
-            contentStream.setNonStrokingColor(255, 255, 255); // RGB para blanco
+            contentStream.setNonStrokingColor(0, 0, 0); // RGB para negro
 
             // Añadir la imagen (logo) ajustada más arriba y a la derecha
-            PDImageXObject logo = PDImageXObject.createFromFile(getClass().getResource("/img/logo.png").getFile(), document);
-            contentStream.drawImage(logo, 500, 650, 100, 100); // Posición ajustada
+            try {
+                InputStream logoStream = getClass().getResourceAsStream("/img/logo.png");
+                if (logoStream == null) {
+                    Alerta.mensajeError("Error", "No se encontró el logo en '/img/logo.png'.");
+                    return;
+                }
+                PDImageXObject logo = PDImageXObject.createFromByteArray(
+                        document,
+                        logoStream.readAllBytes(),
+                        "logo.png"
+                );
+                contentStream.drawImage(logo, 500, 650, 100, 100); // Posición ajustada
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alerta.mensajeError("Error", "Error al cargar la imagen del logo: " + e.getMessage());
+            }
 
             // Escribir el título h1
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
@@ -268,16 +217,14 @@ public class ParteNaranjaController implements Initializable, Configurable {
                             "Fecha: %s\n" +
                             "Hora: %s\n\n" +
                             "Descripción:\n%s\n\n" +
-                            "Sanción:\n%s\n\n" +
-                            "Color del Parte: %s",
+                            "Sanción:\n%s\n",
                     parte.getProfesor().getNombre(),
                     parte.getAlumno().getNombre_alum(),
                     parte.getGrupo().getNombreGrupo(),
                     parte.getFecha(),
                     parte.getHora(),
                     parte.getDescripcion(),
-                    parte.getSancion(),
-                    parte.getColor()
+                    parte.getSancion()
             );
 
             // Gestión de saltos de línea manualmente
@@ -290,58 +237,6 @@ public class ParteNaranjaController implements Initializable, Configurable {
                 contentStream.endText();
                 yPosition -= 14;  // Ajusta la posición para la siguiente línea
             }
-
-            // Agregar información adicional como tabla
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.beginText();
-            contentStream.newLineAtOffset(50, yPosition - 20);
-            contentStream.showText("Información Adicional:");
-            contentStream.endText();
-
-            // Tabla de información adicional
-            float tableYPosition = yPosition - 40;
-            float rowHeight = 20;
-            String[][] tableData = {
-                    {"Campo", "Valor"},
-                    {"Profesor", parte.getProfesor().getNombre()},
-                    {"Alumno", parte.getAlumno().getNombre_alum()},
-                    {"Grupo", parte.getGrupo().getNombreGrupo()},
-                    {"Fecha", String.valueOf(parte.getFecha())},
-                    {"Hora", parte.getHora()},
-                    {"Descripción", parte.getDescripcion()},
-                    {"Sanción", parte.getSancion()},
-                    {"Color del Parte", String.valueOf(parte.getColor())}
-            };
-
-            // Escribir la tabla
-            contentStream.setLineWidth(0.5f); // Línea más delgada para las tablas
-            contentStream.setFont(PDType1Font.HELVETICA, 10);
-
-            // Encabezados de la tabla
-            for (int i = 0; i < tableData.length; i++) {
-                float yPos = tableYPosition - (i * rowHeight);
-                contentStream.beginText();
-                contentStream.newLineAtOffset(50, yPos);
-                contentStream.showText(tableData[i][0]); // Campo
-                contentStream.endText();
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(200, yPos);
-                contentStream.showText(tableData[i][1]); // Valor
-                contentStream.endText();
-
-                // Dibujar una línea horizontal simple entre las filas
-                if (i < tableData.length - 1) {
-                    contentStream.moveTo(50, yPos - 2);
-                    contentStream.lineTo(550, yPos - 2);
-                    contentStream.stroke();
-                }
-            }
-
-            // Dibujar la línea horizontal final para la tabla
-            contentStream.moveTo(50, tableYPosition - (tableData.length * rowHeight) - 2);
-            contentStream.lineTo(550, tableYPosition - (tableData.length * rowHeight) - 2);
-            contentStream.stroke();
 
             // Cerrar el flujo de contenido
             contentStream.close();
@@ -373,5 +268,70 @@ public class ParteNaranjaController implements Initializable, Configurable {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        cb_horaParte.getItems().addAll(
+                "8:30-9:20",
+                "9:25-10:15",
+                "10:20-11:10",
+                "11:40-12:30",
+                "12:35-13:25",
+                "13:30-14:20",
+                "16:00-16:50",
+                "16:55-17:45",
+                "17:50-18:40",
+                "18:55-19:45",
+                "19:50-20:40",
+                "20:45-21:35"
+        );
 
-}
+        nombre_profesor.setText(GuardarProfesor.getProfesor().getNombre());
+
+        if (GuardarParte.getParte() != null) {
+            // Si ya hay un parte cargado
+            txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
+            grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
+            dp_fechaParte.setValue(GuardarParte.getParte().getFecha());
+            cb_horaParte.setValue(GuardarParte.getParte().getHora());
+            txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
+            txt_sancion.setText(GuardarParte.getParte().getSancion());
+
+            // Si se ha cargado un parte, habilitar el botón de actualización
+            bt_actualizar.setDisable(false);
+            bt_crear.setDisable(true); // Deshabilitar el botón de crear si ya existe un parte
+        } else {
+            // Si no se ha cargado un parte, mantener el botón de actualizar deshabilitado
+            bt_actualizar.setDisable(true);
+            bt_crear.setDisable(false); // Permitir crear un nuevo parte
+        }
+    }
+
+
+    private void limpiarCampos() {
+        txt_expedienteAlumno.clear();
+        grupo_alumno.setText("");
+        dp_fechaParte.setValue(null);
+        cb_horaParte.setValue(null);
+        txt_descripcion.clear();
+        txt_sancion.setText("");
+    }
+
+
+    @Override
+    public void configurarBotones(Boolean estado) {// Deshabilita o habilita el botón según el estado.
+        bt_parteVerde.setDisable(estado);
+        bt_parteRojo.setDisable(estado);
+        bt_crear.setDisable(!estado);
+        bt_actualizar.setDisable(estado);
+        txt_expedienteAlumno.setEditable(estado); //para que no se pueda editar el alumno
+        //hacer que cuando cambie de pantalla no se pueda editar ell txt y los botones estén igual
+        reset = estado;
+    }
+
+
+    private void resetParte(Boolean reset) {
+        if(reset){
+            GuardarParte.resetParte();
+        }
+    }
+}//class

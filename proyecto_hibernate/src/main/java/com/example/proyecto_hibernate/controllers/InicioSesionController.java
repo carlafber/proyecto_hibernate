@@ -1,6 +1,6 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.CRUD.ProfesorCRUD;
+import com.example.proyecto_hibernate.CRUD.ProfesoresCRUD;
 import com.example.proyecto_hibernate.classes.Profesores;
 import com.example.proyecto_hibernate.util.Alerta;
 import com.example.proyecto_hibernate.util.CambioEscena;
@@ -28,23 +28,24 @@ public class InicioSesionController implements Initializable {
     @FXML
     private ImageView imagen_fondo;
 
+    //@FXML
+    //private VBox inicio;
+
     @FXML
     private PasswordField pwd_contrasena;
 
     @FXML
     private TextField txt_numero;
 
-    private ProfesorCRUD profesorCRUD = new ProfesorCRUD();
+    private ProfesoresCRUD profesoresCRUD = new ProfesoresCRUD();
 
-
-    // Método que inicia sesión con el id del profesor y su respectiva contraseña
     @FXML
     void onIniciarSesionClick(ActionEvent event) {
         boolean encontrado = false;
         if(txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty()){
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
         } else {
-            for(Profesores profe : profesorCRUD.obtenerProfesores()){
+            for(Profesores profe : profesoresCRUD.obtenerProfesores()){
                 if(txt_numero.getText().equals(profe.getNumero_asignado())){
                     if(pwd_contrasena.getText().equals(profe.getContrasena())) {
                         GuardarProfesor.setProfesor(profe);
@@ -67,6 +68,7 @@ public class InicioSesionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //adaptar la imagen al tamaño de la pantalla
         imagen_fondo.fitWidthProperty().bind(fondo.widthProperty());
         imagen_fondo.fitHeightProperty().bind(fondo.heightProperty());
     }

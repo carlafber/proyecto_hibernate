@@ -1,34 +1,26 @@
 package com.example.proyecto_hibernate.CRUD;
 
-import com.example.proyecto_hibernate.classes.PartesIncidencia;
-import com.example.proyecto_hibernate.util.Alerta;
-import com.example.proyecto_hibernate.util.HibernateUtil;
+import com.example.proyecto_hibernate.classes.*;
+import com.example.proyecto_hibernate.util.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-//Esta clase contiene métodos crud para gestionar los partes de incidencia
-public class PartesCRUD {
+
+//Clase que implementa la interfaz IPartesCRUD para gestionar las operaciones CRUD relacionadas con los Partes utilizando Hibernate
+public class PartesCRUD implements IPartesCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    //método para obtener una lista de todos los partes de incidencia de la BD
-    public ArrayList<PartesIncidencia> obtenerPartes() {
-        Session session = factory.openSession();
-
+    @Override
+    public ArrayList<PartesIncidencia> obtenerPartes(){
         Transaction transaction = null;
-
         //lista para almacenar los partes de incidencia obtenidos almacenados en la BD
         ArrayList<PartesIncidencia> listaPartes = new ArrayList<>();
-
-        try {
-            session.beginTransaction();
-
+        try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
-
             //consulta para obtener todos los partes de incidencia de la BD --> se guardan en una lista
             List<PartesIncidencia> partesIncidencias = session.createQuery("from PartesIncidencia", PartesIncidencia.class).getResultList();
 
@@ -36,49 +28,35 @@ public class PartesCRUD {
             listaPartes.addAll(partesIncidencias);
 
             transaction.commit();
-        } catch (Exception e) {
+        }catch (Exception e){
             Alerta.mensajeError(null, e.getMessage());
-            e.printStackTrace();
         }
         return listaPartes;
     }//obtenerPartes
 
 
-    //método para crear un nuevo parte de incidencia en la BD
-    public void crearParte(PartesIncidencia partesIncidencia) {
-        Session session = factory.openSession();
-
+    @Override
+    public boolean crearParte(PartesIncidencia partesIncidencia) {
         Transaction transaction = null;
-
-        try {
-            session.beginTransaction();
-
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
-            //guardar el nuevo parte en la BD
-            session.save(partesIncidencia);
-
+            session.save(partesIncidencia); //se guarda el nuevo parte en la BD
             transaction.commit();
+            return true;
         } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
+            return false;
         }//try-catch
     } //crearParte
 
 
-
-    //método para obtener los partes de incidencia asociados a un alumno, a través de su id
-    public List<PartesIncidencia> obtenerPartesAlumno(int id_alumno) {
-        Session session = factory.openSession();
-
+    @Override
+    public List<PartesIncidencia> obtenerPartesAlumno(int id_alumno){
         Transaction transaction = null;
-
         //lista vacía para almacenar los partes de un alumno obtenidos de la BD
         List listaPartes = new ArrayList<>();
 
-        //bloque try-with-resources para abrir una sesión
-        try {
-            session.beginTransaction();
-
+        try(Session session = factory.openSession()){
             transaction = session.beginTransaction();
 
             //consulta para obtener los partes que tiene un alumno por su id
@@ -89,42 +67,32 @@ public class PartesCRUD {
 
             //almacenar los partes en la lista
             listaPartes = query.getResultList();
-
             transaction.commit();
-        } catch (Exception e) {
+        }catch (Exception e){
             Alerta.mensajeError(null, e.getMessage());
-            e.printStackTrace();
         }//try-catch
 
         return listaPartes;
     }//obtenerPartesAlumno
 
 
-    //método para actualizar un parte de incidencia existente en la BD
+    @Override
     public boolean actualizarParte(PartesIncidencia parte) {
-        Session session = factory.openSession();
-
         Transaction transaction = null;
 
-        //semáforo para ver si ha habido cambios o no
+        //variable que controla los cambios
         boolean cambios = false;
 
-        try {
-            session.beginTransaction();
-
+        try(Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
-            //actualiza el parte de incidencia en la base de datos
-            session.update(parte);
-
-            //al haber cambios, el semáforo cambia a true
-            cambios = true;
-
+            session.update(parte); //actualiza el parte de incidencia en la base de datos
+            cambios = true; //si la operación funciona, se actualiza a 'true' la variable controladora
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                transaction.rollback(); //en caso de error, realiza un rollback
             }
+            Alerta.mensajeError(null, e.getMessage());
         }//try-catch
 
         return cambios;

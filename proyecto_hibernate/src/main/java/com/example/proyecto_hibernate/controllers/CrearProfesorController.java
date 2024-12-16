@@ -1,6 +1,6 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.CRUD.ProfesorCRUD;
+import com.example.proyecto_hibernate.CRUD.ProfesoresCRUD;
 import com.example.proyecto_hibernate.classes.Profesores;
 import com.example.proyecto_hibernate.classes.TipoProfesor;
 import com.example.proyecto_hibernate.util.Alerta;
@@ -36,10 +36,10 @@ public class CrearProfesorController implements Initializable {
     @FXML
     private TextField txt_numero;
 
-    private ProfesorCRUD profesorCRUD = new ProfesorCRUD();
+    private ProfesoresCRUD profesoresCRUD = new ProfesoresCRUD();
 
-    // Método paras crear profesor
     @FXML
+    //método para crear profesor
     void onCrearClick(ActionEvent event) {
         TipoProfesor tipo = null;
         boolean creado = false; //¿?
@@ -52,7 +52,7 @@ public class CrearProfesorController implements Initializable {
                 tipo = TipoProfesor.jefe_de_estudios;
             }
             Profesores profesor = new Profesores(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
-            if(profesorCRUD.crearProfesor(profesor)){
+            if(profesoresCRUD.crearProfesor(profesor)){
                 Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
             } else {
                 Alerta.mensajeError("Profesor duplicado", "No puede haber dos profesores con el mismo número asignado.");
@@ -60,6 +60,7 @@ public class CrearProfesorController implements Initializable {
             limpiarCampos();
         }
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -72,7 +73,8 @@ public class CrearProfesorController implements Initializable {
         }
     }
 
-    // Método que llamamos cuando queremos limpiar datos
+
+    //método para limpiar los campos que contienen valores
     private void limpiarCampos() {
         txt_nombre.clear();
         txt_numero.clear();

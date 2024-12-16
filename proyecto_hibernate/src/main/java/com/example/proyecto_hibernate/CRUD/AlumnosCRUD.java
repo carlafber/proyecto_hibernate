@@ -1,34 +1,28 @@
 package com.example.proyecto_hibernate.CRUD;
 
-import com.example.proyecto_hibernate.classes.PartesIncidencia;
-import com.example.proyecto_hibernate.util.Alerta;
-import com.example.proyecto_hibernate.classes.Alumnos;
-import com.example.proyecto_hibernate.util.HibernateUtil;
+import com.example.proyecto_hibernate.classes.*;
+import com.example.proyecto_hibernate.util.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-//Esta clase contiene métodos crud para gestionar los Alumnos
-public class AlumnosCRUD {
+
+//Clase que implementa la interfaz IAlumnosCRUD para gestionar las operaciones CRUD relacionadas con los Alumnos utilizando Hibernate
+public class AlumnosCRUD implements IAlumnosCRUD{
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
-    //método para obtener una lista de todos los alumnos de la BD
+    @Override
     public ArrayList<Alumnos> obtenerAlumnos() {
-        Session session = factory.openSession();
-
-        Transaction transaction;
+        Transaction transaction = null;
 
         //lista para almacenar los alumnos almacenados en la BD
         ArrayList<Alumnos> listaAlumnos = new ArrayList<>();
 
-        try {
-            session.beginTransaction();
-
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
 
             //consulta para obtener todos los alumnos de la BD --> se guardan en una lista
@@ -46,14 +40,11 @@ public class AlumnosCRUD {
     }//obtenerAlumnos
 
 
-    //método para buscar un alumno por su número de expediente
+    @Override
     public Alumnos buscarAlumnoPorExpediente(String expediente) {
-        Session session = factory.openSession();
-
         Alumnos alumno = null;
-
-        try {
-            session.beginTransaction();
+        try(Session session = factory.openSession()) {
+            session.beginTransaction();  //comienza la transacción
 
             //consulta para buscar un alumno por su número de expediente
             Query query = session.createQuery("FROM Alumnos WHERE numero_expediente = :numero_expediente");
@@ -64,11 +55,8 @@ public class AlumnosCRUD {
             //resultado único de la consulta ************************
             alumno = (Alumnos) query.uniqueResult();
 
-            session.getTransaction().commit();
+            session.getTransaction().commit();  //guarda la transacción
         } catch (Exception e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
             Alerta.mensajeError(null, e.getMessage());
         }//try-catch
 
@@ -76,40 +64,33 @@ public class AlumnosCRUD {
     }//buscarAlumnoPorExpediente
 
 
-    //método para actualizar los puntos acumulados de un alumno según un parte de incidencia
+    @Override
     public void actualizarPuntosAlumno(Alumnos alumno, PartesIncidencia parte, boolean sumar) {
-        Session session = factory.openSession();
-
         Transaction transaction = null;
 
         //variable para calcular los nuevos puntos
         int nuevosPuntos = 0;
 
-        try {
-            session.beginTransaction();
-
+        try(Session session = factory.openSession()) {
             transaction = session.beginTransaction();
 
-            //si el alumno no es null
-            if (alumno != null) {
-                //si sumar es true, suma los puntos del parte al alumno
-                if (sumar) {
+            if (alumno != null) { //si el alumno existe
+                if(sumar){ //si la variable sumar es 'true', se suman los puntos del parte al alumno
                     nuevosPuntos = alumno.getPuntos_acumulados() + parte.getPuntos_parte();
-                } else {
-                    //si no, asigna directamente los puntos del parte
+                } else { //si no, se asigna directamente los puntos del parte
                     nuevosPuntos = parte.getPuntos_parte();
                 }
-
-                //actualiza los puntos acumulados del alumno
+                //se asignan los nuevos puntos al alumno
                 alumno.setPuntos_acumulados(nuevosPuntos);
 
+                //actualiza los datos del alumno
                 session.update(alumno);
             }//if
 
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                transaction.rollback(); //en caso de error, realiza un rollback
             }
             Alerta.mensajeError(null, e.getMessage());
         }//try-catch

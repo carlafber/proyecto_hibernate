@@ -76,6 +76,55 @@ public class PartesCRUD implements IPartesCRUD {
     }//obtenerPartesAlumno
 
 
+    public List<Object[]> obtenerEstadisticasPartesPorColor() {
+        Transaction transaction = null;
+        List<Object[]> resultados = new ArrayList<>();
+
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+
+            // Consulta para contar las partes por color
+            Query<Object[]> query = session.createQuery(
+                    "SELECT p.color, COUNT(p) FROM PartesIncidencia p GROUP BY p.color", Object[].class);
+
+            resultados = query.getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            Alerta.mensajeError(null, e.getMessage());
+        }
+
+        return resultados;
+    }
+
+    public List<Object[]> obtenerEstadisticasPartesPorAlumno(String numeroExpediente) {
+        Session session = null;
+        List<Object[]> estadisticas = new ArrayList<>();
+        try {
+            // Abrir una nueva sesión de Hibernate
+            session = HibernateUtil.getSessionFactory().openSession();
+
+            // Crear la consulta utilizando HQL (Hibernate Query Language)
+            String hql = "SELECT p.color, COUNT(p) " +
+                    "FROM PartesIncidencia p " +
+                    "WHERE p.alumno.numero_expediente = :numeroExpediente " +
+                    "GROUP BY p.color";
+
+            // Ejecutar la consulta
+            estadisticas = session.createQuery(hql, Object[].class)
+                    .setParameter("numeroExpediente", numeroExpediente)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error obteniendo estadísticas para el alumno con expediente " + numeroExpediente + ": " + e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close(); // Cerrar la sesión
+            }
+        }
+        return estadisticas;
+    }
+
+
+
     @Override
     public boolean actualizarParte(PartesIncidencia parte) {
         Transaction transaction = null;

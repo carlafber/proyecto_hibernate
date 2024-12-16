@@ -90,6 +90,7 @@ public class InicioProfesorController implements Initializable {
         bt_listaPartes.setVisible(false);
         bt_listaAlumnos.setVisible(false);
         bt_crearProfesor.setVisible(false);
+        bt_estadísticas.setDisable(false);
     }//ocultarBotones
 }//class
 

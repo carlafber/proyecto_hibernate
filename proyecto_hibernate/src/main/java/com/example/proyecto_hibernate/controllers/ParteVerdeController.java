@@ -308,15 +308,16 @@ public class ParteVerdeController implements Initializable, Configurable {
             txt_descripcion.setText(GuardarParte.getParte().getDescripcion());
             txt_sancion.setText(GuardarParte.getParte().getSancion());
 
-            // Si se ha cargado un parte, habilitar el botón de actualización
+                  // Si se ha cargado un parte, habilitar el botón de actualización
             bt_actualizar.setDisable(false);
+            bt_exportar.setDisable(false);
             bt_crear.setDisable(true); // Deshabilitar el botón de crear si ya existe un parte
         } else {
             // Si no se ha cargado un parte, mantener el botón de actualizar deshabilitado
             bt_actualizar.setDisable(true);
+            bt_exportar.setDisable(true);
             bt_crear.setDisable(false); // Permitir crear un nuevo parte
         }
-    }
 
 
     private void limpiarCampos() {

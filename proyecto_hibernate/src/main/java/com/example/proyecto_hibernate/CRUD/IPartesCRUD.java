@@ -21,4 +21,8 @@ public interface IPartesCRUD {
 
     //método para comprobar si se actualiza un parte de incidencia existente en la BD
     boolean actualizarParte(PartesIncidencia parte);
+
+    List<Object[]> obtenerEstadisticasPartesPorColor();
+
+    List<Object[]> obtenerEstadisticasPartesPorAlumno(String numeroExpediente);
 }

@@ -1,23 +1,20 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.CRUD.ProfesoresCRUD;
-import com.example.proyecto_hibernate.classes.Profesores;
-import com.example.proyecto_hibernate.classes.TipoProfesor;
-import com.example.proyecto_hibernate.util.Alerta;
+import com.example.proyecto_hibernate.CRUD.*;
+import com.example.proyecto_hibernate.classes.*;
+import com.example.proyecto_hibernate.util.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
+//Clase que controla la creación de un nuevo profesor
 public class CrearProfesorController implements Initializable {
 
+    //ATRIBUTOS
     @FXML
     private Button bt_crear;
 
@@ -36,42 +33,48 @@ public class CrearProfesorController implements Initializable {
     @FXML
     private TextField txt_numero;
 
-    private ProfesoresCRUD profesoresCRUD = new ProfesoresCRUD();
+    private ProfesoresCRUD profesoresCRUD = new ProfesoresCRUD(); //instancia de la clase CRUD para realizar operaciones
 
-    @FXML
+
+    //MÉTODOS
     //método para crear profesor
+    @FXML
     void onCrearClick(ActionEvent event) {
-        TipoProfesor tipo = null;
-        boolean creado = false; //¿?
+        TipoProfesor tipo = null; //declaración del tipo de profesor a nulo
+
+        //comprobar que nigún campo está vacío
         if (txt_nombre.getText().isEmpty() || txt_numero.getText().isEmpty() || pwd_contrasena.getText().isEmpty() || cb_tipo.getSelectionModel().getSelectedItem() == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, completa todos los campos.");
-        } else {
-            if(cb_tipo.getSelectionModel().getSelectedItem().equals("Profesor")){
+        } else { //si todos los campos están rellenos
+            //asignar a la variable 'tipo' el tipo de profesor que se ha seleccionado en el comboBox
+            if (cb_tipo.getSelectionModel().getSelectedItem().equals("Profesor")) {
                 tipo = TipoProfesor.profesor;
             } else if (cb_tipo.getSelectionModel().getSelectedItem().equals("Jefe de estudios")) {
                 tipo = TipoProfesor.jefe_de_estudios;
-            }
+            }//if-elseif
+
+            //crear un nuevo profesor con los datos introducidos
             Profesores profesor = new Profesores(pwd_contrasena.getText(), txt_nombre.getText(), txt_numero.getText(), tipo);
-            if(profesoresCRUD.crearProfesor(profesor)){
+
+            //si se ha creado correctamente, se muestra mensaje de éxito
+            if (profesoresCRUD.crearProfesor(profesor)) {
                 Alerta.mensajeInfo("ÉXITO", "Profesor creado", "El profesor ha sido creado correctamente.");
-            } else {
+            } else { // si no, mensaje de error
                 Alerta.mensajeError("Profesor duplicado", "No puede haber dos profesores con el mismo número asignado.");
-            }
-            limpiarCampos();
-        }
-    }
+            }//if-else
+
+            limpiarCampos(); //limpiar los campos de texto
+        }//if-else
+    }//onCrearClick
 
 
+    //método para inicializar la pantalla según se abre
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        for(TipoProfesor tipo : TipoProfesor.values()) {
-            if(tipo == TipoProfesor.profesor){
-                cb_tipo.getItems().add("Profesor");
-            } else if (tipo == TipoProfesor.jefe_de_estudios) {
-                cb_tipo.getItems().add("Jefe de estudios");
-            }
-        }
-    }
+        //inicializar el comboBox
+        cb_tipo.getItems().add("Profesor");
+        cb_tipo.getItems().add("Jefe de estudios");
+    }//initialize
 
 
     //método para limpiar los campos que contienen valores
@@ -80,5 +83,5 @@ public class CrearProfesorController implements Initializable {
         txt_numero.clear();
         pwd_contrasena.clear();
         cb_tipo.setValue(null);
-    }
-}
+    }//limpiarCampos
+}//class

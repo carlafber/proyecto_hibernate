@@ -16,6 +16,8 @@ public enum ColorParte {
         this.puntos = puntos;
     }
 
+
+    //MÉTODOS PARA OBTENER LOS ATRIBUTOS
     public String getCodigo_color() {
         return codigo_color;
     }

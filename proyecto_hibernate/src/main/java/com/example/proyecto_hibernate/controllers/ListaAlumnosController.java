@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+//Clase que controla el listado de alumnos
 public class ListaAlumnosController implements Initializable {
 
+    //ATRIBUTOS
     @FXML
     private Button bt_buscar;
 
@@ -54,37 +56,38 @@ public class ListaAlumnosController implements Initializable {
     @FXML
     private TextField txt_numExpediente;
 
-    private AlumnosCRUD alumnosCRUD = new AlumnosCRUD();
+    private AlumnosCRUD alumnosCRUD = new AlumnosCRUD(); //instancia de la clase CRUD para realizar operaciones
 
-    private PartesCRUD partesCRUD = new PartesCRUD();
+    private PartesCRUD partesCRUD = new PartesCRUD(); //instancia de la clase CRUD para realizar operaciones
 
-    private ObservableList<Alumnos> alumnosObservableList;
+    private ObservableList<Alumnos> alumnosObservableList; //lista para mostrar los alumnos en la tabla
 
-    private FilteredList<Alumnos> filteredList;
+    private FilteredList<Alumnos> filteredList; //lista para filtrar por el criterio de búsqueda
 
-    private Session session;
 
+    //MÉTODOS
+    //método que se ejecuta cuando se presiona sobre el botón 'Borrar' de los filtros
     @FXML
     void onBorrarClick(ActionEvent event) {
-        //se restablece el filtro de búsqueda
-        restablecerFiltro();
+        restablecerFiltro(); //se restablece el filtro de búsqueda
 
-        //se restablece la paginación para reflejar los cambios
-        restablecerPaginacion();
-    }
+        restablecerPaginacion(); //se restablece la paginación para reflejar los cambios
+    }//onBorrarClick
 
 
+    //método que se ejecuta cuando se presiona sobre el botón 'Buscar' de los filtros
     @FXML
     void onBuscarClick(ActionEvent event) {
-        String numeroExpediente = txt_numExpediente.getText(); //se recoge el número de expediente
+        String numeroExpediente = txt_numExpediente.getText(); //obtener el número de expediente introducido en el filtro
 
+        //comprobar que no está vacio el campo
         if (numeroExpediente == null || numeroExpediente.isEmpty()) {
             Alerta.mensajeError("Campo vacío", "Por favor, introduce un número válido.");
             return;
-        }
+        }//if
 
         try {
-            //se actualiza el filtro para mostrar solo el alumno con el número buscado
+            //se actualiza el filtro para mostrar solo el alumno con el número expediente buscado
             filteredList.setPredicate(alumno -> alumno.getNumero_expediente().equals(numeroExpediente));
 
             //comprobar si hay algún resultado
@@ -93,30 +96,30 @@ public class ListaAlumnosController implements Initializable {
 
                 //se restablece el filtro de búsqueda
                 restablecerFiltro();
-            }
+            }//if
 
             //se restablece la paginación para reflejar los cambios
             restablecerPaginacion();
 
         } catch (NumberFormatException e) {
             Alerta.mensajeError("Formato no válido", "Por favor, introduce un número de expediente válido.");
-        }
-    }
+        }//try-catch
+    }//onBuscarClick
 
 
+    //método que se ejecuta al abrirse la pantalla
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        session = HibernateUtil.getSessionFactory().openSession();
-
+        //inicializar las columnas de la tabla
         tc_nombreAlumno.setCellValueFactory(new PropertyValueFactory<>("nombre_alum"));
         tc_numExpediente.setCellValueFactory(new PropertyValueFactory<>("numero_expediente"));
         tc_puntosAcumulados.setCellValueFactory(new PropertyValueFactory<>("puntos_acumulados"));
-
+        //obtener solo el nombre de grupo porque el alumno almacena el grupo como objeto
         tc_nombreGrupo.setCellValueFactory(cellData -> {
-            Grupos grupo = cellData.getValue().getGrupo(); //se obteniene el grupo del alumno
-            return new SimpleStringProperty(grupo.getNombreGrupo());
+            return new SimpleStringProperty(cellData.getValue().getGrupo().getNombreGrupo());
         });
 
+        //dar color a las columnas de la tabla, dependiendo del color del parte de más gravedad
         tv_alumnos.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Alumnos alumno, boolean empty) {
@@ -127,9 +130,11 @@ public class ListaAlumnosController implements Initializable {
                     return; //salir para evitar el procesamiento adicional
                 }
 
+                //obtener todos los pates del alumno por el id
                 List<PartesIncidencia> partes = partesCRUD.obtenerPartesAlumno(alumno.getId_alum());
-                String estilo = "-fx-background-color: ";
-                ColorParte color = colorMasGrave(partes);
+
+                String estilo = "-fx-background-color: "; //variable para ir concatenando el estilo
+                ColorParte color = colorMasGrave(partes); //obtener el color de l parte de mayor gravedad
                 if (partes.isEmpty()) {
                     estilo = "";
                     setStyle(""); //restablecer estilo si la fila está vacía
@@ -145,18 +150,20 @@ public class ListaAlumnosController implements Initializable {
                 }
                 setStyle(estilo);
             }
-        });
+        });//tv_alumnos.setRowFactory
 
-        ArrayList<Alumnos> listaAlumnos = alumnosCRUD.obtenerAlumnos();
-        alumnosObservableList = FXCollections.observableArrayList(listaAlumnos);
+
+        ArrayList<Alumnos> listaAlumnos = alumnosCRUD.obtenerAlumnos(); //obtener la lista de alumnos
+        alumnosObservableList = FXCollections.observableArrayList(listaAlumnos); //mostrar la lista
 
         //crear el FilteredList basado en la lista original
         filteredList = new FilteredList<>(alumnosObservableList, alumno -> true);
         tv_alumnos.setItems(filteredList);
         configurarPaginacion(filteredList);
-    }
+    }//initialize
 
 
+    //método para configurar la paginación de la tabla
     private void configurarPaginacion(ObservableList<Alumnos> listaCompleta) {
         int filasPorPagina = 7; //número de filas por página
 
@@ -168,39 +175,47 @@ public class ListaAlumnosController implements Initializable {
             cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
         });
 
+
         //mostrar la primera página
         cambiarPagina(listaCompleta, filasPorPagina, pagination.getCurrentPageIndex());
-    }
+    }//configurarPaginacion
 
 
+    //método para cambiar de página (de la paginación) y actualizar los datos visibles en la tabla
     private void cambiarPagina(ObservableList<Alumnos> listaCompleta, int filasPorPagina, int paginaActual) {
+        //variable para guardar el inicio del índice
         int desdeIndice = paginaActual * filasPorPagina;
+        //variable para guardar el fin del índice
         int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
 
+        //lista que contiene solo un número de datos
         ObservableList<Alumnos> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
 
-        tv_alumnos.setItems(paginaActualLista);
-    }
+        tv_alumnos.setItems(paginaActualLista); //mostrar la lista
+    }//cambiarPagina
 
 
+    //método que selecciona cuál es el color del parte más grave
     private ColorParte colorMasGrave(List<PartesIncidencia> partes) {
-        ColorParte color = ColorParte.VERDE;
+        if (partes == null || partes.isEmpty()) {
+            return ColorParte.VERDE; //valor por defecto si no hay partes
+        }
+
+        ColorParte color = ColorParte.VERDE; //color menos grave por defecto
 
         for (PartesIncidencia parte : partes) {
             if (parte.getColor() != null) {
-                if (parte.getColor() == ColorParte.ROJO) {
-                    return ColorParte.ROJO; //si hay algún ROJO, retornamos ROJO
-                }
-                if (parte.getColor() == ColorParte.NARANJA && color != ColorParte.ROJO) {
-                    color = ColorParte.NARANJA; //si hay NARANJA y no hay ROJO, ponemos NARANJA
-                }
-                if (parte.getColor() == ColorParte.VERDE && color == ColorParte.VERDE) {
-                    color = ColorParte.VERDE; //si hay VERDE y es el color más leve, mantenemos VERDE
+                switch (parte.getColor()) {
+                    case ROJO:
+                        return ColorParte.ROJO; //gravedad máxima encontrada
+                    case NARANJA:
+                        color = ColorParte.NARANJA; //actualizar si no hay ROJO
+                        break;
                 }
             }
         }
         return color;
-    }
+    }//colorMasGrave
 
 
     //método para restablecer el filtro de búsqueda
@@ -210,7 +225,7 @@ public class ListaAlumnosController implements Initializable {
 
         //se borra el texto del campo de búsqueda
         txt_numExpediente.clear();
-    }
+    }//restablecerFiltro
 
 
     //método para restablecer la paginación para reflejar los cambios
@@ -220,6 +235,5 @@ public class ListaAlumnosController implements Initializable {
 
         //volver a la primera página
         pagination.setCurrentPageIndex(0);
-    }
-
-}
+    }//restablecerPaginacion
+}//class

@@ -1,26 +1,21 @@
 package com.example.proyecto_hibernate.controllers;
 
-import com.example.proyecto_hibernate.CRUD.PartesCRUD;
+import com.example.proyecto_hibernate.CRUD.*;
 import com.example.proyecto_hibernate.classes.*;
 import com.example.proyecto_hibernate.util.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.collections.transformation.FilteredList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-
+import javafx.scene.image.*;
 import javafx.event.ActionEvent;
 import org.hibernate.Session;
-
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class ListaPartesController implements Initializable {
@@ -288,33 +283,41 @@ public class ListaPartesController implements Initializable {
         }
     }
 
-
     private void configurarPaginacion(ObservableList<PartesIncidencia> listaCompleta) {
         int filasPorPagina = 10; // Número de filas por página
 
-        // Configurar el Pagination
-        pagination.setPageCount((int) Math.ceil((double) listaCompleta.size() / filasPorPagina));
-        pagination.setCurrentPageIndex(0);
+        // Calcular el número total de páginas
+        int totalPaginas = (int) Math.ceil((double) listaCompleta.size() / filasPorPagina);
+        pagination.setPageCount(totalPaginas);
 
-        // Listener para cambiar de página
+        // Eliminar cualquier listener anterior para evitar duplicados
+        pagination.currentPageIndexProperty().removeListener((observable, oldValue, newValue) -> {
+            cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
+        });
+
+        // Añadir un nuevo listener para cambiar de página
         pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
             cambiarPagina(listaCompleta, filasPorPagina, newValue.intValue());
         });
 
         // Mostrar la primera página
-        cambiarPagina(listaCompleta, filasPorPagina, 0);
+        cambiarPagina(listaCompleta, filasPorPagina, pagination.getCurrentPageIndex());
     }
 
 
     private void cambiarPagina(ObservableList<PartesIncidencia> listaCompleta, int filasPorPagina, int paginaActual) {
-        int desdeIndice = paginaActual * filasPorPagina;
-        int hastaIndice = Math.min(desdeIndice + filasPorPagina, listaCompleta.size());
+        int desdeIndex = paginaActual * filasPorPagina;
+        int hastaIndex = Math.min(desdeIndex + filasPorPagina, listaCompleta.size());
 
-        ObservableList<PartesIncidencia> paginaActualLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndice, hastaIndice));
+        // Extraer los elementos para la página actual
+        ObservableList<PartesIncidencia> subLista = FXCollections.observableArrayList(listaCompleta.subList(desdeIndex, hastaIndex));
 
-        tv_partes.setItems(paginaActualLista);
+        // Actualizar solo los ítems del TableView sin reinicializarlo
+        tv_partes.setItems(subLista);
+
+        // Forzar una actualización visual para evitar que los botones desaparezcan
+        tv_partes.refresh();
     }
-
 
     private void abrirParte(PartesIncidencia parte){
         GuardarParte.setParte(parte);
@@ -340,9 +343,4 @@ public class ListaPartesController implements Initializable {
             configurarPaginacion(listaFiltrada);
         });
     }
-
-
-
-
-
 }

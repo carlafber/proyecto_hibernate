@@ -22,7 +22,15 @@ public interface IPartesCRUD {
     //método para comprobar si se actualiza un parte de incidencia existente en la BD
     boolean actualizarParte(PartesIncidencia parte);
 
+
+    //método para obtener estadísticas por el tipo de color
     List<Object[]> obtenerEstadisticasPartesPorColor();
 
+
+    //método para obtener estadísticas por el expediente del alumnoa
     List<Object[]> obtenerEstadisticasPartesPorAlumno(String numeroExpediente);
+
+
+    //método para obtener estadísticas por el tipo de curso
+    List<Object[]> obtenerEstadisticasPartesPorCurso(String curso);
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="835" prefWidth="1220" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.EstadisticasController">
+
+    <!-- Título -->
+    <Label layoutX="500" layoutY="20" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Estadísticas de Partes" />
+
+    <!-- Label para el total de partes -->
+    <Label fx:id="lblTotalPartes" layoutX="20" layoutY="60" style="-fx-font-size: 18px;" />
+
+    <!-- Contenedor para el campo de búsqueda y botones -->
+    <HBox layoutX="407.0" layoutY="87.0" spacing="10">
+        <!-- Campo de texto para introducir el número de expediente -->
+        <TextField fx:id="txtNumeroExpediente" prefWidth="300" promptText="Introduce Nº de expediente" />
+        <!-- Botón para buscar -->
+        <Button fx:id="bt_buscar" onAction="#onClickbuscarEstadisticasPorAlumno" text="Buscar" />
+        <!-- Botón para limpiar -->
+        <Button fx:id="bt_limpiar" onAction="#onClickLimpiar" text="Limpiar" />
+    </HBox>
+
+    <!-- Gráfica de barras -->
+    <BarChart fx:id="barChartEstadisticas" layoutX="20" layoutY="150" prefHeight="650" prefWidth="1180">
+        <xAxis>
+            <CategoryAxis label="Color" />
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Número de Partes" />
+        </yAxis>
+    </BarChart>
+   <TextField fx:id="txtNumeroCurso" layoutX="407.0" layoutY="122.0" prefWidth="300" promptText="Introduce Nº de curso" />
+   <Button fx:id="bt_buscarCurso" layoutX="718.0" layoutY="122.0" onAction="#onClickbuscarEstadisticasPorCurso" text="Buscar" />
+   <Button fx:id="bt_limpiar2" layoutX="791.0" layoutY="122.0" onAction="#onClickLimpiar" text="Limpiar" />
+</AnchorPane>

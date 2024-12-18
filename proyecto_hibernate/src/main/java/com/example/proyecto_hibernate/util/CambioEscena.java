@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+//Clase necragada de los cambios de ventana
 public class CambioEscena {
 
     //metodo que cambia de escena en el FXML
@@ -43,6 +44,7 @@ public class CambioEscena {
     } //cambiarEscena
 
 
+    //método que se llama cuando se abre la ventana desde el botón ver más
     public static void abrirEscena(String fxmlFile, String titulo, Configurable controller, Boolean estado) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(GestionPartesApplication.class.getResource(fxmlFile)); //carga el archivo FXML

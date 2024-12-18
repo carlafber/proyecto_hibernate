@@ -2,6 +2,8 @@ package com.example.proyecto_hibernate.util;
 
 import com.example.proyecto_hibernate.classes.PartesIncidencia;
 
+// Clase que almacena la información de un parte que se le pasa desde el controller
+
 public class GuardarParte {
     private static PartesIncidencia parte_guardado;
 

@@ -20,6 +20,7 @@ import java.util.*;
 
 public class ListaPartesController implements Initializable {
 
+    //ATRIBUTOS
     @FXML
     private Button bt_borrar;
 
@@ -71,28 +72,26 @@ public class ListaPartesController implements Initializable {
     @FXML
     private TextField txt_numExpediente;
 
-    private PartesCRUD partesCRUD = new PartesCRUD();
+    private PartesCRUD partesCRUD = new PartesCRUD(); //instancia de la clase CRUD para realizar operaciones
 
-    private PartesIncidencia parte = new PartesIncidencia();
+    private PartesIncidencia parte = new PartesIncidencia(); //instancia de la clase CRUD para realizar operaciones
 
-    private FilteredList<PartesIncidencia> listaFiltrada;
-
-    private Session session;
+    private FilteredList<PartesIncidencia> listaFiltrada; //instancia de la clase CRUD para realizar operaciones
 
     private ObservableList<PartesIncidencia> listaPartesObservable; // Lista observable para la tabla
 
+    //controladores configurables para los distintos tipos de partes
     Configurable ParteVerdeController = new ParteVerdeController();
-
     Configurable ParteNaranjaController = new ParteNaranjaController();
-
     Configurable ParteRojoController = new ParteRojoController();
 
 
+    //MÉTODOS
+    //método que se ejecuta al abrirse la pantalla
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        session = HibernateUtil.getSessionFactory().openSession();
 
-        // Configurar columnas de la tabla
+        //inicializar las columnas de la tabla
         tc_expediente.setCellValueFactory(cellData -> {
             Alumnos alumnos = cellData.getValue().getAlumno();
             return new SimpleStringProperty(alumnos.getNumero_expediente());
@@ -117,6 +116,7 @@ public class ListaPartesController implements Initializable {
         tc_descripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         tc_sancion.setCellValueFactory(new PropertyValueFactory<>("sancion"));
 
+        //configurar columna con botones para ver más detalles
         tc_botones.setCellFactory(column -> new TableCell<>() {
             private final Button bt_verMas = new Button("Ver más");
             {
@@ -141,6 +141,7 @@ public class ListaPartesController implements Initializable {
             }
         });
 
+        //configurar colores de filas en la tabla según el tipo de parte
         tv_partes.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(PartesIncidencia parte, boolean empty) {
@@ -163,7 +164,7 @@ public class ListaPartesController implements Initializable {
             }
         });
 
-
+        //obtener los datos iniciales y configurar la paginación
         ArrayList<PartesIncidencia> listaPartesIncidencia = partesCRUD.obtenerPartes();
         listaPartesObservable = FXCollections.observableArrayList(listaPartesIncidencia);
 
@@ -171,9 +172,10 @@ public class ListaPartesController implements Initializable {
         tv_partes.setItems(listaFiltrada);
 
         configurarPaginacion(listaFiltrada);
-    }
+    }//initialize
 
 
+    //método para borrar filtros aplicados y restablecer la tabla
     @FXML
     void onBorrarClick(ActionEvent event) {
         listaFiltrada.setPredicate(alumno -> true);
@@ -185,9 +187,10 @@ public class ListaPartesController implements Initializable {
         pagination.setCurrentPageIndex(0);
 
         tv_partes.refresh();
-    }
+    }//onBorrarClick
 
 
+    ////método para buscar partes por número de expediente
     @FXML
     void onBuscarClick(ActionEvent event) {
         String numeroExpediente = txt_numExpediente.getText();
@@ -196,7 +199,7 @@ public class ListaPartesController implements Initializable {
         if (numeroExpediente == null || numeroExpediente.isEmpty()) {
             Alerta.mensajeError("Campo vacío", "Por favor, introduce un número de expediente válido.");
             return;
-        }
+        }//if
 
         try {
             // Aplicar el filtro a la lista
@@ -219,7 +222,7 @@ public class ListaPartesController implements Initializable {
                 configurarPaginacion(listaFiltrada);
 
                 return;
-            }
+            }//if
 
             // Recalibrar la paginación para reflejar los resultados de la búsqueda
             configurarPaginacion(listaFiltrada);
@@ -229,10 +232,11 @@ public class ListaPartesController implements Initializable {
         } catch (Exception e) {
             Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
+        }//try-catch
+    }//onBuscarClick
 
 
+    //método para buscar partes dentro de un rango de fechas
     @FXML
     void onBuscarFechaClick(ActionEvent event) {
         LocalDate fechaInicio = dt_fechaInicio.getValue();
@@ -242,13 +246,13 @@ public class ListaPartesController implements Initializable {
         if (fechaInicio == null || fechaFin == null) {
             Alerta.mensajeError("Campos vacíos", "Por favor, selecciona ambas fechas para buscar.");
             return;
-        }
+        }//if
 
         // Validar que el rango de fechas sea válido
         if (fechaInicio.isAfter(fechaFin)) {
             Alerta.mensajeError("Rango de fechas inválido", "La fecha inicial no puede ser posterior a la fecha final.");
             return;
-        }
+        }//if
 
         try {
             // Aplicar filtro para el rango de fechas
@@ -270,7 +274,7 @@ public class ListaPartesController implements Initializable {
                 configurarPaginacion(listaFiltrada);
 
                 return;
-            }
+            }//if
 
             // Recalibrar la paginación para reflejar los resultados filtrados
             configurarPaginacion(listaFiltrada);
@@ -280,9 +284,11 @@ public class ListaPartesController implements Initializable {
         } catch (Exception e) {
             Alerta.mensajeError("Error inesperado", "Ocurrió un error al buscar por rango de fechas: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
+        }//try-catch
+    }//onBuscarFechaClick
 
+
+    //método para configurar la paginación de la tabla
     private void configurarPaginacion(ObservableList<PartesIncidencia> listaCompleta) {
         int filasPorPagina = 10; // Número de filas por página
 
@@ -302,9 +308,10 @@ public class ListaPartesController implements Initializable {
 
         // Mostrar la primera página
         cambiarPagina(listaCompleta, filasPorPagina, pagination.getCurrentPageIndex());
-    }
+    }//configurarPaginacion
 
 
+    //método para cambiar el contenido de la tabla según la página actual
     private void cambiarPagina(ObservableList<PartesIncidencia> listaCompleta, int filasPorPagina, int paginaActual) {
         int desdeIndex = paginaActual * filasPorPagina;
         int hastaIndex = Math.min(desdeIndex + filasPorPagina, listaCompleta.size());
@@ -317,8 +324,10 @@ public class ListaPartesController implements Initializable {
 
         // Forzar una actualización visual para evitar que los botones desaparezcan
         tv_partes.refresh();
-    }
+    }//cambiarPagina
 
+
+    //método para abrir la escena correspondiente según el color del parte
     private void abrirParte(PartesIncidencia parte){
         GuardarParte.setParte(parte);
         boolean estado = GuardarProfesor.getProfesor().getTipo().equals(TipoProfesor.profesor);
@@ -330,9 +339,10 @@ public class ListaPartesController implements Initializable {
         } else if (parte.getColor().equals(ColorParte.ROJO)) {
             CambioEscena.abrirEscena("parte-rojo.fxml", "Ver parte", ParteRojoController, estado);
         }
-    }
+    }//abrirParte
 
 
+    //método para recargar la lista de partes desde la base de datos
     public void recargarListaPartes() {
         Platform.runLater(() -> {
             // Recuperar datos actualizados
@@ -342,5 +352,5 @@ public class ListaPartesController implements Initializable {
 
             configurarPaginacion(listaFiltrada);
         });
-    }
-}
+    }//recargarListaPartes
+}//class

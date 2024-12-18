@@ -22,6 +22,9 @@ public class InicioProfesorController implements Initializable {
     private Button bt_crearParte;
 
     @FXML
+    private Button bt_estadisticas;
+
+    @FXML
     private Button bt_crearProfesor;
 
     @FXML
@@ -53,6 +56,13 @@ public class InicioProfesorController implements Initializable {
     void onCrearProfesorClick(ActionEvent event) {
         CambioEscena.abrirEscena("crear-profesor.fxml", "Crear profesor"); //cambiar de escena para crear un nuevo profesor
     }//onCrearProfesorClick
+
+
+    //método que se ejecuta cuando se da al botón 'Estadísticas'
+    @FXML
+    public void onEstadisticasClick(ActionEvent event) {
+        CambioEscena.abrirEscena("estadisticas.fxml", "Estadísticas"); //cambiar de escena para crear un nuevo profesor
+    }//onEstadisticaClick
 
 
     //método que se ejecuta cuando se da al botón 'Listar alumnos'
@@ -90,7 +100,9 @@ public class InicioProfesorController implements Initializable {
         bt_listaPartes.setVisible(false);
         bt_listaAlumnos.setVisible(false);
         bt_crearProfesor.setVisible(false);
-        bt_estadísticas.setVisible(false);
+        bt_estadisticas.setVisible(false);
     }//ocultarBotones
+
+
 }//class
 

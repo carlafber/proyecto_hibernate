@@ -417,7 +417,7 @@ public class ParteRojoController implements Initializable, Configurable {
 
         txt_sancion.setVisible(false);
 
-        if(GuardarParte.getParte() != null){
+        if (GuardarParte.getParte() != null) {
             // Si ya hay un parte cargado
             txt_expedienteAlumno.setText(GuardarParte.getParte().getAlumno().getNumero_expediente());
             grupo_alumno.setText(GuardarParte.getParte().getGrupo().getNombreGrupo());
@@ -441,6 +441,7 @@ public class ParteRojoController implements Initializable, Configurable {
             bt_exportar.setDisable(true);
             bt_crear.setDisable(false); // Permitir crear un nuevo parte
         }
+    }
 
 
     private void limpiarCampos() {

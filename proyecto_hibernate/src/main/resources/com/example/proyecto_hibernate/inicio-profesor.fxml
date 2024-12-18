@@ -24,6 +24,7 @@
             <Button fx:id="bt_listaPartes" mnemonicParsing="false" onAction="#onListaPartesClick" style="-fx-background-color: white;" text="Lista de Partes" />
             <Button fx:id="bt_listaAlumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" style="-fx-background-color: white;" text="Lista de Alumnos" />
             <Button fx:id="bt_crearProfesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" style="-fx-background-color: white;" text="Crear Profesor" />
+            <Button fx:id="bt_estadisticas" mnemonicParsing="false" onAction="#onEstadisticasClick" style="-fx-background-color: white;" text="Estadísticas" />
          </items>
       </ToolBar>
    </children>

@@ -3,11 +3,15 @@ package com.example.proyecto_hibernate.CRUD;
 import com.example.proyecto_hibernate.classes.*;
 import com.example.proyecto_hibernate.util.*;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -39,14 +43,15 @@ public class ProfesoresCRUD implements IProfesoresCRUD{
         return listaProfesores;
     }//obtenerProfesores
 
+
     @Override
     public boolean crearProfesor(Profesores profesores) {
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
 
-            // La contraseña del profesor se encripta utilizando bcrypt y se almacena
-            String contrasena_encriptada = BCrypt.hashpw(profesores.getContrasena(), BCrypt.gensalt());
+            // La contraseña del profesor se encripta utilizando SHA-256
+            String contrasena_encriptada = encriptarSHA256(profesores.getContrasena());
             profesores.setContrasena(contrasena_encriptada);
 
             // Se guarda el nuevo profesor en la base de datos
@@ -57,6 +62,26 @@ public class ProfesoresCRUD implements IProfesoresCRUD{
         } catch (Exception e) {
             Alerta.mensajeError("Error al crear profesor", e.getMessage());
             return false;
-        }//try-catch
-    }//crearProfesor
+        } //try-catch
+    } //crearProfesor
+
+    //Método auxiliar para encriptar una cadena de texto utilizando SHA-256.
+
+     public String encriptarSHA256(String contrasena) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(contrasena.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al encriptar la contraseña", e);
+        }
+    }
 }//class

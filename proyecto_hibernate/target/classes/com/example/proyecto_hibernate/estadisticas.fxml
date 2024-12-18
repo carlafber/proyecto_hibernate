@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="835" prefWidth="1220" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.EstadisticasController">
+<AnchorPane prefHeight="835" prefWidth="1220" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.EstadisticasController">
 
     <!-- Título -->
     <Label layoutX="500" layoutY="20" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Estadísticas de Partes" />
@@ -32,6 +37,6 @@
         </yAxis>
     </BarChart>
    <TextField fx:id="txtNumeroCurso" layoutX="407.0" layoutY="122.0" prefWidth="300" promptText="Introduce Nº de curso" />
-   <Button fx:id="bt_buscarCurso" layoutX="718.0" layoutY="122.0" onAction="#onClickbuscarEstadisticasPorCurso" text="Buscar" />
-   <Button fx:id="bt_limpiar2" layoutX="791.0" layoutY="122.0" onAction="#onClickLimpiar" text="Limpiar" />
+   <Button fx:id="bt_buscarCurso" layoutX="717.0" layoutY="122.0" onAction="#onClickbuscarEstadisticasPorCurso" text="Buscar" />
+   <Button fx:id="bt_limpiar2" layoutX="782.0" layoutY="122.0" onAction="#onClickLimpiar" text="Limpiar" />
 </AnchorPane>

@@ -51,21 +51,22 @@ public class InicioSesionController implements Initializable {
         } else { // Si no están vacíos los campos
             // Recorrer todos los profesores de la BD llamando al método 'obtenerProfesores'
             for (Profesores profe : profesoresCRUD.obtenerProfesores()) {
-                // Comprobar que el id introducido coincide con alguno de la BD
+                // Comprobar que el ID introducido coincide con alguno de la BD
                 if (txt_numero.getText().equals(profe.getNumero_asignado())) {
-                    // Si coincide, comprobar la contraseña de ese id usando BCrypt
-                    if (BCrypt.checkpw(pwd_contrasena.getText(), profe.getContrasena())) {
+                    // Si coincide, comprobar la contraseña de ese ID usando SHA-256
+                    String contrasenaEncriptada = profesoresCRUD.encriptarSHA256(pwd_contrasena.getText());
+                    if (contrasenaEncriptada.equals(profe.getContrasena())) {
                         GuardarProfesor.setProfesor(profe); // Guardar los datos de ese profesor en la clase 'GuardarProfesor' para un futuro uso
                         CambioEscena.abrirEscena("inicio-profesor.fxml", null); // Abrir la pantalla principal
-                    } else { // Si no coincide la contraseña con el id, mostrar error de no coincidencia
+                    } else { // Si no coincide la contraseña con el ID, mostrar error de no coincidencia
                         Alerta.mensajeError("Contraseña incorrecta", "Por favor, introduce la contraseña correcta.");
                     }
-                    encontrado = true; // Actualizar la variable si existe el id en la BD
+                    encontrado = true; // Actualizar la variable si existe el ID en la BD
                     break; // Salir del bucle, ya que encontramos el profesor
                 }
             }
 
-            // Si no se encuentra el id introducido por el usuario, mostrar error
+            // Si no se encuentra el ID introducido por el usuario, mostrar error
             if (!encontrado) {
                 Alerta.mensajeError("Profesor no existe", "Por favor, introduce un número de profesor válido.");
             }
@@ -75,7 +76,6 @@ public class InicioSesionController implements Initializable {
         txt_numero.clear();
         pwd_contrasena.clear();
     }
-
 
     //método que se ejecuta cuando se abre la pantalla
     @Override

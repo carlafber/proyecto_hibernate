@@ -13,4 +13,7 @@ public interface IProfesoresCRUD {
 
     //método para crear un nuevo profesor en la base de datos
     boolean crearProfesor(Profesores profesores);
+
+    // método para encriptar una cadena de texto
+    String encriptarSHA256(String contrasena);
 }

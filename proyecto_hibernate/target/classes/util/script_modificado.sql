@@ -108,6 +108,9 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- Inserción de profesores en la tabla 'profesores'
 INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Juan Perez', 'jefe_de_estudios', 1001, 'ce5ca673d13b36118d54a7cf13aeb0ca012383bf771e713421b4d1fd841f539a');
+-- Tiene contraseña 12345
+INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Juan', 'jefe_de_estudios', 2000, '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
+
 INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Alberto Perez', 'profesor', 1002, 'ce5ca673d13b36118d54a7cf13aeb0ca012383bf771e713421b4d1fd841f539a');
 INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Maria Lopez', 'profesor', 1003, '1b18033d8286c4efc126b8a131e85db079c731aca276c9204b6221ca00fedbb0');
 INSERT INTO profesores (nombre, tipo, numero_asignado, contrasena) VALUES('Carlos Sanchez', 'profesor', 1004, '1b18033d8286c4efc126b8a131e85db079c731aca276c9204b6221ca00fedbb0');

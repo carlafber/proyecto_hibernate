@@ -89,7 +89,7 @@ public class EstadisticasController {
         String numeroExpediente = txtNumeroExpediente.getText().trim();
 
         if (numeroExpediente.isEmpty()) {
-            lblTotalPartes.setText("Por favor, introduce un número de expediente.");
+            lblTotalPartes.setText("Por favor, introduce un número de expediente o de curso.");
             return;
         }
 

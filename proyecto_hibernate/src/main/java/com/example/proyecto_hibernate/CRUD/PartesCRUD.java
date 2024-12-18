@@ -1,80 +1,68 @@
 package com.example.proyecto_hibernate.CRUD;
 
-import com.example.proyecto_hibernate.classes.*;
-import com.example.proyecto_hibernate.util.*;
+import com.example.proyecto_hibernate.classes.PartesIncidencia;
+import com.example.proyecto_hibernate.util.Alerta;
+import com.example.proyecto_hibernate.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-
-//Clase que implementa la interfaz IPartesCRUD para gestionar las operaciones CRUD relacionadas con los Partes utilizando Hibernate
 public class PartesCRUD implements IPartesCRUD {
     SessionFactory factory = HibernateUtil.getSessionFactory();
 
     @Override
-    public ArrayList<PartesIncidencia> obtenerPartes(){
+    public ArrayList<PartesIncidencia> obtenerPartes() {
         Transaction transaction = null;
-        //lista para almacenar los partes de incidencia obtenidos almacenados en la BD
         ArrayList<PartesIncidencia> listaPartes = new ArrayList<>();
-        try(Session session = factory.openSession()){
+
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            //consulta para obtener todos los partes de incidencia de la BD --> se guardan en una lista
             List<PartesIncidencia> partesIncidencias = session.createQuery("from PartesIncidencia", PartesIncidencia.class).getResultList();
-
-            //se añaden todos los partes obtenidos de la consulta en la lista
             listaPartes.addAll(partesIncidencias);
-
             transaction.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
         }
-        return listaPartes;
-    }//obtenerPartes
 
+        return listaPartes;
+    }
 
     @Override
     public boolean crearParte(PartesIncidencia partesIncidencia) {
         Transaction transaction = null;
+
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(partesIncidencia); //se guarda el nuevo parte en la BD
+            session.save(partesIncidencia);
             transaction.commit();
             return true;
         } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
             return false;
-        }//try-catch
-    } //crearParte
-
+        }
+    }
 
     @Override
-    public List<PartesIncidencia> obtenerPartesAlumno(int id_alumno){
+    public List<PartesIncidencia> obtenerPartesAlumno(int id_alumno) {
         Transaction transaction = null;
-        //lista vacía para almacenar los partes de un alumno obtenidos de la BD
-        List listaPartes = new ArrayList<>();
+        List<PartesIncidencia> listaPartes = new ArrayList<>();
 
-        try(Session session = factory.openSession()){
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
-            //consulta para obtener los partes que tiene un alumno por su id
-            Query query = session.createQuery("FROM PartesIncidencia WHERE alumno.id_alum = :id_alum", PartesIncidencia.class);
-
-            //asigna el id del alumno como parámetro de la consulta
+            Query<PartesIncidencia> query = session.createQuery("FROM PartesIncidencia WHERE alumno.id_alum = :id_alum", PartesIncidencia.class);
             query.setParameter("id_alum", id_alumno);
-
-            //almacenar los partes en la lista
             listaPartes = query.getResultList();
             transaction.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             Alerta.mensajeError(null, e.getMessage());
-        }//try-catch
+        }
 
         return listaPartes;
-    }//obtenerPartesAlumno
-
+    }
 
     public List<Object[]> obtenerEstadisticasPartesPorColor() {
         Transaction transaction = null;
@@ -82,11 +70,8 @@ public class PartesCRUD implements IPartesCRUD {
 
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-
-            // Consulta para contar las partes por color
             Query<Object[]> query = session.createQuery(
                     "SELECT p.color, COUNT(p) FROM PartesIncidencia p GROUP BY p.color", Object[].class);
-
             resultados = query.getResultList();
             transaction.commit();
         } catch (Exception e) {
@@ -97,53 +82,73 @@ public class PartesCRUD implements IPartesCRUD {
     }
 
     public List<Object[]> obtenerEstadisticasPartesPorAlumno(String numeroExpediente) {
-        Session session = null;
+        Transaction transaction = null;
         List<Object[]> estadisticas = new ArrayList<>();
-        try {
-            // Abrir una nueva sesión de Hibernate
-            session = HibernateUtil.getSessionFactory().openSession();
 
-            // Crear la consulta utilizando HQL (Hibernate Query Language)
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
             String hql = "SELECT p.color, COUNT(p) " +
                     "FROM PartesIncidencia p " +
                     "WHERE p.alumno.numero_expediente = :numeroExpediente " +
                     "GROUP BY p.color";
-
-            // Ejecutar la consulta
             estadisticas = session.createQuery(hql, Object[].class)
                     .setParameter("numeroExpediente", numeroExpediente)
                     .getResultList();
+            transaction.commit();
         } catch (Exception e) {
-            System.err.println("Error obteniendo estadísticas para el alumno con expediente " + numeroExpediente + ": " + e.getMessage());
-        } finally {
-            if (session != null) {
-                session.close(); // Cerrar la sesión
-            }
+            Alerta.mensajeError(null, e.getMessage());
         }
+
         return estadisticas;
     }
+    public List<Object[]> obtenerEstadisticasPartesPorCurso(String curso) {
+        List<Object[]> estadisticas = new ArrayList<>();
 
+        if (curso == null || curso.trim().isEmpty()) {
+            throw new IllegalArgumentException("El curso no puede ser vacío o nulo.");
+        }
+
+        try (Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            // Consulta HQL para estadísticas de partes por grupo/curso
+            String hql = "SELECT p.color, COUNT(p) " +
+                    "FROM PartesIncidencia p " +
+                    "WHERE p.alumno.grupo.nombre_grupo = :curso " +
+                    "GROUP BY p.color";
+
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            query.setParameter("curso", curso);
+            estadisticas = query.getResultList();
+
+            transaction.commit();
+        } catch (Exception e) {
+            Alerta.mensajeError("Error al obtener estadísticas por curso", e.getMessage());
+            e.printStackTrace();
+        }
+
+        return estadisticas;
+    }
 
 
     @Override
     public boolean actualizarParte(PartesIncidencia parte) {
         Transaction transaction = null;
-
-        //variable que controla los cambios
         boolean cambios = false;
 
-        try(Session session = factory.openSession()) {
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            session.update(parte); //actualiza el parte de incidencia en la base de datos
-            cambios = true; //si la operación funciona, se actualiza a 'true' la variable controladora
+            session.update(parte);
+            cambios = true;
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback(); //en caso de error, realiza un rollback
+                transaction.rollback();
             }
             Alerta.mensajeError(null, e.getMessage());
-        }//try-catch
+            e.printStackTrace();
+        }
 
         return cambios;
-    }//actualizarParte
-}//class
+    }
+}

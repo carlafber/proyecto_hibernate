@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="fondo" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.InicioProfesorController">
+   <children>
+      <ImageView fx:id="imagen_fondo" fitHeight="834.0" fitWidth="908.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../img/logo.png" />
+         </image>
+      </ImageView>
+      <ToolBar prefHeight="55.0" prefWidth="1220.0">
+         <items>
+            <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/logo.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="bt_crearParte" mnemonicParsing="false" onAction="#onCrearParteClick" style="-fx-background-color: white;" text="Crear Parte" />
+            <Button fx:id="bt_listaPartes" mnemonicParsing="false" onAction="#onListaPartesClick" style="-fx-background-color: white;" text="Lista de Partes" />
+            <Button fx:id="bt_listaAlumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" style="-fx-background-color: white;" text="Lista de Alumnos" />
+            <Button fx:id="bt_crearProfesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" style="-fx-background-color: white;" text="Crear Profesor" />
+            <Button fx:id="bt_estadisticas" mnemonicParsing="false" onAction="#onEstadisticasClick" style="-fx-background-color: white;" text="Estadísticas" />
+         </items>
+      </ToolBar>
+   </children>
+</StackPane>

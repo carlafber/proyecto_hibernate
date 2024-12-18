@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="stackPane" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: #ff6e6e;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.ParteRojoController">
+    <children>
+        <!-- El contenido original dentro del StackPane -->
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: #ff6e6e;">
+            <children>
+                <Label layoutX="313.0" layoutY="40.0" text="PARTE ROJO DE NOTA NEGATIVA">
+                    <font>
+                        <Font name="System Bold" size="36.0" />
+                    </font>
+                </Label>
+                <Button fx:id="bt_parteVerde" layoutX="375.0" layoutY="112.0" mnemonicParsing="false" onAction="#onParteVerdeClick" style="-fx-background-color: #1ec703;" text="Parte verde" />
+                <Button fx:id="bt_parteNaranja" layoutX="546.0" layoutY="112.0" mnemonicParsing="false" onAction="#onParteNaranjaClick" style="-fx-background-color: #fda22e;" text="Parte naranja" />
+                <Button fx:id="bt_parteRojo" layoutX="723.0" layoutY="112.0" mnemonicParsing="false" style="-fx-background-color: #ee0606;" text="Parte rojo" />
+                <Label layoutX="54.0" layoutY="210.0" prefHeight="27.0" prefWidth="240.0" text="Número de expediente del alumno:" />
+                <TextField fx:id="txt_expedienteAlumno" cache="true" layoutX="365.0" layoutY="204.0" onKeyReleased="#onExpedienteAlumnoChange" prefHeight="39.0" prefWidth="282.0" promptText="Escribe el número de expediente" />
+                <Label layoutX="712.0" layoutY="210.0" text="Nombre del grupo:" />
+                <Label fx:id="grupo_alumno" contentDisplay="CENTER" layoutX="887.0" layoutY="201.0" prefHeight="39.0" prefWidth="282.0" style="-fx-background-color: white;">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding></Label>
+                <Line endX="1220.0" layoutX="1.0" layoutY="271.0" />
+                <Label layoutX="54.0" layoutY="303.0" text="Profesor:" />
+                <Label fx:id="nombre_profesor" layoutX="365.0" layoutY="297.0" prefHeight="39.0" prefWidth="282.0" style="-fx-background-color: white;">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding></Label>
+                <Line endX="1220.0" layoutY="358.0" />
+                <Label layoutX="54.0" layoutY="392.0" text="Fecha:" />
+                <DatePicker fx:id="dp_fechaParte" layoutX="365.0" layoutY="386.0" prefHeight="39.0" prefWidth="282.0" promptText="dd//mm//aaaa" />
+                <Label layoutX="712.0" layoutY="392.0" text="Hora:" />
+                <ComboBox fx:id="cb_horaParte" layoutX="887.0" layoutY="385.0" prefHeight="39.0" prefWidth="282.0" />
+                <Line endX="1220.0" layoutX="1.0" layoutY="445.0" />
+                <Label layoutX="54.0" layoutY="476.0" text="Descripción de los hechos:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="txt_descripcion" layoutX="54.0" layoutY="522.0" prefHeight="200.0" prefWidth="494.0" />
+                <Button fx:id="bt_crear" layoutX="490.0" layoutY="739.0" mnemonicParsing="false" onAction="#onCrearClick" style="-fx-background-color: #3396ff;" text="Crear" textFill="WHITE" />
+                <Label layoutX="620.0" layoutY="476.0" text="Sanción que recibe:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="cb_sancion" layoutX="620.0" layoutY="521.0" onAction="#onSancionChangeOtro" prefHeight="39.0" prefWidth="494.0" />
+                <TextArea fx:id="txt_sancion" layoutX="620.0" layoutY="584.0" prefHeight="138.0" prefWidth="494.0" />
+                <Button fx:id="bt_actualizar" layoutX="620.0" layoutY="739.0" mnemonicParsing="false" onAction="#onActualizarClick" style="-fx-background-color: #3396ff;" text="Actualizar" textFill="WHITE" />
+                <Button fx:id="bt_exportar" layoutX="541.0" layoutY="790.0" onAction="#onExportarClick" style="-fx-background-color: #3396ff;" text="Exportar a PDF" textFill="WHITE" />
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

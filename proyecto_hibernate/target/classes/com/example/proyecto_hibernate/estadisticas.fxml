@@ -6,29 +6,32 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="835" prefWidth="1220" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.EstadisticasController">
+<AnchorPane prefHeight="835" prefWidth="1220" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.EstadisticasController">
 
     <!-- Título -->
-    <Label layoutX="500" layoutY="20" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Estadísticas de Partes" />
-
+    <Label layoutX="500.0" layoutY="76.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Estadísticas de Partes" />
     <!-- Label para el total de partes -->
     <Label fx:id="lblTotalPartes" layoutX="20" layoutY="60" style="-fx-font-size: 18px;" />
+    <!-- Contenedor para el campo de búsqueda y botones -->
+   <HBox layoutX="407.0" layoutY="169.0" spacing="10">
+      <children>
+         <TextField fx:id="txtNumeroCurso" prefWidth="300" promptText="Introduce Nº de curso" />
+         <Button fx:id="bt_buscarCurso" onAction="#onClickbuscarEstadisticasPorCurso" text="Buscar" />
+         <Button fx:id="bt_limpiar2" onAction="#onClickLimpiar" text="Limpiar" />
+      </children>
+   </HBox>
 
     <!-- Contenedor para el campo de búsqueda y botones -->
-    <HBox layoutX="407.0" layoutY="87.0" spacing="10">
-        <!-- Campo de texto para introducir el número de expediente -->
-        <TextField fx:id="txtNumeroExpediente" prefWidth="300" promptText="Introduce Nº de expediente" />
-        <!-- Botón para buscar -->
-        <Button fx:id="bt_buscar" onAction="#onClickbuscarEstadisticasPorAlumno" text="Buscar" />
-        <!-- Botón para limpiar -->
-        <Button fx:id="bt_limpiar" onAction="#onClickLimpiar" text="Limpiar" />
-    </HBox>
+    <HBox layoutX="407.0" layoutY="87.0" spacing="10" />
 
     <!-- Gráfica de barras -->
-    <BarChart fx:id="barChartEstadisticas" layoutX="20" layoutY="150" prefHeight="650" prefWidth="1180">
+    <BarChart fx:id="barChartEstadisticas" layoutX="77.0" layoutY="215.0" prefHeight="579.0" prefWidth="1067.0">
         <xAxis>
             <CategoryAxis label="Color" />
         </xAxis>
@@ -36,7 +39,24 @@
             <NumberAxis label="Número de Partes" />
         </yAxis>
     </BarChart>
-   <TextField fx:id="txtNumeroCurso" layoutX="407.0" layoutY="122.0" prefWidth="300" promptText="Introduce Nº de curso" />
-   <Button fx:id="bt_buscarCurso" layoutX="717.0" layoutY="122.0" onAction="#onClickbuscarEstadisticasPorCurso" text="Buscar" />
-   <Button fx:id="bt_limpiar2" layoutX="782.0" layoutY="122.0" onAction="#onClickLimpiar" text="Limpiar" />
+     <!-- Campo de texto para introducir el número de expediente -->
+     <TextField fx:id="txtNumeroExpediente" layoutX="407.0" layoutY="128.0" prefWidth="300" promptText="Introduce Nº de expediente" />
+     <!-- Botón para limpiar -->
+     <Button fx:id="bt_limpiar" layoutX="776.0" layoutY="131.0" onAction="#onClickLimpiar" text="Limpiar" />
+     <!-- Botón para buscar -->
+     <Button fx:id="bt_buscar" layoutX="718.0" layoutY="131.0" onAction="#onClickbuscarEstadisticasPorAlumno" text="Buscar" />
+   <ToolBar layoutY="1.0" prefHeight="55.0" prefWidth="1220.0">
+      <items>
+         <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../img/logo.png" />
+            </image>
+         </ImageView>
+         <Button fx:id="bt_crearParte" mnemonicParsing="false" onAction="#onCrearParteClick" style="-fx-background-color: white;" text="Crear Parte" />
+         <Button fx:id="bt_listaPartes" mnemonicParsing="false" onAction="#onListaPartesClick" style="-fx-background-color: white;" text="Lista de Partes" />
+         <Button fx:id="bt_listaAlumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" style="-fx-background-color: white;" text="Lista de Alumnos" />
+         <Button fx:id="bt_crearProfesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" style="-fx-background-color: white;" text="Crear Profesor" />
+         <Button fx:id="bt_estadisticas" mnemonicParsing="false" onAction="#onEstadisticasClick" style="-fx-background-color: white;" text="Estadísticas" />
+      </items>
+   </ToolBar>
 </AnchorPane>

@@ -61,7 +61,7 @@ public class InicioProfesorController implements Initializable {
     //método que se ejecuta cuando se da al botón 'Estadísticas'
     @FXML
     public void onEstadisticasClick(ActionEvent event) {
-        CambioEscena.abrirEscena("estadisticas.fxml", "Estadísticas"); //cambiar de escena para crear un nuevo profesor
+        CambioEscena.abrirEscena("estadisticas.fxml", "Estadísticas"); //cambiar de escena para ver estadísticas
     }//onEstadisticaClick
 
 

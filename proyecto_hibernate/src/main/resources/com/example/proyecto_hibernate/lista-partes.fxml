@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.ListaPartesController">
+<AnchorPane prefHeight="835.0" prefWidth="1220.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto_hibernate.controllers.ListaPartesController">
     <ImageView fx:id="imagen_fondo" fitHeight="835.0" fitWidth="1220.0" layoutX="190.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
         <image>
             <Image url="@../../../img/logo.png" />
         </image>
     </ImageView>
-    <AnchorPane layoutX="255.0" layoutY="44.0" prefHeight="154.0" prefWidth="731.0" style="-fx-background-color: #54c6ff; -fx-background-radius: 15;">
+    <AnchorPane layoutX="255.0" layoutY="85.0" prefHeight="154.0" prefWidth="731.0" style="-fx-background-color: #54c6ff; -fx-background-radius: 15;">
         <children>
 
             <!-- Título -->
@@ -31,7 +39,7 @@
             <Button fx:id="bt_buscarFecha" layoutX="543.0" layoutY="108.0" onAction="#onBuscarFechaClick" style="-fx-background-color: #289318;" text="Buscar por Fecha" textFill="WHITE" />
         </children>
     </AnchorPane>
-    <AnchorPane layoutX="109.0" layoutY="240.0" prefHeight="526.0" prefWidth="1002.0" style="-fx-background-color: #54c6ff; -fx-background-radius: 15;">
+    <AnchorPane layoutX="107.0" layoutY="277.0" prefHeight="542.0" prefWidth="1004.0" style="-fx-background-color: #54c6ff; -fx-background-radius: 15;">
         <children>
 
             <!-- Tabla -->
@@ -55,7 +63,21 @@
             </TableView>
 
             <!-- Paginación -->
-            <Pagination fx:id="pagination" layoutX="397.0" layoutY="517.0" maxPageIndicatorCount="3" prefHeight="58.0" prefWidth="208.0" snapToPixel="false" />
+            <Pagination fx:id="pagination" layoutX="397.0" layoutY="517.0" maxPageIndicatorCount="3" prefHeight="25.0" prefWidth="205.0" snapToPixel="false" />
         </children>
     </AnchorPane>
+   <ToolBar prefHeight="55.0" prefWidth="1220.0">
+      <items>
+         <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../img/logo.png" />
+            </image>
+         </ImageView>
+         <Button fx:id="bt_crearParte" mnemonicParsing="false" onAction="#onCrearParteClick" style="-fx-background-color: white;" text="Crear Parte" />
+         <Button fx:id="bt_listaPartes" mnemonicParsing="false" onAction="#onListaPartesClick" style="-fx-background-color: white;" text="Lista de Partes" />
+         <Button fx:id="bt_listaAlumnos" mnemonicParsing="false" onAction="#onListaAlumnosClick" style="-fx-background-color: white;" text="Lista de Alumnos" />
+         <Button fx:id="bt_crearProfesor" mnemonicParsing="false" onAction="#onCrearProfesorClick" style="-fx-background-color: white;" text="Crear Profesor" />
+         <Button fx:id="bt_estadisticas" mnemonicParsing="false" onAction="#onEstadisticasClick" style="-fx-background-color: white;" text="Estadísticas" />
+      </items>
+   </ToolBar>
 </AnchorPane>

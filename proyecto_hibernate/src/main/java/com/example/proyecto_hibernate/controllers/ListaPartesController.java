@@ -31,6 +31,21 @@ public class ListaPartesController implements Initializable {
     private Button bt_buscarFecha;
 
     @FXML
+    private Button bt_crearParte;
+
+    @FXML
+    private Button bt_crearProfesor;
+
+    @FXML
+    private Button bt_estadisticas;
+
+    @FXML
+    private Button bt_listaAlumnos;
+
+    @FXML
+    private Button bt_listaPartes;
+
+    @FXML
     private DatePicker dt_fechaFin;
 
     @FXML
@@ -353,4 +368,40 @@ public class ListaPartesController implements Initializable {
             configurarPaginacion(listaFiltrada);
         });
     }//recargarListaPartes
+
+    //MÉTODOS
+    //método que se ejecuta cuando se da al botón 'Crear parte' del navegador
+    @FXML
+    void onCrearParteClick(ActionEvent event) {
+        GuardarParte.resetParte(); //llamar a la clase 'GuardarParte' para borrar el parte que tenga almacenado
+        CambioEscena.abrirEscena("parte-verde.fxml", "Crear parte"); //cambiar de escena para crear un nuevo parte. Por defecto, se abre el verde
+    }//onCrearParteClick
+
+
+    //método que se ejecuta cuando se da al botón 'Crear profesor'
+    @FXML
+    void onCrearProfesorClick(ActionEvent event) {
+        CambioEscena.abrirEscena("crear-profesor.fxml", "Crear profesor"); //cambiar de escena para crear un nuevo profesor
+    }//onCrearProfesorClick
+
+
+    //método que se ejecuta cuando se da al botón 'Estadísticas'
+    @FXML
+    public void onEstadisticasClick(ActionEvent event) {
+        CambioEscena.abrirEscena("estadisticas.fxml", "Estadísticas"); //cambiar de escena para ver estadísticas
+    }//onEstadisticaClick
+
+
+    //método que se ejecuta cuando se da al botón 'Listar alumnos'
+    @FXML
+    void onListaAlumnosClick(ActionEvent event) {
+        CambioEscena.abrirEscena("lista-alumnos.fxml", "Lista alumnos"); //cambiar de escena para listar los alumnos
+    }//onListaAlumnosClick
+
+
+    //método que se ejecuta cuando se da al botón 'Listar partes'
+    @FXML
+    void onListaPartesClick(ActionEvent event) {
+        CambioEscena.abrirEscena("lista-partes.fxml", "Lista partes"); //cambiar de escena para listar los partes
+    }//onListaPartesClick
 }//class
